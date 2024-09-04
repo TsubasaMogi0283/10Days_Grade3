@@ -118,9 +118,6 @@
     <Filter Include="Ellysia\Header File\Math\Shape">
       <UniqueIdentifier>{4de1d903-5e8b-49b9-b9c0-f0d9591a86c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\GameScene\Sample2">
-      <UniqueIdentifier>{c0575fdd-b572-4e5a-8413-fa3cf96d3880}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Ellysia\Header File\Lighting">
       <UniqueIdentifier>{6894304a-98cd-4168-b852-c62f99047467}</UniqueIdentifier>
     </Filter>
@@ -319,6 +316,9 @@
     <Filter Include="Project\ObjectManager\StageObject\Tree">
       <UniqueIdentifier>{5a44d3e4-b20b-4e25-b81a-9f359069b5ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\GameScene\Game">
+      <UniqueIdentifier>{238cd0f0-2925-4502-9828-467c415ca79f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -380,9 +380,6 @@
     </ClCompile>
     <ClCompile Include="Ellysia\main.cpp">
       <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\AllGameScene\SampleScene2\SampleScene2.cpp">
-      <Filter>Project\GameScene\Sample2</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Math\WorldTransform\WorldTransform.cpp">
       <Filter>Ellysia\Source File\Math</Filter>
@@ -547,6 +544,9 @@
       <Filter>Project\GameScene\Lose</Filter>
     </ClCompile>
     <ClCompile Include="Project\Stage\StageObject\Tree\Tree.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
   </ItemGroup>
@@ -750,9 +750,6 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Shape\AABB.h">
       <Filter>Ellysia\Header File\Math\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\AllGameScene\SampleScene2\SampleScene2.h">
-      <Filter>Project\GameScene\Sample2</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h">
       <Filter>Ellysia\Header File\Math</Filter>
@@ -974,6 +971,9 @@
       <Filter>Project\ObjectManager\StageObject</Filter>
     </ClInclude>
     <ClInclude Include="Project\Stage\StageObject\Tree\Tree.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>
