@@ -67,8 +67,8 @@ void TitleScene::PreDrawPostEffectFirst()
 {
 }
 
-void TitleScene::DrawPostEffect()
-{
+void TitleScene::DrawPostEffect(){
+
 }
 
 void TitleScene::DrawSprite(){
