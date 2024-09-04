@@ -480,17 +480,11 @@
     <ClCompile Include="Ellysia\Polygon\PostEffect\GaussianFilter\GaussianFilter.cpp">
       <Filter>Ellysia\Source File\Polygone\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Enemy\Enemy.cpp">
-      <Filter>Project\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Math\Collision\Collision.cpp">
       <Filter>Project\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Project\Collider\CollisionManager.cpp">
       <Filter>Project\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Player\Player.cpp">
-      <Filter>Project\Player</Filter>
     </ClCompile>
     <ClCompile Include="Project\LightWeapon\LightWeapon.cpp">
       <Filter>Project\Player\LightWeapon</Filter>
@@ -519,9 +513,6 @@
     <ClCompile Include="Project\Stage\Skydome\Skydome.cpp">
       <Filter>Project\ObjectManager\StageObject\Skydome</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Enemy\EnemyManager.cpp">
-      <Filter>Project\Enemy\EnemyManager</Filter>
-    </ClCompile>
     <ClCompile Include="Project\Stage\Gate\Gate.cpp">
       <Filter>Project\ObjectManager\StageObject\Gate</Filter>
     </ClCompile>
@@ -536,9 +527,6 @@
     </ClCompile>
     <ClCompile Include="Project\Stage\ObjectManager\ObjectManager.cpp">
       <Filter>Project\ObjectManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Enemy\EnemyAttackCollision.cpp">
-      <Filter>Ellysia\Source File</Filter>
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\LoseScene\LoseScene.cpp">
       <Filter>Project\GameScene\Lose</Filter>
@@ -892,9 +880,6 @@
     <ClInclude Include="Ellysia\Polygon\PostEffect\GaussianFilter\GaussianFilter.h">
       <Filter>Ellysia\Header File\Polygone\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Enemy\Enemy.h">
-      <Filter>Project\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Project\Collider\Collider.h">
       <Filter>Project\Collision</Filter>
     </ClInclude>
@@ -906,9 +891,6 @@
     </ClInclude>
     <ClInclude Include="Project\Collider\CollisionManager.h">
       <Filter>Project\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Player\Player.h">
-      <Filter>Project\Player</Filter>
     </ClInclude>
     <ClInclude Include="Project\LightWeapon\LightWeapon.h">
       <Filter>Project\Player\LightWeapon</Filter>
@@ -943,9 +925,6 @@
     <ClInclude Include="Project\Stage\Skydome\Skydome.h">
       <Filter>Project\ObjectManager\StageObject\Skydome</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Enemy\EnemyManager.h">
-      <Filter>Project\Enemy\EnemyManager</Filter>
-    </ClInclude>
     <ClInclude Include="Project\Stage\Gate\Gate.h">
       <Filter>Project\ObjectManager\StageObject\Gate</Filter>
     </ClInclude>
@@ -960,9 +939,6 @@
     </ClInclude>
     <ClInclude Include="Project\Stage\DemoObject\DemoObject.h">
       <Filter>Project\ObjectManager\StageObject\DemoObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Enemy\EnemyAttackCollision.h">
-      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\LoseScene\LoseScene.h">
       <Filter>Project\GameScene\Lose</Filter>
