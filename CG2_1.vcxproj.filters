@@ -547,7 +547,7 @@
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp">
-      <Filter>Ellysia\Source File</Filter>
+      <Filter>Project\GameScene\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -974,7 +974,7 @@
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h">
-      <Filter>Ellysia\Header File</Filter>
+      <Filter>Project\GameScene\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

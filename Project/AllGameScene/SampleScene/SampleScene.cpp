@@ -887,10 +887,10 @@ void SampleScene::Update(GameManager* gameManager) {
 		fadeTransparency_ += FADE_OUT_INTERVAL;
 		fadeSprite_->SetTransparency(fadeTransparency_);
 
-		if (fadeTransparency_ > 1.0f) {
-			gameManager->ChangeScene(new SampleScene2());
-			return;
-		}
+		//if (fadeTransparency_ > 1.0f) {
+		//	gameManager->ChangeScene(new SampleScene2());
+		//	return;
+		//}
 		
 	}
 

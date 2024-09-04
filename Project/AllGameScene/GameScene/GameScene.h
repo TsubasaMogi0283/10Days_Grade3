@@ -9,6 +9,13 @@
 #include "Camera.h"
 #include <BackText.h>
 
+
+#include "WorldTransform.h"
+#include "Material.h"
+#include "DirectionalLight.h"
+#include "SpotLight.h"
+#include <Stage/Skydome/Skydome.h>
+
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
 
@@ -61,14 +68,15 @@ private:
 	Camera camera_ = {};
 	Vector3 cameraPosition_ = {};
 
-	//マテリアル
-	Material material_ = {};
 
 	//ポストエフェクト
 	//今は使わない
 	std::unique_ptr<BackText> back_ = nullptr;
 
 
+
+	std::unique_ptr<Skydome>skydome_ = nullptr;
+	SpotLight light_ = {};
 };
 
 

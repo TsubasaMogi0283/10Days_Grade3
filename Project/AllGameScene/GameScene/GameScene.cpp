@@ -11,10 +11,16 @@
 
 void GameScene::Initialize() {
 
-	//カメラ
+	uint32_t groundModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
+	
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(groundModelHandle);
+	
 	camera_.Initialize();
-	camera_.translate_ = { 0.0f,0.0f,-9.8f };
 
+
+	back_ = std::make_unique< BackText>();
+	back_->Initialize();
 
 }
 
@@ -25,6 +31,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 #ifdef _DEBUG
 	ImGui::Begin("ゲーム");
+	ImGui::SliderFloat3("Position", &camera_.translate_.x, -30.0f, 30.0f);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -37,23 +44,30 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 
+	camera_.Update();
+
+
+	skydome_->Update();
+	//light_.Update();
+
+
 
 }
 
-void GameScene::DrawSpriteBack()
-{
+void GameScene::DrawSpriteBack(){
+
 }
 
-void GameScene::DrawObject3D()
-{
+void GameScene::DrawObject3D(){
+	skydome_->Draw(camera_);
 }
 
-void GameScene::PreDrawPostEffectFirst()
-{
+void GameScene::PreDrawPostEffectFirst(){
+	back_->PreDraw();
 }
 
-void GameScene::DrawPostEffect()
-{
+void GameScene::DrawPostEffect(){
+	back_->Draw();
 }
 
 void GameScene::DrawSprite() {
