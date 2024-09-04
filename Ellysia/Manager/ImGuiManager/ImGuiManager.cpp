@@ -5,7 +5,7 @@
 #include "RtvManager.h"
 #include <imgui_impl_dx12.cpp>
 
-
+#include <filesystem>
 
 
 ImGuiManager* ImGuiManager::GetInstance() {
@@ -25,8 +25,11 @@ void ImGuiManager::Initialize() {
 	ImGui::StyleColorsDark();
 	ImGuiIO& io = ImGui::GetIO();
 
+	std::string vsSolutionPath = std::filesystem::current_path().string();
+	//このままだとダブルスラッシュで出来ないので
+	std::replace(vsSolutionPath.begin(), vsSolutionPath.end(), '\\', '/');
 
-	std::string fontPath = "C:/Lesson/CG/CGGrade3/Ellysia_3.0/Resources/External/Font/GenShinGothic-P-Medium.ttf";
+	std::string fontPath = vsSolutionPath +"/"+ "Resources/External/Font/GenShinGothic-P-Medium.ttf";
 	ImFont* font = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
 	if (font == NULL) {
 		assert(0);
