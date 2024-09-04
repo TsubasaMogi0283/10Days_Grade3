@@ -14,7 +14,6 @@
 #include "Material.h"
 #include "DirectionalLight.h"
 #include "SpotLight.h"
-#include <Stage/Skydome/Skydome.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
@@ -75,7 +74,6 @@ private:
 
 
 
-	std::unique_ptr<Skydome>skydome_ = nullptr;
 	SpotLight light_ = {};
 };
 

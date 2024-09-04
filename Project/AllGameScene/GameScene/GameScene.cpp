@@ -12,9 +12,9 @@
 void GameScene::Initialize() {
 
 	uint32_t groundModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
-	
-	skydome_ = std::make_unique<Skydome>();
-	skydome_->Initialize(groundModelHandle);
+	groundModelHandle;
+	//skydome_ = std::make_unique<Skydome>();
+	//skydome_->Initialize(groundModelHandle);
 	
 	camera_.Initialize();
 
@@ -47,7 +47,7 @@ void GameScene::Update(GameManager* gameManager) {
 	camera_.Update();
 
 
-	skydome_->Update();
+	//skydome_->Update();
 	//light_.Update();
 
 
@@ -59,7 +59,7 @@ void GameScene::DrawSpriteBack(){
 }
 
 void GameScene::DrawObject3D(){
-	skydome_->Draw(camera_);
+	//skydome_->Draw(camera_);
 }
 
 void GameScene::PreDrawPostEffectFirst(){

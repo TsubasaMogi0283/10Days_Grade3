@@ -348,9 +348,6 @@
     <ClCompile Include="Ellysia\Common\Windows\WindowsSetup.cpp">
       <Filter>Ellysia\Source File\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp">
-      <Filter>Project\GameScene\Sample</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Camera\Camera.cpp">
       <Filter>Ellysia\Source File\Camera</Filter>
     </ClCompile>
@@ -657,9 +654,6 @@
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h">
       <Filter>Project\GameManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h">
-      <Filter>Project\GameScene\Sample</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Camera\Camera.h">
       <Filter>Ellysia\Header File\Camera</Filter>
