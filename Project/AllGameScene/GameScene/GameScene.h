@@ -12,11 +12,11 @@
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
 
-class TitleScene : public IGameScene {
+class GameScene : public IGameScene {
 public:
 
 	//コンストラクタ
-	TitleScene()=default;
+	GameScene() = default;
 
 
 	/// 初期化
@@ -50,7 +50,7 @@ public:
 
 #pragma endregion
 	/// デストラクタ
-	~TitleScene();
+	~GameScene();
 
 
 
@@ -70,4 +70,5 @@ private:
 
 
 };
+
 
