@@ -486,35 +486,11 @@
     <ClCompile Include="Project\Collider\CollisionManager.cpp">
       <Filter>Project\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Project\LightWeapon\LightWeapon.cpp">
-      <Filter>Project\Player\LightWeapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Stage\Ground\Ground.cpp">
-      <Filter>Project\ObjectManager\StageObject\Ground</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Key\Key.cpp">
-      <Filter>Project\Item\Key</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Key\KeyManager.cpp">
-      <Filter>Project\Item\Key\KeyManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Light\FlashLight\FlashLight.cpp">
-      <Filter>Project\Light\FlashLight</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Math\Single\SingleCalculation.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Manager\LevelDataManager\LevelDataManager.cpp">
       <Filter>Ellysia\Header File\Manager\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Level1\Level1.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Stage\Skydome\Skydome.cpp">
-      <Filter>Project\ObjectManager\StageObject\Skydome</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Stage\Gate\Gate.cpp">
-      <Filter>Project\ObjectManager\StageObject\Gate</Filter>
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp">
       <Filter>Project\GameScene\Title</Filter>
@@ -522,17 +498,8 @@
     <ClCompile Include="Ellysia\Math\Vector\Material.cpp">
       <Filter>Ellysia\Source File\Polygone\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Stage\DemoObject\DemoObject.cpp">
-      <Filter>Project\ObjectManager\StageObject\DemoObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Stage\ObjectManager\ObjectManager.cpp">
-      <Filter>Project\ObjectManager</Filter>
-    </ClCompile>
     <ClCompile Include="Project\AllGameScene\LoseScene\LoseScene.cpp">
       <Filter>Project\GameScene\Lose</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Stage\StageObject\Tree\Tree.cpp">
-      <Filter>Ellysia\Source File</Filter>
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp">
       <Filter>Project\GameScene\Game</Filter>
@@ -892,26 +859,8 @@
     <ClInclude Include="Project\Collider\CollisionManager.h">
       <Filter>Project\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Project\LightWeapon\LightWeapon.h">
-      <Filter>Project\Player\LightWeapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Key\Key.h">
-      <Filter>Project\Item\Key</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Stage\Ground\Ground.h">
-      <Filter>Project\ObjectManager\StageObject\Ground</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Key\KeyManager.h">
-      <Filter>Project\Item\Key\KeyManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Light\FlashLight\FlashLight.h">
-      <Filter>Project\Light\FlashLight</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Math\Shape\Fan.h">
       <Filter>Ellysia\Header File\Math\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Stage\Ground\StageRect.h">
-      <Filter>Project\ObjectManager\StageObject\Ground</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Single\SingleCalculation.h">
       <Filter>Ellysia\Header File</Filter>
@@ -919,35 +868,14 @@
     <ClInclude Include="Ellysia\Manager\LevelDataManager\LevelDataManager.h">
       <Filter>Ellysia\Header File\Manager\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Level1\Level1.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Stage\Skydome\Skydome.h">
-      <Filter>Project\ObjectManager\StageObject\Skydome</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Stage\Gate\Gate.h">
-      <Filter>Project\ObjectManager\StageObject\Gate</Filter>
-    </ClInclude>
     <ClInclude Include="Project\AllGameScene\TitleScene\TitleScene.h">
       <Filter>Project\GameScene\Title</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\PostEffect\GrayScale\GrayScale.h">
       <Filter>Ellysia\Header File\Polygone\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Stage\ObjectManager\ObjectManager.h">
-      <Filter>Project\ObjectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Stage\DemoObject\DemoObject.h">
-      <Filter>Project\ObjectManager\StageObject\DemoObject</Filter>
-    </ClInclude>
     <ClInclude Include="Project\AllGameScene\LoseScene\LoseScene.h">
       <Filter>Project\GameScene\Lose</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Stage\StageObject\StageObject.h">
-      <Filter>Project\ObjectManager\StageObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Stage\StageObject\Tree\Tree.h">
-      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h">
       <Filter>Project\GameScene\Game</Filter>

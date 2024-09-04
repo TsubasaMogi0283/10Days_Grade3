@@ -190,17 +190,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Project\Collider\CollisionManager.cpp" />
-    <ClCompile Include="Project\Key\Key.cpp" />
-    <ClCompile Include="Project\Key\KeyManager.cpp" />
-    <ClCompile Include="Project\Level1\Level1.cpp" />
-    <ClCompile Include="Project\LightWeapon\LightWeapon.cpp" />
-    <ClCompile Include="Project\Light\FlashLight\FlashLight.cpp" />
-    <ClCompile Include="Project\Stage\DemoObject\DemoObject.cpp" />
-    <ClCompile Include="Project\Stage\Gate\Gate.cpp" />
-    <ClCompile Include="Project\Stage\Ground\Ground.cpp" />
-    <ClCompile Include="Project\Stage\ObjectManager\ObjectManager.cpp" />
-    <ClCompile Include="Project\Stage\Skydome\Skydome.cpp" />
-    <ClCompile Include="Project\Stage\StageObject\Tree\Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\AnimationObject3D\AnimationObject3D.PS.hlsl">
@@ -467,19 +456,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Collider\Collider.h" />
     <ClInclude Include="Project\Collider\CollisionConfig.h" />
     <ClInclude Include="Project\Collider\CollisionManager.h" />
-    <ClInclude Include="Project\Key\Key.h" />
-    <ClInclude Include="Project\Key\KeyManager.h" />
-    <ClInclude Include="Project\Level1\Level1.h" />
-    <ClInclude Include="Project\LightWeapon\LightWeapon.h" />
-    <ClInclude Include="Project\Light\FlashLight\FlashLight.h" />
-    <ClInclude Include="Project\Stage\DemoObject\DemoObject.h" />
-    <ClInclude Include="Project\Stage\Gate\Gate.h" />
-    <ClInclude Include="Project\Stage\Ground\Ground.h" />
-    <ClInclude Include="Project\Stage\Ground\StageRect.h" />
-    <ClInclude Include="Project\Stage\ObjectManager\ObjectManager.h" />
-    <ClInclude Include="Project\Stage\Skydome\Skydome.h" />
-    <ClInclude Include="Project\Stage\StageObject\StageObject.h" />
-    <ClInclude Include="Project\Stage\StageObject\Tree\Tree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
