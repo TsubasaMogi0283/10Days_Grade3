@@ -6,22 +6,20 @@
 #include "Material.h"
 
 
-struct Camera;
-struct DirectionalLight;
 
-class Ground{
+
+class DraftPlayer{
 public:
-
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Ground() = default;
+	DraftPlayer() = default;
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize(uint32_t modelhandle);
-	
+
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -38,7 +36,29 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Ground() = default;
+	~DraftPlayer() = default;
+
+
+public:
+	/// <summary>
+	/// ワールド座標の取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetWorldPosition()const;
+
+	/// <summary>
+	/// 方向の入力
+	/// </summary>
+	inline void SetPlayerDirection(Vector3& direction) {
+		this->direction_ = direction;
+	}
+
+
+
+
+	void SetIsJump(bool isJump) {
+		this->isJump_ = isJump;
+	}
 
 private:
 	//モデル
@@ -49,6 +69,20 @@ private:
 
 	//マテリアル
 	Material material_ = {};
+
+
+
+	//方向
+	Vector3 direction_ = {};
+
+
+	//ジャンプしているかどうか
+	bool isJump_ = false;
+
+
+
+
+	float velocityY = 10.0f;
 
 };
 
