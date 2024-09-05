@@ -3,12 +3,13 @@
 
 
 void Ground::Initialize(uint32_t modelhandle){
+	//モデルの生成
 	model_.reset(Model::Create(modelhandle));
 
 
 	//初期化
 	worldTransform_.Initialize();
-	const float SIZE = !00.0f;
+	const float SIZE = 100.0f;
 	worldTransform_.scale_ = { .x = SIZE,.y = SIZE,.z = SIZE };
 	material_.Initialize();
 

@@ -15,6 +15,7 @@
 #include "DirectionalLight.h"
 #include "SpotLight.h"
 #include <StageObject/Ground/Groud.h>
+#include <DraftPlayer/DraftPlayer.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
@@ -56,7 +57,10 @@ public:
 	void DrawSprite()override;
 
 #pragma endregion
+	
+	/// <summary>
 	/// デストラクタ
+	/// </summary>
 	~GameScene();
 
 
@@ -79,6 +83,10 @@ private:
 
 
 
+	//プレイヤーの下書き
+	std::unique_ptr<DraftPlayer> draftPlayer_ = nullptr;
+	//プレイヤーの向いている方向
+	Vector3 playerDirection_ = {};
 
 
 	//地面

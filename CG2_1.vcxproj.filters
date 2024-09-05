@@ -319,6 +319,9 @@
     <Filter Include="Project\GameScene\Game">
       <UniqueIdentifier>{238cd0f0-2925-4502-9828-467c415ca79f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Player\Draft">
+      <UniqueIdentifier>{e879e994-db53-4531-8fc4-435ee3269761}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -502,6 +505,9 @@
       <Filter>Project\GameScene\Game</Filter>
     </ClCompile>
     <ClCompile Include="Project\StageObject\Ground\Groud.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\DraftPlayer\DraftPlayer.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
   </ItemGroup>
@@ -878,6 +884,9 @@
       <Filter>Project\GameScene\Game</Filter>
     </ClInclude>
     <ClInclude Include="Project\StageObject\Ground\Groud.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\DraftPlayer\DraftPlayer.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>

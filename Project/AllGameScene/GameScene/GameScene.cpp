@@ -7,12 +7,21 @@
 #include "GameManager.h"
 #include "ModelManager.h"
 #include <TextureManager.h>
+#include <VectorCalculation.h>
 
 
 void GameScene::Initialize() {
 
 	
 
+
+
+	//下書きプレイヤー
+	uint32_t draftPlayer = ModelManager::GetInstance()->LoadModelFile("Resources/Player/Model", "Player.obj");
+	draftPlayer_ = std::make_unique<DraftPlayer>();
+	draftPlayer_->Initialize(draftPlayer);
+
+	playerDirection_ = {};
 
 
 	//地面
@@ -43,26 +52,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 #ifdef _DEBUG
-
-	const float CAMERA_MOVE_INTERVAL = 0.05f;
-	if (Input::GetInstance()->IsPushKey(DIK_W) == true) {
-		camera_.translate_.y += CAMERA_MOVE_INTERVAL;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
-		camera_.translate_.y -= CAMERA_MOVE_INTERVAL;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_RIGHT) == true) {
-		camera_.translate_.x += CAMERA_MOVE_INTERVAL;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_LEFT) == true) {
-		camera_.translate_.x -= CAMERA_MOVE_INTERVAL;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
-		camera_.translate_.z += CAMERA_MOVE_INTERVAL;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_DOWN) == true) {
-		camera_.translate_.z -= CAMERA_MOVE_INTERVAL;
-	}
+	
 
 
 	ImGui::Begin("ゲーム");
@@ -73,16 +63,52 @@ void GameScene::Update(GameManager* gameManager) {
 
 	//仮置き
 	//スペースキーで次のシーンへ
-	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
+	if (Input::GetInstance()->IsTriggerKey(DIK_L) == true) {
 		gameManager->ChangeScene(new LoseScene());
 		return;
 	}
 
+	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
+		draftPlayer_->SetIsJump(true);
+	}
+
+
+	playerDirection_ = {};
+
+	if (Input::GetInstance()->IsPushKey(DIK_W) == true) {
+		playerDirection_.z = 1.0f;
+	}
+	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
+		playerDirection_.z = -1.0f;
+	}
+	if (Input::GetInstance()->IsPushKey(DIK_D) == true) {
+		playerDirection_.x = 1.0f;
+	}
+	if (Input::GetInstance()->IsPushKey(DIK_A) == true) {
+		playerDirection_.x = -1.0f;
+	}
+
+
+	//プレイヤーの向いている方向を設定
+	draftPlayer_->SetPlayerDirection(playerDirection_);
+
+
+
+
+	//プレイヤー(下書き)の更新
+	draftPlayer_->Update();
+
+
+
+	//プレイヤーに追従する
+	Vector3 cameraOffset = VectorCalculation::Add(draftPlayer_->GetWorldPosition(), {0.0,5.0f,-20.0f });
+	camera_.translate_ = cameraOffset;
 
 
 
 
 
+	
 
 
 	//地面の更新
@@ -101,7 +127,11 @@ void GameScene::DrawSpriteBack(){
 }
 
 void GameScene::DrawObject3D(){
+	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
+
+	//下書きプレイヤーの描画
+	draftPlayer_->Draw(camera_, directtionalLight_);
 }
 
 void GameScene::PreDrawPostEffectFirst(){
