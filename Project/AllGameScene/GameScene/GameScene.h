@@ -14,6 +14,7 @@
 #include "Material.h"
 #include "DirectionalLight.h"
 #include "SpotLight.h"
+#include <StageObject/Ground/Groud.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
@@ -67,6 +68,10 @@ private:
 	Camera camera_ = {};
 	Vector3 cameraPosition_ = {};
 
+	//平行光源
+	DirectionalLight directtionalLight_ = {};
+
+
 
 	//ポストエフェクト
 	//今は使わない
@@ -74,7 +79,12 @@ private:
 
 
 
-	SpotLight light_ = {};
+
+
+	//地面
+	std::unique_ptr<Ground>ground_ = nullptr;
+
+
 };
 
 
