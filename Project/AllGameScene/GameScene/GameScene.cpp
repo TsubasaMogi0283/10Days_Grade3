@@ -50,9 +50,6 @@ void GameScene::Initialize() {
 
 void GameScene::Update(GameManager* gameManager) {
 
-	/* ----- Player プレイヤー ----- */
-	playe_->Update();
-
 
 #ifdef _DEBUG
 	ImGui::Begin("ゲーム");
@@ -67,6 +64,12 @@ void GameScene::Update(GameManager* gameManager) {
 		return;
 	}
 
+
+	/* ----- Player プレイヤー ----- */
+	playe_->Update();
+
+
+	directtionalLight_.Update();
 
 
 	camera_.Update();
