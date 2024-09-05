@@ -187,6 +187,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\AllGameScene\LoseScene\LoseScene.cpp" />
     <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Project\Collider\CollisionManager.cpp" />
+    <ClCompile Include="Project\Player\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\AnimationObject3D\AnimationObject3D.PS.hlsl">
@@ -450,6 +451,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Collider\Collider.h" />
     <ClInclude Include="Project\Collider\CollisionConfig.h" />
     <ClInclude Include="Project\Collider\CollisionManager.h" />
+    <ClInclude Include="Project\Player\Player.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

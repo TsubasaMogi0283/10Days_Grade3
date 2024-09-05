@@ -15,6 +15,10 @@
 #include "DirectionalLight.h"
 #include "SpotLight.h"
 
+
+#include "Player/Player.h"
+
+
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
 
@@ -22,7 +26,7 @@ class GameScene : public IGameScene {
 public:
 
 	//コンストラクタ
-	GameScene() = default;
+	GameScene();
 
 
 	/// 初期化
@@ -72,9 +76,23 @@ private:
 	//今は使わない
 	std::unique_ptr<BackText> back_ = nullptr;
 
+	//平行光源
+	DirectionalLight directtionalLight_ = {};
 
 
 	SpotLight light_ = {};
+
+
+	// プレイヤー
+	std::unique_ptr<Player> playe_;
+
+
+#pragma region System
+
+	// モデルマネージャー
+	ModelManager* modelManager_ = nullptr;
+
+#pragma endregion 
 };
 
 

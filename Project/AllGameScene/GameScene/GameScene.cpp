@@ -9,12 +9,36 @@
 #include <TextureManager.h>
 
 
+
+//コンストラクタ
+GameScene::GameScene()
+{
+#pragma region System
+
+	// モデルマネージャー
+	modelManager_ = ModelManager::GetInstance();
+
+#pragma endregion 
+}
+
+
 void GameScene::Initialize() {
 
 	uint32_t groundModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
 	groundModelHandle;
 	//skydome_ = std::make_unique<Skydome>();
 	//skydome_->Initialize(groundModelHandle);
+
+
+	/* ----- Player プレイヤー ----- */
+	uint32_t playerModelHD = modelManager_->LoadModelFile("Resources/Player", "Player.obj");
+	playe_ = std::make_unique<Player>(playerModelHD);
+	playe_->Init();
+
+
+	//平行光源
+	directtionalLight_.Initialize();
+	directtionalLight_.direction_ = { .x = 0.0f,.y = -1.0f,.z = 0.0f };
 	
 	camera_.Initialize();
 
@@ -26,7 +50,8 @@ void GameScene::Initialize() {
 
 void GameScene::Update(GameManager* gameManager) {
 
-
+	/* ----- Player プレイヤー ----- */
+	playe_->Update();
 
 
 #ifdef _DEBUG
@@ -60,6 +85,10 @@ void GameScene::DrawSpriteBack(){
 
 void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
+
+	/* ----- Player プレイヤー ----- */
+	playe_->Draw3D(camera_, directtionalLight_);
+
 }
 
 void GameScene::PreDrawPostEffectFirst(){
