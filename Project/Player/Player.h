@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "Input.h"
 #include "VectorCalculation.h"
+#include "Matrix4x4Calculation.h"
 
 
 // 前方宣言
@@ -33,6 +34,16 @@ public:
 
 	// 移動処理
 	void Move(XINPUT_STATE joyState);
+
+
+#pragma region Accessor アクセッサ
+
+	// ワールド座標の取得
+	Vector3 GetWorldPos() const {
+		return { transform_.worldMatrix_.m[3][0], transform_.worldMatrix_.m[3][1], transform_.worldMatrix_.m[3][2] };
+	}
+
+#pragma endregion 
 
 
 private:
