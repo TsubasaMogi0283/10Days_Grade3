@@ -3,6 +3,8 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "Material.h"
+#include "Input.h"
+#include "VectorCalculation.h"
 
 
 // 前方宣言
@@ -29,13 +31,16 @@ public:
 	void Update();
 	void Draw3D(Camera& camera, DirectionalLight& light);
 
+	// 移動処理
+	void Move(XINPUT_STATE joyState);
+
 
 private:
 
 	// Imguiの描画
 	void DrawImGui();
 
-
+	
 private:
 
 	// モデル
@@ -46,14 +51,13 @@ private:
 	// マテリアル
 	Material mtl_{};
 
+	// 移動量
+	Vector3 velocity_{};
+	// 移動速度
+	float moveSpeed_ = 0.3f;
+
 
 #pragma region System システム
-
-	// 入力
-	Input* input_ = nullptr;
-
-	// グローバルバリューズ
-	AdjustmentItems* itemManager_ = nullptr;
 
 
 #pragma endregion 

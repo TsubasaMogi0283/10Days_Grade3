@@ -7,6 +7,7 @@
 #include "GameManager.h"
 #include "ModelManager.h"
 #include <TextureManager.h>
+#include <numbers>
 
 
 
@@ -17,6 +18,9 @@ GameScene::GameScene()
 
 	// モデルマネージャー
 	modelManager_ = ModelManager::GetInstance();
+
+	// 入力
+	input_ = Input::GetInstance();
 
 #pragma endregion 
 }
@@ -67,6 +71,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 	/* ----- Player プレイヤー ----- */
 	playe_->Update();
+	PlayerMove();
 
 
 	directtionalLight_.Update();
@@ -109,4 +114,18 @@ void GameScene::DrawSprite() {
 
 GameScene::~GameScene()
 {
+}
+
+
+/// <summary>
+/// プレイヤーの移動処理
+/// </summary>
+void GameScene::PlayerMove()
+{
+	// 入力を検出
+	if (input_->GetJoystickState(joyState_)) {
+
+		// 入力があれば移動
+		playe_->Move(joyState_);
+	}
 }
