@@ -75,6 +75,11 @@ public:
 
 
 private:
+	/// <summary>
+	/// 敵の反転
+	/// </summary>
+	void InvertDirection();
+
 
 	/// <summary>
 	/// プレイヤーの移動処理

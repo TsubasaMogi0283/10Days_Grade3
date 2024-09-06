@@ -4,19 +4,22 @@
 #include <VectorCalculation.h>
 
 
-void Enemy::Initialize(uint32_t& modelHandle){
+void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
 	//モデルの生成
 	model_.reset(Model::Create(modelHandle));
 
 	//初期化
 	worldTransform_.Initialize();
+	worldTransform_.translate_ = position;
 	material_.Initialize() ;
+	speed_ = { -0.0f,0.0f,-0.001f };
 
-
+	aabb_.max = { .x = position.x + radius_,.y = position.y + radius_,.z = position.z + radius_ };
+	aabb_.min = { .x = position.x - radius_,.y = position.x - radius_,.z = position.x - radius_ };
 
 }
 
-void Enemy::Update(){
+void Enemy::Update() {
 
 
 	//状態
@@ -165,6 +168,11 @@ void Enemy::Update(){
 
 	//マテリアル
 	material_.Update();
+
+
+	//AABB
+	aabb_.min = VectorCalculation::Subtract(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
+	aabb_.max = VectorCalculation::Add(GetWorldPosition(), {.x = radius_, .y = radius_, .z =radius_});
 
 
 
