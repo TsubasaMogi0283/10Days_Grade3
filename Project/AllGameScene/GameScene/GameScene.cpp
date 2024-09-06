@@ -24,6 +24,21 @@ void GameScene::Initialize() {
 	playerDirection_ = {};
 
 
+
+
+	//敵
+	uint32_t enemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Enemy","enemy.obj");
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Initialize(enemyModelhandle);
+
+
+
+
+
+
+
+
+
 	//地面
 	uint32_t groundModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
 	ground_ = std::make_unique<Ground>();
@@ -52,7 +67,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 #ifdef _DEBUG
-	
+
 
 
 	ImGui::Begin("ゲーム");
@@ -101,7 +116,9 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 	//プレイヤーに追従する
-	Vector3 cameraOffset = VectorCalculation::Add(draftPlayer_->GetWorldPosition(), {0.0,5.0f,-20.0f });
+	Vector3 cameraOffset = VectorCalculation::Add(
+		{draftPlayer_->GetWorldPosition().x,0.0f,draftPlayer_->GetWorldPosition().z}, 
+		{ 0.0,20.0f,-60.0f });
 	camera_.translate_ = cameraOffset;
 
 

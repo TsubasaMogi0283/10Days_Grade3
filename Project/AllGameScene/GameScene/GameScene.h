@@ -16,6 +16,7 @@
 #include "SpotLight.h"
 #include <StageObject/Ground/Groud.h>
 #include <DraftPlayer/DraftPlayer.h>
+#include <Enemy/Enemy.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
@@ -87,6 +88,15 @@ private:
 	std::unique_ptr<DraftPlayer> draftPlayer_ = nullptr;
 	//プレイヤーの向いている方向
 	Vector3 playerDirection_ = {};
+
+
+
+
+
+
+	std::unique_ptr<Enemy> enemy_ = nullptr;
+
+
 
 
 	//地面

@@ -1,7 +1,7 @@
 #include "DraftPlayer.h"
 #include <VectorCalculation.h>
 
-void DraftPlayer::Initialize(uint32_t modelhandle){
+void DraftPlayer::Initialize(uint32_t& modelhandle){
 	//モデルの生成
 	model_.reset(Model::Create(modelhandle));
 
@@ -30,8 +30,7 @@ void DraftPlayer::Update(){
 	if (isJump_ == true) {
 
 		
-		float acceleationY = -0.5f;
-
+		acceleationY -= -0.1f;
 		velocityY += acceleationY;
 		
 		worldTransform_.translate_.y = velocityY;

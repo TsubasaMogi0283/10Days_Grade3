@@ -13,6 +13,20 @@ void Ground::Initialize(uint32_t modelhandle){
 	worldTransform_.scale_ = { .x = SIZE,.y = SIZE,.z = SIZE };
 	material_.Initialize();
 
+
+
+
+
+	//左奥
+	leftTop_ = {.x= -SIZE,.y=0.0f,.z= SIZE };
+	//右奥
+	rightTop_ = { .x = SIZE,.y = 0.0f,.z = SIZE };
+	//左前
+	leftBottom_ = { .x = -SIZE,.y = 0.0f,.z = -SIZE };
+	//右前
+	rightBottom_ = { .x = SIZE,.y = 0.0f,.z = -SIZE };
+
+
 }
 
 void Ground::Update(){
