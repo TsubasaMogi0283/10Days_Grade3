@@ -104,6 +104,10 @@ void GameScene::Update(GameManager* gameManager) {
 	}
 
 
+
+	enemy_->Update();
+
+
 	//プレイヤーの向いている方向を設定
 	draftPlayer_->SetPlayerDirection(playerDirection_);
 
