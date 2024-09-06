@@ -58,10 +58,13 @@ public:
 private:
 
 	// 移動処理
-	void Move(XINPUT_STATE joyState);
+	void Move();
 
 	// 移動限界処理
 	void MoveLimited();
+
+	// Y軸の姿勢を傾ける処理
+	void BodyOrientation();
 
 	// ジャンプのエンター処理
 	void EnterJampFunc();
@@ -100,6 +103,9 @@ private:
 	// 移動速度
 	float moveSpeed_ = 0.3f;
 
+	// 姿勢
+	float bodyOrientation_ = 0.0f;
+	
 	// ジャンプのフラグ
 	bool isJumping_ = false;
 	// 地面にいるかどうかのフラグ
@@ -128,6 +134,11 @@ private:
 
 #pragma region System システム
 
+	// LStickの入力
+	Vector2 iLStick_{};
+
+	// デッドゾーン
+	const float DZone_ = 0.2f;
 
 #pragma endregion 
 
