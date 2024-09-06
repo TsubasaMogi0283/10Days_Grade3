@@ -18,14 +18,22 @@
 #include <DraftPlayer/DraftPlayer.h>
 #include <Enemy/Enemy.h>
 
+
+#include "Player/Player.h"
+
+
+
+
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
+class ModelManager;
+class Input;
 
 class GameScene : public IGameScene {
 public:
 
 	//コンストラクタ
-	GameScene() = default;
+	GameScene();
 
 
 	/// 初期化
@@ -73,6 +81,11 @@ private:
 	void InvertDirection();
 
 
+	/// <summary>
+	/// プレイヤーの移動処理
+	/// </summary>
+	void PlayerMove();
+
 
 
 
@@ -93,6 +106,25 @@ private:
 
 
 
+	/* ----- Player プレイヤー ----- */
+	// 本体
+	std::unique_ptr<Player> playe_;
+
+
+#pragma region System
+
+	// モデルマネージャー
+	ModelManager* modelManager_ = nullptr;
+
+	// 入力
+	Input* input_ = nullptr;
+
+	//操作は全部ゲームシーンで統一させたい
+	//コマンドパターンですっきりさせても良さそう
+	XINPUT_STATE joyState_{};
+
+
+#pragma endregion 
 	//プレイヤーの下書き
 	std::unique_ptr<DraftPlayer> draftPlayer_ = nullptr;
 	//プレイヤーの向いている方向
