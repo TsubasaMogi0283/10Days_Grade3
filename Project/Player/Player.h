@@ -106,9 +106,9 @@ private:
 	// Y軸方向の速度
 	float stompVel_ = 0.0f;
 	// 急降下のスピード
-	float stompSpeed_ = 30.0f;
+	float stompSpeed_ = 1.0f;
 	// 重力の強さ
-	float stompGravoty_ = 40.0f;
+	float stompGravoty_ = 1.0f;
 	
 
 
