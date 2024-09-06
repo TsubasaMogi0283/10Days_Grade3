@@ -55,15 +55,20 @@ void GameScene::Initialize() {
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(groundModelHandle);
 
+	// Groundの四隅の座標をPlayerに渡す
+	playe_->SetGroundCorners(
+		ground_->GetLeftBack(), ground_->GetRightBack(), 
+		ground_->GetLeftFront(), ground_->GetRightFront());
+
 
 	//敵
 	uint32_t normalEnemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Enemy","enemy.obj");
 
-	//四隅を取得
 	Vector3 stageLeftBack = ground_->GetLeftBack();
 	Vector3 stageRightBack = ground_->GetRightBack();
 	Vector3 stageLeftFront = ground_->GetLeftFront();
 	Vector3 stageRightFront = ground_->GetRightFront();
+
 
 	//敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -225,7 +230,7 @@ void GameScene::PlayerInput()
 	if (input_->GetJoystickState(joyState_)) {
 
 		// 入力があれば移動
-		playe_->Move(joyState_);
+		playe_->FuncStickFunc(joyState_);
 	}
 
 	// ジャンプ処理

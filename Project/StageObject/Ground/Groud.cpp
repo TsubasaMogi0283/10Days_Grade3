@@ -18,13 +18,13 @@ void Ground::Initialize(uint32_t modelhandle){
 
 
 	//左奥
-	leftTop_ = {.x= -SIZE,.y=0.0f,.z= SIZE };
+	leftBack_ = {.x= -SIZE,.y=0.0f,.z= SIZE };
 	//右奥
-	rightTop_ = { .x = SIZE,.y = 0.0f,.z = SIZE };
+	rightBack_ = { .x = SIZE,.y = 0.0f,.z = SIZE };
 	//左前
-	leftBottom_ = { .x = -SIZE,.y = 0.0f,.z = -SIZE };
+	leftFront_ = { .x = -SIZE,.y = 0.0f,.z = -SIZE };
 	//右前
-	rightBottom_ = { .x = SIZE,.y = 0.0f,.z = -SIZE };
+	rightFront_ = { .x = SIZE,.y = 0.0f,.z = -SIZE };
 
 
 }
