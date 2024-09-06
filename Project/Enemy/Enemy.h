@@ -5,7 +5,7 @@
 #include "WorldTransform.h"
 #include "Material.h"
 #include "EnemyAttackCollision.h"
-
+#include "AABB.h"
 
 struct Camera;
 struct DirectionalLight;
@@ -41,7 +41,8 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="modelHandle"></param>
-	void Initialize(uint32_t& modelHandle);
+	/// <param name="position"></param>
+	void Initialize(uint32_t& modelHandle,Vector3 &position);
 
 	/// <summary>
 	/// 更新
@@ -71,11 +72,33 @@ public:
 	Vector3 GetWorldPosition()const;
 
 
-	//void SetDraftPlayer(DraftPlayer& draftPlayer) {
-	//	this->draftplayer_ = draftPlayer;
-	//}
 
 
+	/// <summary>
+	/// 状態の取得
+	/// </summary>
+	/// <returns></returns>
+	uint32_t GetCondition() const{
+		return condition_;
+	}
+
+	//半径の取得
+	float GetRadius()const {
+		return radius_;
+	}
+
+
+	inline AABB GetAABB()const {
+		return aabb_;
+	}
+
+
+	inline void InvertSpeedX() {
+		speed_.x *= -1.0f;
+	}
+	inline void InvertSpeedZ() {
+		speed_.z *= -1.0f;
+	}
 
 private:
 	//モデル
@@ -89,10 +112,12 @@ private:
 
 
 
+	AABB aabb_ = {};
+
 	//向き
 	Vector3 direction_ = {};
 
-
+	float radius_ = 1.0f;
 
 private:
 	DraftPlayer* draftplayer_ = nullptr;
@@ -122,6 +147,7 @@ private:
 
 	//攻撃
 	int32_t attackTime_ = 0;
+
 
 
 
