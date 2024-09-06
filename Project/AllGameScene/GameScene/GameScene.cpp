@@ -9,6 +9,7 @@
 #include <TextureManager.h>
 #include <numbers>
 #include <VectorCalculation.h>
+#include "../External/TsumiInput/TInput.h"
 
 
 //コンストラクタ
@@ -21,6 +22,7 @@ GameScene::GameScene()
 
 	// 入力
 	input_ = Input::GetInstance();
+	tInput_ = TInput::GetInstance();
 
 #pragma endregion 
 }
@@ -137,7 +139,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 	/* ----- Player プレイヤー ----- */
 	playe_->Update();
-	PlayerMove();
+	PlayerInput();
 
 
 	directtionalLight_.Update();
@@ -217,12 +219,19 @@ GameScene::~GameScene(){
 /// <summary>
 /// プレイヤーの移動処理
 /// </summary>
-void GameScene::PlayerMove()
+void GameScene::PlayerInput()
 {
-	// 入力を検出
+	// 移動処理
 	if (input_->GetJoystickState(joyState_)) {
 
 		// 入力があれば移動
 		playe_->Move(joyState_);
+	}
+
+	// ジャンプ処理
+	if (tInput_->Trigger(PadData::A)) {
+
+		// Aボタンが押された時の処理
+		playe_->FuncAButton();
 	}
 }
