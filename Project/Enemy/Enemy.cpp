@@ -12,7 +12,7 @@ void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
 	worldTransform_.Initialize();
 	worldTransform_.translate_ = position;
 	material_.Initialize() ;
-	speed_ = { -0.0f,0.0f,-0.001f };
+	speed_ = { -0.0f,0.0f,-0.1f };
 
 	aabb_.max = { .x = position.x + radius_,.y = position.y + radius_,.z = position.z + radius_ };
 	aabb_.min = { .x = position.x - radius_,.y = position.x - radius_,.z = position.x - radius_ };
@@ -155,9 +155,9 @@ void Enemy::Update() {
 
 
 	//加算
-	const float SPEED_SIZE = 0.5f;
-	Vector3 speed = VectorCalculation::Multiply(direction_, SPEED_SIZE);
-	worldTransform_.translate_ = VectorCalculation::Add(worldTransform_.translate_, speed);
+	//const float SPEED_SIZE = 0.05f;
+	//Vector3 speed = VectorCalculation::Multiply(direction_, SPEED_SIZE);
+	//worldTransform_.translate_ = VectorCalculation::Add(worldTransform_.translate_, speed);
 
 
 

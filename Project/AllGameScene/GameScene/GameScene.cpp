@@ -32,8 +32,8 @@ void GameScene::Initialize() {
 
 	/* ----- Player プレイヤー ----- */
 	uint32_t playerModelHD = modelManager_->LoadModelFile("Resources/Player", "Player.obj");
-	playe_ = std::make_unique<Player>(playerModelHD);
-	playe_->Init();
+	player_ = std::make_unique<Player>(playerModelHD);
+	player_->Init();
 
 
 	//平行光源
@@ -105,29 +105,29 @@ void GameScene::Update(GameManager* gameManager) {
 		return;
 	}
 
-	enemyManager_->InvertDirection();
-	enemyManager_->Update();
-
-
+	
 	/* ----- Player プレイヤー ----- */
-	playe_->Update();
+	player_->Update();
 	PlayerInput();
 
 
-	directtionalLight_.Update();
+
 
 
 
 	//プレイヤーに追従する
 	Vector3 cameraOffset = VectorCalculation::Add(
-		{ playe_->GetWorldPos().x, 0.0f, playe_->GetWorldPos().z },
+		{ player_->GetWorldPos().x, 0.0f, player_->GetWorldPos().z },
 		{ 0.0, 20.0f, -60.0f });
 	camera_.translate_ = cameraOffset;
 
 
+	//敵管理クラスの更新
+	Vector3 playerPosition = player_->GetWorldPos();
+	enemyManager_->SetPlayerPosition(playerPosition);
 
-
-
+	enemyManager_->Update();
+	enemyManager_->DeleteEnemy();
 	
 
 
@@ -150,7 +150,7 @@ void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
 	/* ----- Player プレイヤー ----- */
-	playe_->Draw3D(camera_, directtionalLight_);
+	player_->Draw3D(camera_, directtionalLight_);
 
 	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
@@ -188,13 +188,13 @@ void GameScene::PlayerInput()
 	if (input_->GetJoystickState(joyState_)) {
 
 		// 入力があれば移動
-		playe_->Move(joyState_);
+		player_->Move(joyState_);
 	}
 
 	// ジャンプ処理
 	if (tInput_->Trigger(PadData::A)) {
 
 		// Aボタンが押された時の処理
-		playe_->FuncAButton();
+		player_->FuncAButton();
 	}
 }

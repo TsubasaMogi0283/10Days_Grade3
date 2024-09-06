@@ -105,7 +105,7 @@ private:
 
 	/* ----- Player プレイヤー ----- */
 	// 本体
-	std::unique_ptr<Player> playe_;
+	std::unique_ptr<Player> player_;
 
 
 #pragma region System

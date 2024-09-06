@@ -71,9 +71,33 @@ public:
 	/// <returns></returns>
 	Vector3 GetWorldPosition()const;
 
+	/// <summary>
+	/// 方向の取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetDirection()const {
+		return direction_;
+	}
+
+
+
+
+
+
+
+
 
 	void SetPlayerPosition(Vector3 position) {
 		this->playerPosition_ = position;
+	}
+
+
+	/// <summary>
+	/// 生きているかどうかのフラグを取得
+	/// </summary>
+	/// <returns></returns>
+	inline bool GetIsAlive() const {
+		return isAlive_;
 	}
 
 
@@ -84,6 +108,17 @@ public:
 	uint32_t GetCondition() const{
 		return condition_;
 	}
+
+
+	void SetCondition(uint32_t& condition) {
+		this->condition_ = condition;
+	}
+
+	void SetPreCondition(uint32_t& preCondition) {
+		this->preCondition_ = preCondition;
+	}
+
+
 
 	//半径の取得
 	float GetRadius()const {
@@ -114,6 +149,7 @@ private:
 	Material material_ = {};
 
 
+	bool isAlive_=true;
 
 	AABB aabb_ = {};
 
@@ -138,7 +174,7 @@ private:
 	Vector3 preSpeed_ = {};
 	Vector3 speed_ = {};
 
-
+	//プレイヤーの座標
 	Vector3 playerPosition_ = {};
 
 
