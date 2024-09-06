@@ -104,8 +104,8 @@ private:
 	//プレイヤーの座標
 	Vector3 playerPosition_ = {};
 
-	AABB aabb[2] = {};
-	Vector3 enemyPosition[2] = {};
+	//AABB aabb[2] = {};
+	//Vector3 enemyPosition[2] = {};
 
 	//ステージの四隅の座標
 	//左奥
