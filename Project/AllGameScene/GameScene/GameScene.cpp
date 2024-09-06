@@ -47,24 +47,7 @@ void GameScene::Initialize() {
 	uint32_t draftPlayer = ModelManager::GetInstance()->LoadModelFile("Resources/Player/Model", "Player.obj");
 	draftPlayer_ = std::make_unique<DraftPlayer>();
 	draftPlayer_->Initialize(draftPlayer);
-
 	playerDirection_ = {};
-
-
-
-
-	//敵
-	uint32_t enemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Enemy","enemy.obj");
-	enemy_ = std::make_unique<Enemy>();
-	Vector3 enemyPosition = {1.0f,0.0f,1.0f};
-	enemy_->Initialize(enemyModelhandle, enemyPosition);
-
-
-
-
-
-
-
 
 
 	//地面
@@ -72,6 +55,24 @@ void GameScene::Initialize() {
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(groundModelHandle);
 
+
+	//敵
+	uint32_t normalEnemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Enemy","enemy.obj");
+
+	//四隅を取得
+	Vector3 stageLeftBack = ground_->GetLeftBack();
+	Vector3 stageRightBack = ground_->GetRightBack();
+	Vector3 stageLeftFront = ground_->GetLeftFront();
+	Vector3 stageRightFront = ground_->GetRightFront();
+
+	//敵管理クラス
+	enemyManager_ = std::make_unique<EnemyManager>();
+	enemyManager_->Initialize(normalEnemyModelhandle);
+	enemyManager_->SetStageRectPosition(stageLeftBack, stageRightBack, stageLeftFront, stageRightFront);
+
+
+
+	
 
 	//平行光源
 	directtionalLight_.Initialize();
@@ -89,45 +90,6 @@ void GameScene::Initialize() {
 
 }
 
-
-void GameScene::InvertDirection() {
-
-
-	Vector3 stageLeftTop = ground_->GetLeftTop();
-	Vector3 stageRightTop = ground_->GetRightTop();
-	Vector3 stageLeftBottom = ground_->GetLeftBottom();
-	Vector3 stageRightBottom = ground_->GetRightBottom();
-
-
-	AABB enemyAABB = enemy_->GetAABB();
-	Vector3 position = enemy_->GetWorldPosition();
-
-#ifdef _DEBUG
-	ImGui::Begin("Enemy"); 
-	ImGui::InputFloat3("Position", &position.x);
-
-	if (ImGui::TreeNode("AABB")) {
-		ImGui::InputFloat3("Min", &enemyAABB.min.x);
-		ImGui::InputFloat3("Max", &enemyAABB.max.x);
-		ImGui::TreePop();
-	}
-	ImGui::End();
-#endif // _DEBUG
-
-
-
-	//X
-	if ((enemyAABB.min.x < stageLeftTop.x) || (enemyAABB.max.x > stageRightTop.x)) {
-		enemy_->InvertSpeedX();
-	}
-	//Z
-	if ((enemyAABB.min.z < stageLeftBottom.z) || (enemyAABB.max.z > stageLeftTop.z)) {
-		enemy_->InvertSpeedZ();
-	}
-
-
-
-}
 
 void GameScene::Update(GameManager* gameManager) {
 
@@ -169,10 +131,8 @@ void GameScene::Update(GameManager* gameManager) {
 		playerDirection_.x = -1.0f;
 	}
 
-
-	InvertDirection();
-	enemy_->Update();
-
+	enemyManager_->InvertDirection();
+	enemyManager_->Update();
 
 	//プレイヤーの向いている方向を設定
 	draftPlayer_->SetPlayerDirection(playerDirection_);
@@ -233,7 +193,7 @@ void GameScene::DrawObject3D(){
 	draftPlayer_->Draw(camera_, directtionalLight_);
 
 	//敵の描画
-	enemy_->Draw(camera_, directtionalLight_);
+	enemyManager_->Draw(camera_, directtionalLight_);
 
 }
 

@@ -295,6 +295,12 @@
     <ClCompile Include="Project\DraftPlayer\DraftPlayer.cpp">
       <Filter>Project\Player\Draft</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Player\Player.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Enemy\EnemyManager.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -698,6 +704,12 @@
     </ClInclude>
     <ClInclude Include="Project\DraftPlayer\DraftPlayer.h">
       <Filter>Project\Player\Draft</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Player\Player.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\EnemyManager.h">
+      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

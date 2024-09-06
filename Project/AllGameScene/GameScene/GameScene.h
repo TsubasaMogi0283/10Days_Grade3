@@ -20,6 +20,7 @@
 
 
 #include "Player/Player.h"
+#include <Enemy/EnemyManager.h>
 
 
 
@@ -76,11 +77,6 @@ public:
 
 
 private:
-	/// <summary>
-	/// 敵の反転
-	/// </summary>
-	void InvertDirection();
-
 
 	/// <summary>
 	/// プレイヤーの移動処理
@@ -136,8 +132,8 @@ private:
 
 
 
-
-	std::unique_ptr<Enemy> enemy_ = nullptr;
+	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
+	//std::unique_ptr<Enemy> enemy_ = nullptr;
 
 
 
