@@ -35,11 +35,20 @@ void Player::Update()
 	// マテリアルの更新
 	mtl_.Update();
 
-#ifdef _DEBUG
+	// ジャンプ処理
+	if (isJumping_) { // フラグが立っていたら入る
+		JumpFunc();
+	}
 
+	// ストンプの処理
+	if (isStomping_) { // フラグが立っていたら入る
+		StompFunc();
+	}
+
+
+#ifdef _DEBUG
 	// ImGuiの描画
 	DrawImGui();
-
 #endif // _DEBUG
 }
 
@@ -48,6 +57,23 @@ void Player::Update()
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
 	model_->Draw(transform_, camera, mtl_, light);
+}
+
+
+// Aボタンが押された時の処理
+void Player::FuncAButton()
+{
+	// ジャンプしていなければジャンプ
+	if (!isJumping_) {
+		EnterJampFunc();
+		return;
+	}
+
+	// ジャンプしていたらストンプ処理
+	if (isJumping_ && !isStomping_) {
+		EnterStompFunc();
+		return;
+	}
 }
 
 
@@ -91,15 +117,111 @@ void Player::Move(XINPUT_STATE joyState)
 }
 
 
+// ボタン押下時に呼び出されるジャンプのエンター処理
+void Player::EnterJampFunc()
+{
+	isJumping_ = true; // ジャンプ中
+	isGrounded_ = false; // 地面から離れた状態
+	jumpVel_ = jumpForce_; // 初速を入れる
+}
+
+
+// ジャンプ処理
+void Player::JumpFunc()
+{
+	// 重力をY軸速度に加える
+	jumpVel_ -= jumpGravity_ * jumpDeltaTime_;
+
+	// プレイヤーのY軸方向の移動を更新
+	transform_.translate_.y += jumpVel_ * jumpDeltaTime_;
+
+	// 地面との接触判定
+	if (transform_.translate_.y <= 0.0f) {
+
+		// 地面に戻す
+		transform_.translate_.y = 1.0f;
+		// 着地状態
+		isGrounded_ = true;
+		// 終了処理
+		JumpExsit();
+	}
+}
+
+
+// ジャンプ終了処理
+void Player::JumpExsit()
+{
+	isJumping_ = false; // ジャンプ終了
+	jumpVel_ = 0.0f; // Y軸速度をリセット
+}
+
+
+// ストンプのエンター処理
+void Player::EnterStompFunc()
+{
+	JumpExsit(); // ジャンプの終了処理
+	isStomping_ = true; // ストンプ中
+	stompVel_ = -stompSpeed_; // ストンプの速度を設定
+}
+
+
+// ストンプ処理
+void Player::StompFunc()
+{
+	// 重力をY軸速度に加える
+	stompVel_ -= stompGravoty_;
+
+	// プレイヤーのY軸方向の移動を更新
+	transform_.translate_.y += stompVel_;
+
+	// 地面との接触判定
+	if (transform_.translate_.y <= 0.0f) {
+
+		// 地面に戻す
+		transform_.translate_.y = 1.0f;
+		// 着地状態
+		isGrounded_ = true;
+		// ストンプ終了処理
+		StompExsit();
+	}
+}
+
+
+// ストンプ終了処理
+void Player::StompExsit()
+{
+	isStomping_ = false; // ストンプ終了
+	stompVel_ = 0.0f; // Y軸速度をリセット
+}
+
+
 // Imguiの描画
 void Player::DrawImGui()
 {
 	if (ImGui::TreeNode("Player")) {
 
-		ImGui::Text("Transform"); 
+		ImGui::Text("トランスフォーム");
 		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.01f, 0.1f, 10.0f);
 		ImGui::DragFloat3("Rotate", &transform_.rotate_.x, 0.001f);
 		ImGui::DragFloat3("Transform", &transform_.translate_.x, 0.01f);
+		ImGui::Text("");
+
+		ImGui::Text("ジャンプ関連数値");
+		ImGui::DragFloat("j初速", &jumpForce_, 0.01f);
+		ImGui::DragFloat("j重力", &jumpGravity_, 0.01f);
+		ImGui::DragFloat("jデルタタイム", &jumpDeltaTime_, 0.01f);
+		ImGui::Checkbox("Is_Jump", &isJumping_);
+		ImGui::Checkbox("Is_Grounded", &isGrounded_);
+		ImGui::DragFloat("j速度", &jumpVel_, 0.0f);
+		ImGui::Text("");
+
+		ImGui::Text("ストンプ関連数値");
+		ImGui::DragFloat("s降下速度", &stompSpeed_, 0.01f);
+		ImGui::DragFloat("s重力", &stompGravoty_, 0.01f);
+		ImGui::Checkbox("Is_Stomp", &isStomping_);
+		ImGui::DragFloat("s速度", &stompVel_, 0.0f);
+		ImGui::Text("");
+
 
 		ImGui::TreePop();
 	}

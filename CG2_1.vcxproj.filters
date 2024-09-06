@@ -1,329 +1,108 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Ellysia">
-      <UniqueIdentifier>{abdf560c-0a11-4c32-b8f0-948d3e3b2874}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Common">
-      <UniqueIdentifier>{07c0a95e-6a93-4df8-8d44-8e73f10e1ea2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Math">
-      <UniqueIdentifier>{06a9a389-3fa9-4add-ab75-e624db9a3dd9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\ConvertFunction">
-      <UniqueIdentifier>{5f4a72fc-e562-4946-a2ac-4329dcdc39c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone">
-      <UniqueIdentifier>{6a198dbf-5723-494c-be30-e68adffa3015}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\3D">
-      <UniqueIdentifier>{45f53b96-3860-406f-90bf-8d1946adf2ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\3D\Model">
-      <UniqueIdentifier>{bc061468-3fa2-4b64-a612-cab1c2939851}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\3D\Sphere">
-      <UniqueIdentifier>{c3da23d8-f671-4592-aa90-b00a4373331a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\3D\Particle">
-      <UniqueIdentifier>{5ce2def9-4d37-4049-bbcb-73c42cd3469d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\2D">
-      <UniqueIdentifier>{e51d4b2b-92a7-4a65-aa9d-03229af44e71}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Input">
-      <UniqueIdentifier>{8654ad5d-6e38-43c8-90ef-8d93aa2c6272}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Audio">
-      <UniqueIdentifier>{4e9ce233-b84c-4858-95a3-08d752302d12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Camera">
-      <UniqueIdentifier>{87a8506f-b468-4ee9-a25f-edaaa2092b76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Common">
-      <UniqueIdentifier>{489343cf-64f2-4e1a-99e3-9a53fd5598b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Math">
-      <UniqueIdentifier>{b543a5c7-1ed6-4ca8-ac06-3165a71162a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Math\Vector">
-      <UniqueIdentifier>{aaf74c02-09fc-4fb3-8841-c46e52af7448}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Math\Matrix">
-      <UniqueIdentifier>{979fd626-d0ee-4f17-8e46-8c4d9e8a2bb9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\ConvertFunction">
-      <UniqueIdentifier>{88525f3c-706e-4397-b214-f9c6099be35f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone">
-      <UniqueIdentifier>{7d6b79d6-b619-47a8-8605-e65a4fad754b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone\2D">
-      <UniqueIdentifier>{83900f6e-9ffb-4fd9-992c-e68b69015b2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone\3D">
-      <UniqueIdentifier>{f7f05086-715d-489d-9568-38cf742858b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone\3D\Particle">
-      <UniqueIdentifier>{d3eb6c6b-887b-4ad2-b25a-d06e1be2d5be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone\3D\Sphere">
-      <UniqueIdentifier>{e202b27b-4fd4-47d6-917f-053ff7d7086c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone\3D\Model">
-      <UniqueIdentifier>{fafdcfea-8c0f-4b2e-a2c4-892975276f5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Input">
-      <UniqueIdentifier>{bd6a7a20-7921-47f1-a1ef-c5a99c26491a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Audio">
-      <UniqueIdentifier>{38c8c39f-90cc-4b8a-99bb-e3a6cf511aa2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Camera">
-      <UniqueIdentifier>{21e76dcb-803b-4fd7-91bd-042fb6766ede}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\Object2d">
-      <UniqueIdentifier>{4ce80b78-a1ee-4775-a383-6c321fe1a91b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\Object3d">
-      <UniqueIdentifier>{50a3e48e-01ba-4cc1-95a6-f0f6473efa6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\Particle3D">
-      <UniqueIdentifier>{b41805c9-84ac-4738-9010-423926ba4b89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project">
-      <UniqueIdentifier>{b6cfa1df-9916-48ad-8c18-f653946103ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\GameScene">
-      <UniqueIdentifier>{d00a8998-a08f-48ce-850f-96c0eddb4980}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\GameScene\Sample">
-      <UniqueIdentifier>{e3a0acb5-08b3-41f0-a41e-4357a3698e46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\GameManager">
-      <UniqueIdentifier>{6783ae0e-f5a0-4867-a365-1d65f9d0e07e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Math\Shape">
-      <UniqueIdentifier>{4de1d903-5e8b-49b9-b9c0-f0d9591a86c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Lighting">
-      <UniqueIdentifier>{6894304a-98cd-4168-b852-c62f99047467}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone\3D\Particle3DManager">
-      <UniqueIdentifier>{d8dd8122-9282-4dc5-83dd-13e2bca63bf8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\3D\Particle3DManager">
-      <UniqueIdentifier>{3ec739a0-2572-47d0-a8e3-2884e559d8fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="External">
-      <UniqueIdentifier>{14a915d2-8493-4c0a-a515-545fd5a67d14}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\AdjustmentItems">
-      <UniqueIdentifier>{790ca7fe-3aed-4cdc-bdf7-edc3fdacdae6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Text">
-      <UniqueIdentifier>{86ea6656-3c90-41a3-872c-722ea8f63729}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager">
-      <UniqueIdentifier>{3843d394-1415-4d74-a180-2e7806e3ddf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone\3D\AnimationModel">
-      <UniqueIdentifier>{305d7fc5-1fb5-4be1-a271-b6c4eaa923b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\AnimationObject3D">
-      <UniqueIdentifier>{9eccab60-4ff5-457b-9904-6ce6fe4d5a63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\3D\SkyBox">
-      <UniqueIdentifier>{cb254adb-71fc-4a38-a6a9-c42d7a59dc59}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\SkyBox">
-      <UniqueIdentifier>{44244ac2-4549-4851-b772-2c4eb7d15eb5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\3D\AnimationModel">
-      <UniqueIdentifier>{2e92d4d2-e932-4495-aace-3da469cbd20c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager\Pipeline">
-      <UniqueIdentifier>{960690e0-f2d3-4f0a-a7e9-81f206ff3f49}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Manager">
-      <UniqueIdentifier>{8809c26d-403e-422c-baa3-edea3d495fdd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Manager\Pipeline">
-      <UniqueIdentifier>{249441d7-ac06-46bc-84f0-500c7b9095a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager\SRV">
-      <UniqueIdentifier>{7769c9a0-c850-4598-990d-dccb23b095ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager\RTV">
-      <UniqueIdentifier>{b9da9b7d-b86e-46bc-a22d-f7db0c37aa66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Manager\RTV">
-      <UniqueIdentifier>{46b132e8-4eaa-443c-aae1-601116305520}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Polygone\PostEffect">
-      <UniqueIdentifier>{ef5cb602-2042-45a3-9f69-6683bdec740b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Polygone\PostEffect">
-      <UniqueIdentifier>{6b7ed0e5-1697-4c65-b662-96b18d9e16f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Manager\SRV">
-      <UniqueIdentifier>{7b4dbcbf-dff4-482d-b198-c08e182da004}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Manager\Model">
-      <UniqueIdentifier>{2747883a-dcbe-4951-b835-e69a4e599a81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager\Model">
-      <UniqueIdentifier>{3d3be091-044e-42b8-93ea-7d8380a25a1b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager\Texture">
-      <UniqueIdentifier>{923fe313-40bb-48ce-aa0b-eb17ee0b5333}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Manager\Texture">
-      <UniqueIdentifier>{7cee7120-9bf3-4b3b-a93a-30c9b8710e6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager\ImGui">
-      <UniqueIdentifier>{14d4744c-9636-4620-8765-10b4ee6446ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Manager\ImGui">
-      <UniqueIdentifier>{00ad347e-53a6-4856-9344-67a497557e0a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager\Animation">
-      <UniqueIdentifier>{97ce354a-4949-41c4-886a-96dc659bbfc0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Manager\Animation">
-      <UniqueIdentifier>{854ee5dc-7df8-4ce1-a244-9ca2a7c26822}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\AdjustmentItems">
-      <UniqueIdentifier>{12e16608-40ac-4915-8d0c-9b46fdd3dd26}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Source File\Lighting">
-      <UniqueIdentifier>{18d4b0dd-38f4-4c8c-b471-c9aa09e3199c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect">
-      <UniqueIdentifier>{bf44ec8d-4cae-4c6e-b211-00e52f732abf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\LuminanceBasedOutline">
-      <UniqueIdentifier>{78a63350-fe4d-4afd-b19b-0fef1f5f2beb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\FullScreen">
-      <UniqueIdentifier>{7861ced3-2a88-4ca5-a1e3-103885d8bccc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\Dissolve">
-      <UniqueIdentifier>{10327663-f5e8-4a84-9868-6aa21b3359b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\DepthBasedOutLine">
-      <UniqueIdentifier>{93e38bdd-1750-4952-9dae-c784ea89cc51}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\RadialBlur">
-      <UniqueIdentifier>{9091124b-25b9-4f0e-b379-f66d6a2590a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\RandomEffect">
-      <UniqueIdentifier>{7b981246-9015-4976-adde-0ee45c53d6d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\GrayScale">
-      <UniqueIdentifier>{09f77f84-4dfe-4a08-8be9-17894e87123e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\SepiaScale">
-      <UniqueIdentifier>{bb9d0593-1d3e-49a3-80c4-4af268ff488a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\Vignette">
-      <UniqueIdentifier>{3e054879-47a6-4d80-8db0-b71b096e8249}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\BoxFilter">
-      <UniqueIdentifier>{4446064b-c2c3-4fbe-8b31-67a8815a462f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\PostEffect\GaussianFilter">
-      <UniqueIdentifier>{96657abe-adba-4189-ab80-75a7fbfba290}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Enemy">
-      <UniqueIdentifier>{50da64de-7949-4d78-9976-41a9e659d7be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Collision">
-      <UniqueIdentifier>{c1aa45b5-8f1f-4832-9f1f-70cd41ad017e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Player">
-      <UniqueIdentifier>{64043a22-c8f5-4bb5-9fd8-8f56b10eb819}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Player\LightWeapon">
-      <UniqueIdentifier>{d4541ffb-27ab-4165-84e8-d544c34cb2a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Item">
-      <UniqueIdentifier>{617e81c9-f892-40bf-92da-38799fc0e39e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Item\Key">
-      <UniqueIdentifier>{fc1d294f-567f-4707-a4fc-9052cbc0f915}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Item\Key\KeyManager">
-      <UniqueIdentifier>{f292f7df-b6ad-4cbe-93cb-c6b80da6c1c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Light">
-      <UniqueIdentifier>{49355256-8b6e-46a4-a9ea-39d8676cbf2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Light\FlashLight">
-      <UniqueIdentifier>{d8dbaa74-8099-4ee9-a61b-20473f2f96ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Enemy\EnemyManager">
-      <UniqueIdentifier>{e2a6260b-6ea8-4c91-83ff-a92709617455}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Header File\Manager\LevelEditor">
-      <UniqueIdentifier>{edef7b64-1b23-4423-9ff8-a01676a0d1a8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ellysia\Resource File\Line3D">
-      <UniqueIdentifier>{10f964f7-878d-4c2f-bd56-002547dadcf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\GameScene\Title">
-      <UniqueIdentifier>{92919d9a-660d-4a63-8767-0a9223021c5b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Enemy\EnemyAttackCollision">
-      <UniqueIdentifier>{20d87d40-77b6-425d-8fb0-6466f81f7d5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\GameScene\Lose">
-      <UniqueIdentifier>{57682276-21c2-48e2-83ee-02eed279de4a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\ObjectManager">
-      <UniqueIdentifier>{07691779-7717-47c0-8eaf-66d662b47822}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\ObjectManager\StageObject">
-      <UniqueIdentifier>{3ee82dd3-28aa-419b-817b-b4293c945d9b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\ObjectManager\StageObject\Ground">
-      <UniqueIdentifier>{3c3cdb90-3b57-4d02-8386-26dafe74497f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\ObjectManager\StageObject\Gate">
-      <UniqueIdentifier>{04fdbc6f-7a4a-4b0a-ad10-68fef5f36d90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\ObjectManager\StageObject\Skydome">
-      <UniqueIdentifier>{3ef8085f-eeb8-4a09-ae96-9db0b99c2fae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\ObjectManager\StageObject\DemoObject">
-      <UniqueIdentifier>{23eb0470-6142-403d-b697-8c87c43993b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\ObjectManager\StageObject\Tree">
-      <UniqueIdentifier>{5a44d3e4-b20b-4e25-b81a-9f359069b5ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\GameScene\Game">
-      <UniqueIdentifier>{238cd0f0-2925-4502-9828-467c415ca79f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Player\Draft">
-      <UniqueIdentifier>{e879e994-db53-4531-8fc4-435ee3269761}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Ground">
-      <UniqueIdentifier>{c2200429-df02-42d2-ba0c-43d2e45fcbd9}</UniqueIdentifier>
-    </Filter>
+    <FxCompile Include="Resources\Shader\AnimationObject3D\AnimationObject3D.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\AnimationObject3D\AnimationObject3D.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\BoxFilter\BoxFilter.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\BoxFilter\BoxFilter.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\DepthBasedOutline\DepthBasedOutline.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\DepthBasedOutline\DepthBasedOutline.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Dissolve\Dissolve.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Dissolve\Dissolve.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\FullScreen\FullScreen.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\FullScreen\FullScreen.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\GaussianFilter\GaussianFilter.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\GaussianFilter\GaussianFilter.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\GrayScale\GrayScale.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\GrayScale\GrayScale.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Line3D\Line3D.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Line3D\Line3D.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\LuminanceBasedOutline\LuminanceBasedOutline.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\LuminanceBasedOutline\LuminanceBasedOutline.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Object2D\Object2d.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Object2D\Object2d.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Object3D\Object3d.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Object3D\Object3d.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle3D\Particle3d.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\RadialBlur\RadialBlur.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\RadialBlur\RadialBlur.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\RandomEffect\RandomEffect.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\RandomEffect\RandomEffect.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\SepiaScale\SepiaScale.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\SepiaScale\SepiaScale.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\SkyBox\SkyBox.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\SkyBox\SkyBox.VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Vignette\Vignette.PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Vignette\Vignette.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ellysia\AdjustmentItems\AdjustmentItems.cpp" />
+    <ClCompile Include="Ellysia\Audio\Audio.cpp" />
+    <ClCompile Include="Ellysia\Camera\Camera.cpp" />
+    <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp" />
+    <ClCompile Include="Ellysia\Common\Windows\WindowsSetup.cpp" />
+    <ClCompile Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.cpp" />
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ConvertColor.cpp" />
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\ConvertLog.cpp" />
+    <ClCompile Include="Ellysia\Ellysia.cpp" />
+    <ClCompile Include="Ellysia\Input\Input.cpp" />
+    <ClCompile Include="Ellysia\Lighting\DirectionalLight.cpp" />
+    <ClCompile Include="Ellysia\Lighting\PointLight.cpp" />
+    <ClCompile Include="Ellysia\Lighting\SpotLight.cpp" />
+    <ClCompile Include="Ellysia\Line\Line.cpp" />
+    <ClCompile Include="Ellysia\main.cpp" />
+    <ClCompile Include="Ellysia\Manager\AnimationManager\AnimationManager.cpp" />
+    <ClCompile Include="Ellysia\Manager\ImGuiManager\ImGuiManager.cpp" />
+    <ClCompile Include="Ellysia\Manager\LevelDataManager\LevelDataManager.cpp" />
+    <ClCompile Include="Ellysia\Manager\ModelManager\Animation.cpp" />
+    <ClCompile Include="Ellysia\Manager\ModelManager\Joint.cpp" />
+    <ClCompile Include="Ellysia\Manager\ModelManager\ModelManager.cpp" />
+    <ClCompile Include="Ellysia\Manager\ModelManager\ReadNode.cpp" />
+    <ClCompile Include="Ellysia\Manager\ModelManager\Skeleton.cpp" />
+    <ClCompile Include="Ellysia\Manager\ModelManager\SkinCluster.cpp" />
+    <ClCompile Include="Ellysia\Manager\PipelineManager\PipelineManager.cpp" />
+    <ClCompile Include="Ellysia\Manager\RtvManager\RtvManager.cpp" />
+    <ClCompile Include="Ellysia\Manager\SrvManager\SrvManager.cpp" />
+    <ClCompile Include="Ellysia\Manager\TextureManager\TextureManager.cpp" />
+    <ClCompile Include="Ellysia\Math\BPMCalculation\BPMSetting.cpp" />
+    <ClCompile Include="Ellysia\Math\Collision\Collision.cpp" />
+    <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp" />
+    <ClCompile Include="Ellysia\Math\Quaternion\Quaternion.cpp" />
+    <ClCompile Include="Ellysia\Math\Single\SingleCalculation.cpp" />
+    <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp" />
+    <ClCompile Include="Ellysia\Math\Vector\Material.cpp" />
+    <ClCompile Include="Ellysia\Math\WorldTransform\WorldTransform.cpp" />
+    <ClCompile Include="Ellysia\Polygon\2D\Sprite\Sprite.cpp" />
+    <ClCompile Include="Ellysia\Polygon\2D\Triangle\Triangle.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\AnimationModel\AnimationModel.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\Model\Model.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\Particle3DManager\Particle3DManager.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\SkyBox\SkyBox.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\Sphere\Sphere.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\BackTest\BackText.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\BoxFilter\BoxFilter.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\DepthBasedOutline\DepthBasedOutline.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\Dissolve\Dissolve.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\GaussianFilter\GaussianFilter.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\GrayScale\GrayScale.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\LuminanceBasedOutline\LuminanceBasedOutline.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\RadialBlur\RadialBlur.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\RandomEffect\RandomEffect.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\SepiaScale\SepiaScale.cpp" />
+    <ClCompile Include="Ellysia\Polygon\PostEffect\Vignette\Vignette.cpp" />
+    <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
+    <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp" />
+    <ClCompile Include="Project\AllGameScene\LoseScene\LoseScene.cpp" />
+    <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp" />
+    <ClCompile Include="Project\Collider\CollisionManager.cpp" />
+    <ClCompile Include="Project\Player\Player.cpp" />
+    <ClCompile Include="Project\DraftPlayer\DraftPlayer.cpp" />
+    <ClCompile Include="Project\Enemy\Enemy.cpp" />
+    <ClCompile Include="Project\Enemy\EnemyAttackCollision.cpp" />
+    <ClCompile Include="Project\StageObject\Ground\Groud.cpp" />
+    <ClCompile Include="External\TsumiInput\TInput.cpp" />
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
       <Filter>Ellysia\Source File\Math</Filter>
     </ClCompile>
@@ -518,110 +297,129 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
-      <Filter>Ellysia\Resource File\Particle3D</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Particle3D\Particle3d.VS.hlsl">
-      <Filter>Ellysia\Resource File\Particle3D</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Object2D\Object2d.PS.hlsl">
-      <Filter>Ellysia\Resource File\Object2d</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Object2D\Object2d.VS.hlsl">
-      <Filter>Ellysia\Resource File\Object2d</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Object3D\Object3d.PS.hlsl">
-      <Filter>Ellysia\Resource File\Object3d</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Object3D\Object3d.VS.hlsl">
-      <Filter>Ellysia\Resource File\Object3d</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\AnimationObject3D\AnimationObject3D.PS.hlsl">
-      <Filter>Ellysia\Resource File\AnimationObject3D</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\AnimationObject3D\AnimationObject3D.VS.hlsl">
-      <Filter>Ellysia\Resource File\AnimationObject3D</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\SkyBox\SkyBox.VS.hlsl">
-      <Filter>Ellysia\Resource File\SkyBox</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\SkyBox\SkyBox.PS.hlsl">
-      <Filter>Ellysia\Resource File\SkyBox</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\DepthBasedOutline\DepthBasedOutline.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\DepthBasedOutLine</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\DepthBasedOutline\DepthBasedOutline.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\DepthBasedOutLine</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Dissolve\Dissolve.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\Dissolve</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Dissolve\Dissolve.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\Dissolve</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\FullScreen\FullScreen.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\FullScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\FullScreen\FullScreen.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\FullScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\LuminanceBasedOutline\LuminanceBasedOutline.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\LuminanceBasedOutline</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\LuminanceBasedOutline\LuminanceBasedOutline.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\LuminanceBasedOutline</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\RadialBlur\RadialBlur.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\RadialBlur</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\RadialBlur\RadialBlur.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\RadialBlur</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\RandomEffect\RandomEffect.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\RandomEffect</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\RandomEffect\RandomEffect.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\RandomEffect</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\GrayScale\GrayScale.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\GrayScale</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\GrayScale\GrayScale.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\GrayScale</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\SepiaScale\SepiaScale.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\SepiaScale</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\SepiaScale\SepiaScale.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\SepiaScale</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Vignette\Vignette.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\Vignette</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Vignette\Vignette.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\Vignette</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\BoxFilter\BoxFilter.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\BoxFilter</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\BoxFilter\BoxFilter.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\BoxFilter</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\GaussianFilter\GaussianFilter.PS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\GaussianFilter</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\GaussianFilter\GaussianFilter.VS.hlsl">
-      <Filter>Ellysia\Resource File\PostEffect\GaussianFilter</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Line3D\Line3D.PS.hlsl">
-      <Filter>Ellysia\Resource File\Line3D</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Line3D\Line3D.VS.hlsl">
-      <Filter>Ellysia\Resource File\Line3D</Filter>
-    </FxCompile>
+    <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
+    <ClInclude Include="Ellysia\Audio\Audio.h" />
+    <ClInclude Include="Ellysia\Audio\AudioStruct.h" />
+    <ClInclude Include="Ellysia\Camera\Camera.h" />
+    <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
+    <ClInclude Include="Ellysia\Common\Windows\WindowsSetup.h" />
+    <ClInclude Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.h" />
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ConvertColor.h" />
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\ConvertLog.h" />
+    <ClInclude Include="Ellysia\Ellysia.h" />
+    <ClInclude Include="Ellysia\Input\Input.h" />
+    <ClInclude Include="Ellysia\Lighting\DirectionalLight.h" />
+    <ClInclude Include="Ellysia\Lighting\LightingType.h" />
+    <ClInclude Include="Ellysia\Lighting\PointLight.h" />
+    <ClInclude Include="Ellysia\Lighting\SpotLight.h" />
+    <ClInclude Include="Ellysia\Line\Line.h" />
+    <ClInclude Include="Ellysia\Manager\AnimationManager\AnimationManager.h" />
+    <ClInclude Include="Ellysia\Manager\ImGuiManager\ImGuiManager.h" />
+    <ClInclude Include="Ellysia\Manager\LevelDataManager\LevelDataManager.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\Animation.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\Joint.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\JoinWeightData.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\KeyFrame.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\ModelData.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\ModelManager.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\Node.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\NodeAnimation.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\ReadNode.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\Skeleton.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\SkinCluster.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\VertexInfluence.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\VertexWeightData.h" />
+    <ClInclude Include="Ellysia\Manager\ModelManager\WellForGPU.h" />
+    <ClInclude Include="Ellysia\Manager\PipelineManager\PipelineManager.h" />
+    <ClInclude Include="Ellysia\Manager\RtvManager\RtvManager.h" />
+    <ClInclude Include="Ellysia\Manager\SrvManager\SrvManager.h" />
+    <ClInclude Include="Ellysia\Manager\TextureManager\TextureManager.h" />
+    <ClInclude Include="Ellysia\Math\BPMCalculation\BPMSetting.h" />
+    <ClInclude Include="Ellysia\Math\Collision\Collision.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix3x3.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix4x4.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\TransformationMatrix.h" />
+    <ClInclude Include="Ellysia\Math\Quaternion\Quaternion.h" />
+    <ClInclude Include="Ellysia\Math\Shape\AABB.h" />
+    <ClInclude Include="Ellysia\Math\Shape\Fan.h" />
+    <ClInclude Include="Ellysia\Math\Shape\SphereShape.h" />
+    <ClInclude Include="Ellysia\Math\Single\SingleCalculation.h" />
+    <ClInclude Include="Ellysia\Math\Transform\EulerTransform.h" />
+    <ClInclude Include="Ellysia\Math\Transform\QuaternionTransform.h" />
+    <ClInclude Include="Ellysia\Math\Vector\Calculation\VectorCalculation.h" />
+    <ClInclude Include="Ellysia\Math\Vector\Material.h" />
+    <ClInclude Include="Ellysia\Math\Vector\Transform.h" />
+    <ClInclude Include="Ellysia\Math\Vector\Vector2.h" />
+    <ClInclude Include="Ellysia\Math\Vector\Vector3.h" />
+    <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
+    <ClInclude Include="Ellysia\Math\Vector\VertexData.h" />
+    <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h" />
+    <ClInclude Include="Ellysia\Polygon\2D\Sprite\Sprite.h" />
+    <ClInclude Include="Ellysia\Polygon\2D\Triangle\Triangle.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\AnimationModel\AnimationModel.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3DManager\Particle3DManager.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\AccelerationField.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\SkyBox\SkyBox.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Sphere\Sphere.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\BackTest\BackText.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\BoxFilter\BoxFilter.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\DepthBasedOutline\DepthBasedOutline.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\Dissolve\Dissolve.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\GaussianFilter\GaussianFilter.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\GrayScale\GrayScale.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\LuminanceBasedOutline\LuminanceBasedOutline.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\RadialBlur\RadialBlur.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\RandomEffect\RandomEffect.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\SepiaScale\SepiaScale.h" />
+    <ClInclude Include="Ellysia\Polygon\PostEffect\Vignette\Vignette.h" />
+    <ClInclude Include="External\nlohmann\json.hpp" />
+    <ClInclude Include="External\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
+    <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
+    <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h" />
+    <ClInclude Include="Project\AllGameScene\LoseScene\LoseScene.h" />
+    <ClInclude Include="Project\AllGameScene\TitleScene\TitleScene.h" />
+    <ClInclude Include="Project\Collider\Collider.h" />
+    <ClInclude Include="Project\Collider\CollisionConfig.h" />
+    <ClInclude Include="Project\Collider\CollisionManager.h" />
+    <ClInclude Include="Project\Player\Player.h" />
+    <ClInclude Include="Project\DraftPlayer\DraftPlayer.h" />
+    <ClInclude Include="Project\Enemy\Enemy.h" />
+    <ClInclude Include="Project\Enemy\EnemyAttackCollision.h" />
+    <ClInclude Include="Project\StageObject\Ground\Groud.h" />
+    <ClInclude Include="External\TsumiInput\TInput.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include="Resources\Shader\AnimationObject3D\AnimationObject3D.hlsli" />
+    <None Include="Resources\Shader\BoxFilter\BoxFilter.hlsli" />
+    <None Include="Resources\Shader\BoxFilter\SmoothingIndex.hlsli" />
+    <None Include="Resources\Shader\DepthBasedOutline\DepthBasedOutline.hlsli" />
+    <None Include="Resources\Shader\Dissolve\Dissolve.hlsli" />
+    <None Include="Resources\Shader\FullScreen\EffectType.hlsli" />
+    <None Include="Resources\Shader\FullScreen\FullScreen.hlsli" />
+    <None Include="Resources\Shader\FullScreen\Kernel.hlsli" />
+    <None Include="Resources\Shader\FullScreen\SmoothingIndex.hlsli" />
+    <None Include="Resources\Shader\GaussianFilter\GaussianFilter.hlsli" />
+    <None Include="Resources\Shader\GaussianFilter\Kernel.hlsli" />
+    <None Include="Resources\Shader\GaussianFilter\SmoothingIndex.hlsli" />
+    <None Include="Resources\Shader\GrayScale\GrayScale.hlsli" />
+    <None Include="Resources\Shader\Line3D\Line3D.hlsli" />
+    <None Include="Resources\Shader\LuminanceBasedOutline\LuminanceBasedOutline.hlsli" />
+    <None Include="Resources\Shader\Object2D\Object2d.hlsli" />
+    <None Include="Resources\Shader\Object3D\Object3d.hlsli" />
+    <None Include="Resources\Shader\Particle3D\Particle3D.hlsli" />
+    <None Include="Resources\Shader\RadialBlur\RadialBlur.hlsli" />
+    <None Include="Resources\Shader\RandomEffect\RandomEffect.hlsli" />
+    <None Include="Resources\Shader\SepiaScale\SepiaScale.hlsli" />
+    <None Include="Resources\Shader\SkyBox\SkyBox.hlsli" />
+    <None Include="Resources\Shader\Vignette\Vignette.hlsli" />
     <ClInclude Include="Ellysia\Math\Vector\Vector3.h">
       <Filter>Ellysia\Header File\Math\Vector</Filter>
     </ClInclude>
@@ -903,88 +701,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shader\Particle3D\Particle3D.hlsli">
-      <Filter>Ellysia\Resource File\Particle3D</Filter>
-    </None>
-    <None Include="Resources\Shader\Object2D\Object2d.hlsli">
-      <Filter>Ellysia\Resource File\Object2d</Filter>
-    </None>
-    <None Include="Resources\Shader\Object3D\Object3d.hlsli">
-      <Filter>Ellysia\Resource File\Object3d</Filter>
-    </None>
-    <None Include=".editorconfig">
-      <Filter>Text</Filter>
-    </None>
-    <None Include=".gitattributes">
-      <Filter>Text</Filter>
-    </None>
-    <None Include=".gitignore">
-      <Filter>Text</Filter>
-    </None>
-    <None Include="Resources\Shader\AnimationObject3D\AnimationObject3D.hlsli">
-      <Filter>Ellysia\Resource File\AnimationObject3D</Filter>
-    </None>
-    <None Include="Resources\Shader\SkyBox\SkyBox.hlsli">
-      <Filter>Ellysia\Resource File\SkyBox</Filter>
-    </None>
-    <None Include="Resources\Shader\DepthBasedOutline\DepthBasedOutline.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\DepthBasedOutLine</Filter>
-    </None>
-    <None Include="Resources\Shader\Dissolve\Dissolve.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\Dissolve</Filter>
-    </None>
-    <None Include="Resources\Shader\FullScreen\EffectType.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\FullScreen</Filter>
-    </None>
-    <None Include="Resources\Shader\FullScreen\FullScreen.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\FullScreen</Filter>
-    </None>
-    <None Include="Resources\Shader\FullScreen\SmoothingIndex.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\FullScreen</Filter>
-    </None>
-    <None Include="Resources\Shader\LuminanceBasedOutline\LuminanceBasedOutline.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\LuminanceBasedOutline</Filter>
-    </None>
-    <None Include="Resources\Shader\RadialBlur\RadialBlur.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\RadialBlur</Filter>
-    </None>
-    <None Include="Resources\Shader\RandomEffect\RandomEffect.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\RandomEffect</Filter>
-    </None>
-    <None Include="Resources\Shader\GrayScale\GrayScale.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\GrayScale</Filter>
-    </None>
-    <None Include="Resources\Shader\SepiaScale\SepiaScale.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\SepiaScale</Filter>
-    </None>
-    <None Include="Resources\Shader\Vignette\Vignette.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\Vignette</Filter>
-    </None>
-    <None Include="Resources\Shader\BoxFilter\BoxFilter.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\BoxFilter</Filter>
-    </None>
-    <None Include="Resources\Shader\BoxFilter\SmoothingIndex.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\BoxFilter</Filter>
-    </None>
-    <None Include="Resources\Shader\FullScreen\Kernel.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\FullScreen</Filter>
-    </None>
-    <None Include="Resources\Shader\GaussianFilter\GaussianFilter.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\GaussianFilter</Filter>
-    </None>
-    <None Include="Resources\Shader\GaussianFilter\Kernel.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\GaussianFilter</Filter>
-    </None>
-    <None Include="Resources\Shader\GaussianFilter\SmoothingIndex.hlsli">
-      <Filter>Ellysia\Resource File\PostEffect\GaussianFilter</Filter>
-    </None>
-    <None Include="Resources\Shader\Line3D\Line3D.hlsli">
-      <Filter>Ellysia\Resource File\Line3D</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Ellysia\Audio\AudioMemo.txt">
-      <Filter>Ellysia\Header File\Audio</Filter>
-    </Text>
+    <Text Include="Ellysia\Audio\AudioMemo.txt" />
   </ItemGroup>
 </Project>

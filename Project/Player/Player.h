@@ -32,6 +32,9 @@ public:
 	void Update();
 	void Draw3D(Camera& camera, DirectionalLight& light);
 
+	// Aボタンが押された時の処理
+	void FuncAButton();
+
 	// 移動処理
 	void Move(XINPUT_STATE joyState);
 
@@ -47,6 +50,24 @@ public:
 
 
 private:
+
+	// ジャンプのエンター処理
+	void EnterJampFunc();
+
+	// ジャンプ処理
+	void JumpFunc();
+
+	// ジャンプ終了処理
+	void JumpExsit();
+
+	// ストンプのエンター処理
+	void EnterStompFunc();
+
+	// ストンプ処理
+	void StompFunc();
+
+	// ストンプ終了処理
+	void StompExsit();
 
 	// Imguiの描画
 	void DrawImGui();
@@ -66,6 +87,29 @@ private:
 	Vector3 velocity_{};
 	// 移動速度
 	float moveSpeed_ = 0.3f;
+
+	// ジャンプのフラグ
+	bool isJumping_ = false;
+	// 地面にいるかどうかのフラグ
+	bool isGrounded_ = true;
+	// Y軸方向の速度
+	float jumpVel_ = 0.0f;
+	// ジャンプ時の初速
+	float jumpForce_ = 25.0f;
+	// 重力の強さ
+	float jumpGravity_ = 30.0f;
+	// ジャンプのフレーム時間ごとの時間経過
+	float jumpDeltaTime_ = 0.036f;
+
+	// ストンプのフラグ
+	bool isStomping_ = false;
+	// Y軸方向の速度
+	float stompVel_ = 0.0f;
+	// 急降下のスピード
+	float stompSpeed_ = 30.0f;
+	// 重力の強さ
+	float stompGravoty_ = 40.0f;
+	
 
 
 #pragma region System システム

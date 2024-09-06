@@ -8,6 +8,7 @@
 #include "RtvManager.h"
 #include <Audio.h>
 #include <AdjustmentItems.h>
+#include "../External/TsumiInput/TInput.h"
 
 
 //インスタンス
@@ -71,6 +72,14 @@ void Ellysia::Initialize(){
 	gameManager_->Initialize();
 
 
+
+	////////////////////////////////////////////
+
+	// ツミエンジンのInputの初期化
+	TInput::GetInstance()->Initialize();
+
+	////////////////////////////////////////////
+
 }
 
 
@@ -81,6 +90,12 @@ void Ellysia::BeginFrame(){
 #ifdef _DEBUG
 	ImGuiManager::GetInstance()->BeginFrame();
 #endif
+	////////////////////////////////////////////
+
+	// ツミエンジンのInputの初期化
+	TInput::GetInstance()->BeginFrame();
+
+	////////////////////////////////////////////
 }
 
 void Ellysia::Update(){

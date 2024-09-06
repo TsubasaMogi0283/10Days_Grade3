@@ -28,6 +28,7 @@
 class GameManager;
 class ModelManager;
 class Input;
+class TInput;
 
 class GameScene : public IGameScene {
 public:
@@ -84,7 +85,7 @@ private:
 	/// <summary>
 	/// プレイヤーの移動処理
 	/// </summary>
-	void PlayerMove();
+	void PlayerInput();
 
 
 
@@ -118,6 +119,7 @@ private:
 
 	// 入力
 	Input* input_ = nullptr;
+	TInput* tInput_ = nullptr;
 
 	//操作は全部ゲームシーンで統一させたい
 	//コマンドパターンですっきりさせても良さそう
