@@ -91,6 +91,17 @@ void Player::Move(XINPUT_STATE joyState)
 }
 
 
+// ジャンプ処理
+void Player::JumpFunc()
+{
+	// フラグが折れていたらフラグを建て、数値の設定をする
+	if (!isJump_) {
+		isJump_ = true;
+	}
+
+}
+
+
 // Imguiの描画
 void Player::DrawImGui()
 {
@@ -100,6 +111,10 @@ void Player::DrawImGui()
 		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.01f, 0.1f, 10.0f);
 		ImGui::DragFloat3("Rotate", &transform_.rotate_.x, 0.001f);
 		ImGui::DragFloat3("Transform", &transform_.translate_.x, 0.01f);
+		ImGui::Text("");
+
+		ImGui::Text("Jump_Function");
+		ImGui::Checkbox("Is_Jump", &isJump_);
 
 		ImGui::TreePop();
 	}

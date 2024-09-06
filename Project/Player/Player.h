@@ -35,6 +35,9 @@ public:
 	// 移動処理
 	void Move(XINPUT_STATE joyState);
 
+	// ジャンプ処理
+	void JumpFunc();
+
 
 #pragma region Accessor アクセッサ
 
@@ -66,6 +69,9 @@ private:
 	Vector3 velocity_{};
 	// 移動速度
 	float moveSpeed_ = 0.3f;
+
+	// ジャンプのフラグ
+	bool isJump_ = false;
 
 
 #pragma region System システム

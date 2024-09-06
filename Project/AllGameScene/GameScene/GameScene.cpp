@@ -221,7 +221,7 @@ void GameScene::PlayerInput()
 	// ジャンプ処理
 	if (tInput_->Trigger(PadData::A)) {
 
-		std::string text = "Trigger A Button \n";
-		WindowsSetup::GetInstance()->OutputText(text);
+		// ジャンプの処理
+		playe_->JumpFunc();
 	}
 }
