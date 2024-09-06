@@ -99,9 +99,6 @@ private:
 	//今は使わない
 	std::unique_ptr<BackText> back_ = nullptr;
 
-	//平行光源
-	DirectionalLight directtionalLight_ = {};
-
 
 
 	/* ----- Player プレイヤー ----- */

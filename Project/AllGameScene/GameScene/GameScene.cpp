@@ -28,12 +28,6 @@ GameScene::GameScene()
 
 void GameScene::Initialize() {
 
-	uint32_t groundModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
-	groundModelHandle;
-	//skydome_ = std::make_unique<Skydome>();
-	//skydome_->Initialize(groundModelHandle);
-
-
 	/* ----- Player プレイヤー ----- */
 	uint32_t playerModelHD = modelManager_->LoadModelFile("Resources/Player", "Player.obj");
 	playe_ = std::make_unique<Player>(playerModelHD);
@@ -153,8 +147,8 @@ void GameScene::Update(GameManager* gameManager) {
 
 	//プレイヤーに追従する
 	Vector3 cameraOffset = VectorCalculation::Add(
-		{draftPlayer_->GetWorldPosition().x,0.0f,draftPlayer_->GetWorldPosition().z}, 
-		{ 0.0,20.0f,-60.0f });
+		{ playe_->GetWorldPos().x, 0.0f, playe_->GetWorldPos().z },
+		{ 0.0, 20.0f, -60.0f });
 	camera_.translate_ = cameraOffset;
 
 

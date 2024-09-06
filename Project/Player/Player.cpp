@@ -19,6 +19,7 @@ void Player::Init()
 
 	// トランスフォームの初期化
 	transform_.Initialize();
+	transform_.translate_.y = 1.0f;
 
 	// マテリアルの初期化
 	mtl_.Initialize();
