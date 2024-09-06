@@ -40,6 +40,42 @@ public:
 	/// </summary>
 	~Ground() = default;
 
+
+
+public:
+	/// <summary>
+	/// 左奥
+	/// </summary>
+	/// <returns></returns>
+	inline Vector3 GetLeftTop()const {
+		return leftTop_;
+	}
+
+
+	/// <summary>
+	/// 左奥
+	/// </summary>
+	/// <returns></returns>
+	inline Vector3 GetRightTop()const {
+		return rightTop_;
+	}
+
+	/// <summary>
+	/// 左前
+	/// </summary>
+	/// <returns></returns>
+	inline Vector3 GetLeftBottom()const {
+		return leftBottom_;
+	}
+
+	/// <summary>
+	/// 右前
+	/// </summary>
+	/// <returns></returns>
+	inline Vector3 GetRightBottom()const {
+		return rightBottom_;
+	}
+
 private:
 	//モデル
 	std::unique_ptr<Model>model_ = nullptr;
@@ -49,6 +85,17 @@ private:
 
 	//マテリアル
 	Material material_ = {};
+
+
+	//左奥
+	Vector3 leftTop_ = {};
+	//右奥
+	Vector3 rightTop_ = {};
+	//左前
+	Vector3 leftBottom_ = {};
+	//右前
+	Vector3 rightBottom_ = {};
+
 
 };
 

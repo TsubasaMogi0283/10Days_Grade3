@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(uint32_t modelhandle);
+	void Initialize(uint32_t& modelhandle);
 
 	/// <summary>
 	/// 更新
@@ -55,7 +55,10 @@ public:
 
 
 
-
+	/// <summary>
+	/// ジャンプしているかどうか
+	/// </summary>
+	/// <param name="isJump"></param>
 	void SetIsJump(bool isJump) {
 		this->isJump_ = isJump;
 	}
@@ -82,7 +85,7 @@ private:
 
 
 
-	float velocityY = 10.0f;
-
+	float velocityY = 5.0f;
+	float acceleationY = -0.2f;
 };
 
