@@ -29,7 +29,8 @@ void GameScene::Initialize() {
 	//敵
 	uint32_t enemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Enemy","enemy.obj");
 	enemy_ = std::make_unique<Enemy>();
-	enemy_->Initialize(enemyModelhandle);
+	Vector3 enemyPosition = {1.0f,0.0f,1.0f};
+	enemy_->Initialize(enemyModelhandle, enemyPosition);
 
 
 
@@ -58,6 +59,46 @@ void GameScene::Initialize() {
 	///ポストエフェクト
 	back_ = std::make_unique<BackText>();
 	back_->Initialize();
+
+}
+
+
+void GameScene::InvertDirection() {
+
+
+	Vector3 stageLeftTop = ground_->GetLeftTop();
+	Vector3 stageRightTop = ground_->GetRightTop();
+	Vector3 stageLeftBottom = ground_->GetLeftBottom();
+	Vector3 stageRightBottom = ground_->GetRightBottom();
+
+
+	AABB enemyAABB = enemy_->GetAABB();
+	Vector3 position = enemy_->GetWorldPosition();
+
+#ifdef _DEBUG
+	ImGui::Begin("Enemy"); 
+	ImGui::InputFloat3("Position", &position.x);
+
+	if (ImGui::TreeNode("AABB")) {
+		ImGui::InputFloat3("Min", &enemyAABB.min.x);
+		ImGui::InputFloat3("Max", &enemyAABB.max.x);
+		ImGui::TreePop();
+	}
+	ImGui::End();
+#endif // _DEBUG
+
+
+
+	//X
+	if ((enemyAABB.min.x < stageLeftTop.x) || (enemyAABB.max.x > stageRightTop.x)) {
+		enemy_->InvertSpeedX();
+	}
+	//Z
+	if ((enemyAABB.min.z < stageLeftBottom.z) || (enemyAABB.max.z > stageLeftTop.z)) {
+		enemy_->InvertSpeedZ();
+	}
+
+
 
 }
 
@@ -104,7 +145,7 @@ void GameScene::Update(GameManager* gameManager) {
 	}
 
 
-
+	InvertDirection();
 	enemy_->Update();
 
 
@@ -153,6 +194,10 @@ void GameScene::DrawObject3D(){
 
 	//下書きプレイヤーの描画
 	draftPlayer_->Draw(camera_, directtionalLight_);
+
+	//敵の描画
+	enemy_->Draw(camera_, directtionalLight_);
+
 }
 
 void GameScene::PreDrawPostEffectFirst(){
@@ -168,6 +213,8 @@ void GameScene::DrawSprite() {
 
 }
 
-GameScene::~GameScene()
-{
+GameScene::~GameScene(){
+
 }
+
+

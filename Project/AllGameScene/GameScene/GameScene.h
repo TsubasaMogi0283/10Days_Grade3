@@ -66,6 +66,15 @@ public:
 
 
 
+private:
+	/// <summary>
+	/// 敵の反転
+	/// </summary>
+	void InvertDirection();
+
+
+
+
 
 private:
 

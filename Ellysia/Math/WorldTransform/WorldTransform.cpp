@@ -43,6 +43,8 @@ Vector3 WorldTransform::GetWorldPosition(){
 		.z = worldMatrix_.m[3][2],
 
 	};
+
+	return position;
 }
 
 void WorldTransform::Transfer() {
