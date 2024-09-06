@@ -35,6 +35,9 @@ public:
 	// 移動処理
 	void Move(XINPUT_STATE joyState);
 
+	// ボタン押下時に呼び出されるジャンプのエンター処理
+	void EnterJampFunc();
+
 	// ジャンプ処理
 	void JumpFunc();
 
@@ -72,6 +75,17 @@ private:
 
 	// ジャンプのフラグ
 	bool isJump_ = false;
+	// 地面にいるかどうかのフラグ
+	bool isGrounded_ = true;
+	// Y軸方向の速度
+	float jumpVel_ = 0.0f;
+	// ジャンプ時の初速
+	float jumpForce_ = 25.0f;
+	// 重力の強さ
+	float jumpGravity_ = 30.0f;
+	// ジャンプのフレーム時間ごとの時間経過
+	float jumpDeltaTime_ = 0.036f;
+	
 
 
 #pragma region System システム

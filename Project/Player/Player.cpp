@@ -35,6 +35,12 @@ void Player::Update()
 	// マテリアルの更新
 	mtl_.Update();
 
+	// ジャンプ処理
+	if (isJump_) { // フラグが立っていたら
+		JumpFunc();
+	}
+	
+
 #ifdef _DEBUG
 
 	// ImGuiの描画
@@ -91,14 +97,38 @@ void Player::Move(XINPUT_STATE joyState)
 }
 
 
+// ボタン押下時に呼び出されるジャンプのエンター処理
+void Player::EnterJampFunc()
+{
+	// フラグが折れていたらフラグを立て、数値の設定をする
+	if (!isJump_) {
+		isJump_ = true; // ジャンプ中
+		isGrounded_ = false; // 地面から離れた状態
+		jumpVel_ = jumpForce_; // 初速を入れる
+	}
+}
+
+
 // ジャンプ処理
 void Player::JumpFunc()
 {
-	// フラグが折れていたらフラグを建て、数値の設定をする
-	if (!isJump_) {
-		isJump_ = true;
-	}
+	// ジャンプフラグが立っていたら
+	if (!isGrounded_) {
 
+		// 重力をY軸速度に加える
+		jumpVel_ -= jumpGravity_ * jumpDeltaTime_;
+
+		// プレイヤーのY軸方向の移動を更新
+		transform_.translate_.y += jumpVel_ * jumpDeltaTime_;
+
+		// 地面との接触判定
+		if (transform_.translate_.y <= 0.0f) {
+			transform_.translate_.y = 1.0f; // 地面に戻す
+			isJump_ = false; // ジャンプ終了
+			isGrounded_ = true; // 着地状態
+			jumpVel_ = 0.0f; // Y軸速度をリセット
+		}
+	}
 }
 
 
@@ -107,14 +137,19 @@ void Player::DrawImGui()
 {
 	if (ImGui::TreeNode("Player")) {
 
-		ImGui::Text("Transform"); 
+		ImGui::Text("トランスフォーム"); 
 		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.01f, 0.1f, 10.0f);
 		ImGui::DragFloat3("Rotate", &transform_.rotate_.x, 0.001f);
 		ImGui::DragFloat3("Transform", &transform_.translate_.x, 0.01f);
 		ImGui::Text("");
 
-		ImGui::Text("Jump_Function");
+		ImGui::Text("ジャンプ関連数値");
+		ImGui::DragFloat("初速", &jumpForce_, 0.01f);
+		ImGui::DragFloat("重力", &jumpGravity_, 0.01f);
+		ImGui::DragFloat("デルタタイム", &jumpDeltaTime_, 0.01f);
 		ImGui::Checkbox("Is_Jump", &isJump_);
+		ImGui::Checkbox("Is_Grounded", &isGrounded_);
+		ImGui::DragFloat("速度", &jumpVel_, 0.001f);
 
 		ImGui::TreePop();
 	}
