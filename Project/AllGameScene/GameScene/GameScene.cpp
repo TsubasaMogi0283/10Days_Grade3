@@ -221,7 +221,7 @@ void GameScene::PlayerInput()
 	// ジャンプ処理
 	if (tInput_->Trigger(PadData::A)) {
 
-		// ジャンプの処理
-		playe_->EnterJampFunc();
+		// Aボタンが押された時の処理
+		playe_->FuncAButton();
 	}
 }
