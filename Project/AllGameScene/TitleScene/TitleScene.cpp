@@ -14,6 +14,11 @@ void TitleScene::Initialize(){
 	//カメラ
 	camera_.Initialize();
 	camera_.translate_ = { 0.0f,0.0f,-9.8f };
+
+	///ポストエフェクト
+	back_ = std::make_unique<BackText>();
+	back_->Initialize();
+
 }
 
 void TitleScene::Update(GameManager* gameManager){

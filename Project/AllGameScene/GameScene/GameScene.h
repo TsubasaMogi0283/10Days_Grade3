@@ -14,6 +14,9 @@
 #include "Material.h"
 #include "DirectionalLight.h"
 #include "SpotLight.h"
+#include <StageObject/Ground/Groud.h>
+#include <DraftPlayer/DraftPlayer.h>
+#include <Enemy/Enemy.h>
 
 
 #include "Player/Player.h"
@@ -63,7 +66,10 @@ public:
 	void DrawSprite()override;
 
 #pragma endregion
+	
+	/// <summary>
 	/// デストラクタ
+	/// </summary>
 	~GameScene();
 
 
@@ -84,6 +90,10 @@ private:
 	Camera camera_ = {};
 	Vector3 cameraPosition_ = {};
 
+	//平行光源
+	DirectionalLight directtionalLight_ = {};
+
+
 
 	//ポストエフェクト
 	//今は使わない
@@ -92,8 +102,6 @@ private:
 	//平行光源
 	DirectionalLight directtionalLight_ = {};
 
-
-	SpotLight light_ = {};
 
 
 	/* ----- Player プレイヤー ----- */
@@ -115,6 +123,25 @@ private:
 
 
 #pragma endregion 
+	//プレイヤーの下書き
+	std::unique_ptr<DraftPlayer> draftPlayer_ = nullptr;
+	//プレイヤーの向いている方向
+	Vector3 playerDirection_ = {};
+
+
+
+
+
+
+	std::unique_ptr<Enemy> enemy_ = nullptr;
+
+
+
+
+	//地面
+	std::unique_ptr<Ground>ground_ = nullptr;
+
+
 };
 
 
