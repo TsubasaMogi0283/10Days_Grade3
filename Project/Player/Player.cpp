@@ -82,33 +82,36 @@ void Player::FuncAButton()
 // stick入力時の処理
 void Player::FuncStickFunc(XINPUT_STATE joyState)
 {
-	// 移動処理
-	Move(joyState);
-}
-
-
-// 移動処理
-void Player::Move(XINPUT_STATE joyState)
-{
-	// velocityは0で更新
-	velocity_ = { 0.0f, 0.0f, 0.0f };
-
 	//コントローラーの入力
-	Vector2 leftStickInput = {
+	iLStick_ = {
 		.x = (static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX * 1.0f),
 		.y = (static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX * 1.0f),
 	};
 
-	// デッドゾーン
-	const float DZone = 0.2f;
+	// 移動処理
+	Move();
+
+	// Y軸の姿勢処理
+	BodyOrientation();
+}
+
+
+// 移動処理
+void Player::Move()
+{
+	// ストンプ中は移動できない。早期return
+	if (isStomping_) { return; }
+
+	// velocityは0で更新
+	velocity_ = { 0.0f, 0.0f, 0.0f };
 
 	// 移動量の計算
-	if (std::abs(leftStickInput.x) > DZone || std::abs(leftStickInput.y) > DZone) {
+	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
 
 		// 移動量
 		velocity_ = {
-			.x = leftStickInput.x,
-			.z = leftStickInput.y,
+			.x = iLStick_.x,
+			.z = iLStick_.y,
 		};
 
 		// 移動量を正規化し速さを乗算
@@ -141,6 +144,16 @@ void Player::MoveLimited()
 	transform_.translate_.x = min(transform_.translate_.x, maxX);
 	transform_.translate_.z = max(transform_.translate_.z, minZ);
 	transform_.translate_.z = min(transform_.translate_.z, maxZ);
+}
+
+
+// Y軸の姿勢を傾ける処理
+void Player::BodyOrientation()
+{
+	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
+
+		transform_.rotate_.y = std::atan2(iLStick_.x, iLStick_.y);
+	}
 }
 
 
