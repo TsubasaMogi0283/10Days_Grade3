@@ -72,6 +72,9 @@ public:
 	Vector3 GetWorldPosition()const;
 
 
+	void SetPlayerPosition(Vector3 position) {
+		this->playerPosition_ = position;
+	}
 
 
 	/// <summary>
@@ -134,6 +137,9 @@ private:
 	//移動速度
 	Vector3 preSpeed_ = {};
 	Vector3 speed_ = {};
+
+
+	Vector3 playerPosition_ = {};
 
 
 	//追跡

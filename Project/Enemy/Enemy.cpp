@@ -80,7 +80,7 @@ void Enemy::Update() {
 #endif // DEBUG
 
 		//取得したら追跡
-		//preTrackingPlayerPosition_ = playerPosition_;
+		preTrackingPlayerPosition_ = playerPosition_;
 		preTrackingPosition_ = GetWorldPosition();
 
 
