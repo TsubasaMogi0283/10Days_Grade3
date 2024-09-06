@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "VectorCalculation.h"
 #include "Matrix4x4Calculation.h"
+#include "Func/PlayerFunc.h"
 
 
 // 前方宣言
@@ -105,6 +106,8 @@ private:
 
 	// 姿勢
 	float bodyOrientation_ = 0.0f;
+	// 姿勢計算の補間速度
+	float orientationLerpSpeed_ = 0.1f;
 	
 	// ジャンプのフラグ
 	bool isJumping_ = false;
