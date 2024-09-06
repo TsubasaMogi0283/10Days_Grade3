@@ -504,8 +504,6 @@
     <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp">
       <Filter>Project\GameScene\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Player\Player.cpp">
-      <Filter>Ellysia\Source File</Filter>
     <ClCompile Include="Project\Enemy\EnemyAttackCollision.cpp">
       <Filter>Project\Enemy\EnemyAttackCollision</Filter>
     </ClCompile>
@@ -517,6 +515,12 @@
     </ClCompile>
     <ClCompile Include="Project\DraftPlayer\DraftPlayer.cpp">
       <Filter>Project\Player\Draft</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Player\Player.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Enemy\EnemyManager.cpp">
+      <Filter>Ellysia\Source File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -891,8 +895,6 @@
     <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h">
       <Filter>Project\GameScene\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Player\Player.h">
-      <Filter>Ellysia\Header File</Filter>
     <ClInclude Include="Project\Enemy\EnemyAttackCollision.h">
       <Filter>Project\Enemy\EnemyAttackCollision</Filter>
     </ClInclude>
@@ -904,6 +906,12 @@
     </ClInclude>
     <ClInclude Include="Project\DraftPlayer\DraftPlayer.h">
       <Filter>Project\Player\Draft</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Player\Player.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\EnemyManager.h">
+      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
