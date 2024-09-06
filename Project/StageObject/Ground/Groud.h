@@ -48,7 +48,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	inline Vector3 GetLeftBack()const {
-		return leftTop_;
+		return leftBack_;
 	}
 
 
@@ -57,7 +57,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	inline Vector3 GetRightBack()const {
-		return rightTop_;
+		return rightBack_;
 	}
 
 	/// <summary>
@@ -65,7 +65,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	inline Vector3 GetLeftFront()const {
-		return leftBottom_;
+		return leftFront_;
 	}
 
 	/// <summary>
@@ -73,7 +73,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	inline Vector3 GetRightFront()const {
-		return rightBottom_;
+		return rightFront_;
 	}
 
 private:
@@ -88,13 +88,13 @@ private:
 
 
 	//左奥
-	Vector3 leftTop_ = {};
+	Vector3 leftBack_ = {};
 	//右奥
-	Vector3 rightTop_ = {};
+	Vector3 rightBack_ = {};
 	//左前
-	Vector3 leftBottom_ = {};
+	Vector3 leftFront_ = {};
 	//右前
-	Vector3 rightBottom_ = {};
+	Vector3 rightFront_ = {};
 
 
 };
