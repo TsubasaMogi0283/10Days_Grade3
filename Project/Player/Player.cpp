@@ -99,6 +99,9 @@ void Player::FuncStickFunc(XINPUT_STATE joyState)
 // 移動処理
 void Player::Move()
 {
+	// ストンプ中は移動できない。早期return
+	if (isStomping_) { return; }
+
 	// velocityは0で更新
 	velocity_ = { 0.0f, 0.0f, 0.0f };
 
