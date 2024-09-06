@@ -123,12 +123,6 @@ private:
 
 
 #pragma endregion 
-	//プレイヤーの下書き
-	std::unique_ptr<DraftPlayer> draftPlayer_ = nullptr;
-	//プレイヤーの向いている方向
-	Vector3 playerDirection_ = {};
-
-
 
 
 

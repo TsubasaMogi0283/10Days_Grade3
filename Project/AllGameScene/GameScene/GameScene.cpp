@@ -43,12 +43,6 @@ void GameScene::Initialize() {
 
 
 
-	//下書きプレイヤー
-	uint32_t draftPlayer = ModelManager::GetInstance()->LoadModelFile("Resources/Player/Model", "Player.obj");
-	draftPlayer_ = std::make_unique<DraftPlayer>();
-	draftPlayer_->Initialize(draftPlayer);
-	playerDirection_ = {};
-
 
 	//地面
 	uint32_t groundModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
@@ -111,31 +105,9 @@ void GameScene::Update(GameManager* gameManager) {
 		return;
 	}
 
-	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
-		draftPlayer_->SetIsJump(true);
-	}
-
-
-	playerDirection_ = {};
-
-	if (Input::GetInstance()->IsPushKey(DIK_W) == true) {
-		playerDirection_.z = 1.0f;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
-		playerDirection_.z = -1.0f;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_D) == true) {
-		playerDirection_.x = 1.0f;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_A) == true) {
-		playerDirection_.x = -1.0f;
-	}
-
 	enemyManager_->InvertDirection();
 	enemyManager_->Update();
 
-	//プレイヤーの向いている方向を設定
-	draftPlayer_->SetPlayerDirection(playerDirection_);
 
 	/* ----- Player プレイヤー ----- */
 	playe_->Update();
@@ -143,12 +115,6 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 	directtionalLight_.Update();
-
-
-
-
-	//プレイヤー(下書き)の更新
-	draftPlayer_->Update();
 
 
 
@@ -188,9 +154,6 @@ void GameScene::DrawObject3D(){
 
 	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
-
-	//下書きプレイヤーの描画
-	draftPlayer_->Draw(camera_, directtionalLight_);
 
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);
