@@ -155,13 +155,6 @@ void Enemy::Update() {
 	}
 
 
-	//加算
-	//const float SPEED_SIZE = 0.05f;
-	//Vector3 speed = VectorCalculation::Multiply(direction_, SPEED_SIZE);
-	//worldTransform_.translate_ = VectorCalculation::Add(worldTransform_.translate_, speed);
-
-
-
 
 
 	//ワールドトランスフォーム
