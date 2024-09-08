@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 	ground_->Initialize(groundModelHandle);
 
 	// Groundの四隅の座標をPlayerに渡す
-	playe_->SetGroundCorners(
+	player_->SetGroundCorners(
 		ground_->GetLeftBack(), ground_->GetRightBack(), 
 		ground_->GetLeftFront(), ground_->GetRightFront());
 
@@ -193,8 +193,8 @@ void GameScene::PlayerInput()
 	if (input_->GetJoystickState(joyState_)) {
 
 		// 入力があれば移動
-		player_->Move(joyState_);
-		playe_->FuncStickFunc(joyState_);
+		//player_->Move(joyState_);
+		player_->FuncStickFunc(joyState_);
 	}
 
 	// ジャンプ処理
