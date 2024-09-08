@@ -24,20 +24,13 @@ float pFunc::NormalizeAngle(float angle)
 // 角度の補正
 float pFunc::ShortestAngle(float currentAngle, float targetAngle)
 {
-    // 角度を -π ～ π に正規化
-    currentAngle = NormalizeAngle(currentAngle);
-    targetAngle = NormalizeAngle(targetAngle);
-
     // 角度の差を計算
-    float delta = targetAngle - currentAngle;
+    float angleDifference = targetAngle - currentAngle;
 
-    // 差が π を超える場合、逆方向に調整
-    if (delta > 3.14159265359f) {
-        delta -= 2.0f * 3.14159265359f;
-    }
-    else if (delta < -3.14159265359f) {
-        delta += 2.0f * 3.14159265359f;
-    }
+    // 角度を -π から +π の範囲に正規化する
+    while (angleDifference > 3.14159265f) angleDifference -= 2.0f * 3.14159265f;
+    while (angleDifference < -3.14159265f) angleDifference += 2.0f * 3.14159265f;
 
-    return currentAngle + delta;
+    return angleDifference; // 最短回転角度を返す
 }
+

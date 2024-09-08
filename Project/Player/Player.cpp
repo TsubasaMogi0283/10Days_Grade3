@@ -159,7 +159,7 @@ void Player::BodyOrientation()
 		float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
 
 		// 現在の角度を目標角度の間を補間
-		transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, shortestAngle, orientationLerpSpeed_);
+		transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
 	}
 }
 

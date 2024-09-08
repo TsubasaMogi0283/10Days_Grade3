@@ -88,7 +88,7 @@ private:
 	// Imguiの描画
 	void DrawImGui();
 
-	
+
 private:
 
 	// モデル
