@@ -298,9 +298,8 @@
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Enemy\EnemyManager.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
+    <ClCompile Include="Project\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Project\Player\Func\PlayerFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -398,6 +397,8 @@
     <ClInclude Include="Project\Enemy\EnemyAttackCollision.h" />
     <ClInclude Include="Project\StageObject\Ground\Groud.h" />
     <ClInclude Include="External\TsumiInput\TInput.h" />
+    <ClInclude Include="Project\Enemy\EnemyManager.h" />
+    <ClInclude Include="Project\Player\Func\PlayerFunc.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -706,9 +707,6 @@
       <Filter>Project\Player\Draft</Filter>
     </ClInclude>
     <ClInclude Include="Project\Player\Player.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Enemy\EnemyManager.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>

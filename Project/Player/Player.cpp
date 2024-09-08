@@ -152,7 +152,14 @@ void Player::BodyOrientation()
 {
 	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
 
-		transform_.rotate_.y = std::atan2(iLStick_.x, iLStick_.y);
+		// 目標回転角度
+		float targetAngle = std::atan2(iLStick_.x, iLStick_.y);
+
+		// 現在の角度と目標角度から最短を求める
+		float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
+
+		// 現在の角度を目標角度の間を補間
+		transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
 	}
 }
 
@@ -245,6 +252,16 @@ void Player::DrawImGui()
 		ImGui::DragFloat3("Rotate", &transform_.rotate_.x, 0.001f);
 		ImGui::DragFloat3("Transform", &transform_.translate_.x, 0.01f);
 		ImGui::Text("");
+
+		ImGui::Text("姿勢関連数値");
+		ImGui::DragFloat("姿勢の補間速度", &orientationLerpSpeed_, 0.01f);
+		ImGui::Text("");
+
+		ImGui::Text("入力関連数値");
+		ImGui::DragFloat2("L_Stick", &iLStick_.x, 0.0f);
+		float atan = std::atan2(iLStick_.x, iLStick_.y);
+		ImGui::DragFloat("Stick_tan2", &atan, 0.0f);
+		
 
 		ImGui::Text("ジャンプ関連数値");
 		ImGui::DragFloat("j初速", &jumpForce_, 0.01f);
