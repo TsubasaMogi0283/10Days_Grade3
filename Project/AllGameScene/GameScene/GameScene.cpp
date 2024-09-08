@@ -32,8 +32,8 @@ void GameScene::Initialize() {
 
 	/* ----- Player プレイヤー ----- */
 	uint32_t playerModelHD = modelManager_->LoadModelFile("Resources/Player", "Player.obj");
-	playe_ = std::make_unique<Player>(playerModelHD);
-	playe_->Init();
+	player_ = std::make_unique<Player>(playerModelHD);
+	player_->Init();
 
 
 	//平行光源
@@ -42,12 +42,6 @@ void GameScene::Initialize() {
 	
 
 
-
-	//下書きプレイヤー
-	uint32_t draftPlayer = ModelManager::GetInstance()->LoadModelFile("Resources/Player/Model", "Player.obj");
-	draftPlayer_ = std::make_unique<DraftPlayer>();
-	draftPlayer_->Initialize(draftPlayer);
-	playerDirection_ = {};
 
 
 	//地面
@@ -116,57 +110,29 @@ void GameScene::Update(GameManager* gameManager) {
 		return;
 	}
 
-	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
-		draftPlayer_->SetIsJump(true);
-	}
-
-
-	playerDirection_ = {};
-
-	if (Input::GetInstance()->IsPushKey(DIK_W) == true) {
-		playerDirection_.z = 1.0f;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
-		playerDirection_.z = -1.0f;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_D) == true) {
-		playerDirection_.x = 1.0f;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_A) == true) {
-		playerDirection_.x = -1.0f;
-	}
-
-	enemyManager_->InvertDirection();
-	enemyManager_->Update();
-
-	//プレイヤーの向いている方向を設定
-	draftPlayer_->SetPlayerDirection(playerDirection_);
-
+	
 	/* ----- Player プレイヤー ----- */
-	playe_->Update();
+	player_->Update();
 	PlayerInput();
 
 
-	directtionalLight_.Update();
 
-
-
-
-	//プレイヤー(下書き)の更新
-	draftPlayer_->Update();
 
 
 
 	//プレイヤーに追従する
 	Vector3 cameraOffset = VectorCalculation::Add(
-		{ playe_->GetWorldPos().x, 0.0f, playe_->GetWorldPos().z },
+		{ player_->GetWorldPos().x, 0.0f, player_->GetWorldPos().z },
 		{ 0.0, 20.0f, -60.0f });
 	camera_.translate_ = cameraOffset;
 
 
+	//敵管理クラスの更新
+	Vector3 playerPosition = player_->GetWorldPos();
+	enemyManager_->SetPlayerPosition(playerPosition);
 
-
-
+	enemyManager_->Update();
+	enemyManager_->DeleteEnemy();
 	
 
 
@@ -189,13 +155,10 @@ void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
 	/* ----- Player プレイヤー ----- */
-	playe_->Draw3D(camera_, directtionalLight_);
+	player_->Draw3D(camera_, directtionalLight_);
 
 	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
-
-	//下書きプレイヤーの描画
-	draftPlayer_->Draw(camera_, directtionalLight_);
 
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);
@@ -230,6 +193,7 @@ void GameScene::PlayerInput()
 	if (input_->GetJoystickState(joyState_)) {
 
 		// 入力があれば移動
+		player_->Move(joyState_);
 		playe_->FuncStickFunc(joyState_);
 	}
 
@@ -237,6 +201,6 @@ void GameScene::PlayerInput()
 	if (tInput_->Trigger(PadData::A)) {
 
 		// Aボタンが押された時の処理
-		playe_->FuncAButton();
+		player_->FuncAButton();
 	}
 }

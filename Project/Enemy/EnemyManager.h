@@ -36,10 +36,18 @@ public:
 
 
 public:
-	/// <summary>
-	/// 方向の反転
-	/// </summary>
-	void InvertDirection();
+
+
+	void Tracking();
+
+
+
+
+
+	void SetPlayerPosition(Vector3& playerPosition) {
+		this->playerPosition_ = playerPosition;
+	}
+
 
 
 
@@ -62,6 +70,25 @@ public:
 
 
 
+
+
+
+
+
+
+
+
+	/// <summary>
+	/// エネミーを消す処理
+	/// </summary>
+	void DeleteEnemy();
+
+
+
+
+
+
+
 private:
 
 	//通常の敵
@@ -73,6 +100,13 @@ private:
 
 
 private:
+
+	//プレイヤーの座標
+	Vector3 playerPosition_ = {};
+
+	//AABB aabb[2] = {};
+	//Vector3 enemyPosition[2] = {};
+
 	//ステージの四隅の座標
 	//左奥
 	Vector3 stageLeftBackPosition = {};
