@@ -3,6 +3,7 @@
 #include "DirectionalLight.h"
 #include <VectorCalculation.h>
 #include <Collider/CollisionConfig.h>
+#include <numbers>
 
 
 void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
@@ -188,6 +189,11 @@ void Enemy::Update() {
 
 	}
 
+	//向きを計算しモデルを回転させる
+	float directionToRotateY = std::atan2f(-direction_.z, direction_.x);
+
+	const float ROTATE_OFFSET = -std::numbers::pi_v<float> / 2.0f;
+	worldTransform_.rotate_.y = directionToRotateY + ROTATE_OFFSET;
 
 	//倒された処理
 	Killed();
