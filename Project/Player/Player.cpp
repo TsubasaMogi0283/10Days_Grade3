@@ -216,10 +216,16 @@ void Player::EnterStompFunc()
 void Player::StompFunc()
 {
 	// 重力をY軸速度に加える
-	stompVel_ -= stompGravoty_;
+	stompVel_ -= stompGravoty_ * stompDeltaTime_;
+
+	// 最大落下速度を制限する
+	const float maxFallSpeed = -30.0f;  // 例: 最大速度
+	if (stompVel_ < maxFallSpeed) {
+		stompVel_ = maxFallSpeed;
+	}
 
 	// プレイヤーのY軸方向の移動を更新
-	transform_.translate_.y += stompVel_;
+	transform_.translate_.y += stompVel_ * stompDeltaTime_;
 
 	// 地面との接触判定
 	if (transform_.translate_.y <= 0.0f) {
@@ -266,7 +272,7 @@ void Player::DrawImGui()
 		ImGui::Text("ジャンプ関連数値");
 		ImGui::DragFloat("j初速", &jumpForce_, 0.01f);
 		ImGui::DragFloat("j重力", &jumpGravity_, 0.01f);
-		ImGui::DragFloat("jデルタタイム", &jumpDeltaTime_, 0.01f);
+		ImGui::DragFloat("jデルタタイム", &jumpDeltaTime_, 0.001f);
 		ImGui::Checkbox("Is_Jump", &isJumping_);
 		ImGui::Checkbox("Is_Grounded", &isGrounded_);
 		ImGui::DragFloat("j速度", &jumpVel_, 0.0f);
@@ -275,6 +281,7 @@ void Player::DrawImGui()
 		ImGui::Text("ストンプ関連数値");
 		ImGui::DragFloat("s降下速度", &stompSpeed_, 0.01f);
 		ImGui::DragFloat("s重力", &stompGravoty_, 0.01f);
+		ImGui::DragFloat("sデルタタイム", &stompDeltaTime_, 0.001f);
 		ImGui::Checkbox("Is_Stomp", &isStomping_);
 		ImGui::DragFloat("s速度", &stompVel_, 0.0f);
 		ImGui::Text("");
