@@ -54,9 +54,8 @@ void GameScene::Initialize() {
 		ground_->GetLeftBack(), ground_->GetRightBack(), 
 		ground_->GetLeftFront(), ground_->GetRightFront());
 
-
 	//敵
-	uint32_t normalEnemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Enemy","enemy.obj");
+	uint32_t normalEnemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy","Rock.obj");
 
 	Vector3 stageLeftBack = ground_->GetLeftBack();
 	Vector3 stageRightBack = ground_->GetRightBack();

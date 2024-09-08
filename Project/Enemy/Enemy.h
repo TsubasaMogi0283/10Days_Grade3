@@ -6,6 +6,7 @@
 #include "Material.h"
 #include "EnemyAttackCollision.h"
 #include "AABB.h"
+#include "Collider/Collider.h"
 
 struct Camera;
 struct DirectionalLight;
@@ -30,7 +31,7 @@ enum EnemyCondition {
 
 
 
-class Enemy{
+class Enemy : public Collider{
 public:
 	/// <summary>
 	/// コンストラクタ
@@ -60,7 +61,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Enemy() = default;
+	~Enemy();
 
 
 
@@ -69,7 +70,17 @@ public:
 	/// ワールド座標の取得
 	/// </summary>
 	/// <returns></returns>
-	Vector3 GetWorldPosition()const;
+	Vector3 GetWorldPosition()override;
+
+	/// <summary>
+	/// 当たり判定
+	/// </summary>
+	void OnCollision()override;
+
+	/// <summary>
+	/// 倒された
+	/// </summary>
+	void Killed();
 
 	/// <summary>
 	/// 方向の取得
@@ -93,11 +104,11 @@ public:
 
 
 	/// <summary>
-	/// 生きているかどうかのフラグを取得
+	/// 倒されたかどうかのフラグを取得
 	/// </summary>
 	/// <returns></returns>
-	inline bool GetIsAlive() const {
-		return isAlive_;
+	inline bool GetIsKilled() const {
+		return isKilled_;
 	}
 
 
@@ -156,17 +167,13 @@ private:
 	//向き
 	Vector3 direction_ = {};
 
-	float radius_ = 1.0f;
-
 private:
-	DraftPlayer* draftplayer_ = nullptr;
-	
 
 	//攻撃用
 	EnemyAttackCollision* attackModel_ = nullptr;
 	bool isAttack_ = false;
-
-
+	bool isKilled_ = false;
+	int deleteTime_ = 0;
 
 private:
 
@@ -183,9 +190,7 @@ private:
 	Vector3 preTrackingPosition_ = {};
 	Vector3 preTrackingPlayerPosition_ = {};
 
-	//向き
-	//Vector3 direction_ = {};
-	float t_ = 0.0f;
+
 
 	//攻撃
 	int32_t attackTime_ = 0;

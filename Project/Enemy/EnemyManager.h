@@ -37,13 +37,18 @@ public:
 
 public:
 
-
+	/// <summary>
+	/// 追跡
+	/// </summary>
 	void Tracking();
 
 
 
 
-
+	/// <summary>
+	/// プレイヤーの座標を取得
+	/// </summary>
+	/// <param name="playerPosition"></param>
 	void SetPlayerPosition(Vector3& playerPosition) {
 		this->playerPosition_ = playerPosition;
 	}
@@ -68,26 +73,10 @@ public:
 		this->stageRightFrontPosition = rightFront;
 	}
 
-
-
-
-
-
-
-
-
-
-
 	/// <summary>
 	/// エネミーを消す処理
 	/// </summary>
 	void DeleteEnemy();
-
-
-
-
-
-
 
 private:
 
@@ -103,9 +92,6 @@ private:
 
 	//プレイヤーの座標
 	Vector3 playerPosition_ = {};
-
-	//AABB aabb[2] = {};
-	//Vector3 enemyPosition[2] = {};
 
 	//ステージの四隅の座標
 	//左奥
