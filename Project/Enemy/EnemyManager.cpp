@@ -30,7 +30,7 @@ void EnemyManager::Initialize(uint32_t& modelhandle){
 void EnemyManager::DeleteEnemy(){
 	//敵が生存していなかったら消す
 	enemyes_.remove_if([](Enemy* enemy) {
-		if (enemy->GetIsAlive() == false) {
+		if (enemy->GetIsKilled() == true) {
 			delete enemy;
 			return true;
 		}
@@ -47,7 +47,7 @@ void EnemyManager::Tracking(){
 	//接近するときの距離
 	const float TRACKING_START_DISTANCE_ = 40.0f;
 	////攻撃するときの距離
-	//const float ATTACK_START_DISTANCE_ = 6.0f;
+	const float ATTACK_START_DISTANCE_ = 3.0f;
 	//const float MINIMUM_DISTANCE = 2.0f;
 
 
@@ -55,15 +55,13 @@ void EnemyManager::Tracking(){
 	//現在の敵の数
 	uint32_t enemyQuantity = static_cast<uint32_t>(enemyes_.size());
 
-
-
-	//プレイヤーの
+	//プレイヤー
 	Vector3 playerSize = { .x = 1.0f,.y = 1.0f,.z = 1.0f };
 	Vector3 playerMaxAABB = { VectorCalculation::Add(playerPosition_,playerSize) };
 	Vector3 playerMinAABB = { VectorCalculation::Subtract(playerPosition_,playerSize) };
 	AABB playerAABB = { .min = playerMinAABB , .max = playerMaxAABB };
 
-	//1体だけの時
+
 	if (enemyQuantity >= 1u) {
 		for (Enemy* enemy : enemyes_) {
 
@@ -95,7 +93,8 @@ void EnemyManager::Tracking(){
 			if (dot > 0.8f) {
 
 				
-				if (distance < TRACKING_START_DISTANCE_&&condition==EnemyCondition::Move) {
+				if ((distance < TRACKING_START_DISTANCE_&&distance>ATTACK_START_DISTANCE_)
+					&&condition==EnemyCondition::Move) {
 
 					//前の状態を保存
 					enemy->SetPreCondition(condition);
@@ -106,7 +105,31 @@ void EnemyManager::Tracking(){
 					enemy->SetCondition(newCondition);
 				}
 				
+				//追跡している時
+				if (distance<= ATTACK_START_DISTANCE_&&condition == EnemyCondition::Tracking) {
+					//前の状態を保存
+					enemy->SetPreCondition(condition);
+
+					//現在の状態を保存
+					uint32_t newCondition = EnemyCondition::Attack;
+					enemy->SetCondition(newCondition);
+				}
+				//攻撃中にプレイヤーが離れた時
+				if (distance > ATTACK_START_DISTANCE_ && condition == EnemyCondition::Attack) {
+					//前の状態を保存
+					enemy->SetPreCondition(condition);
+
+					//現在の状態を保存
+					uint32_t newCondition = EnemyCondition::Move;
+					enemy->SetCondition(newCondition);
+				}
+
+
+
+
+
 			}
+			//前方にいなければ強制的にMove
 			else {
 				//前の状態を保存
 				enemy->SetPreCondition(condition);
@@ -280,7 +303,7 @@ void EnemyManager::Update(){
 
 
 
-	
+	//追跡
 	Tracking();
 
 

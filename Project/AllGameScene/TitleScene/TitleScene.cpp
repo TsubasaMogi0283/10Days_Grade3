@@ -68,12 +68,12 @@ void TitleScene::DrawObject3D()
 {
 }
 
-void TitleScene::PreDrawPostEffectFirst()
-{
+void TitleScene::PreDrawPostEffectFirst(){
+	back_->PreDraw();
 }
 
-void TitleScene::DrawPostEffect()
-{
+void TitleScene::DrawPostEffect(){
+	back_->Draw();
 }
 
 void TitleScene::DrawSprite(){

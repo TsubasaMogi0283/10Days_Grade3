@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "DirectionalLight.h"
 #include <VectorCalculation.h>
+#include <Collider/CollisionConfig.h>
 
 
 void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
@@ -17,6 +18,42 @@ void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
 	aabb_.max = { .x = position.x + radius_,.y = position.y + radius_,.z = position.z + radius_ };
 	aabb_.min = { .x = position.x - radius_,.y = position.x - radius_,.z = position.x - radius_ };
 
+
+
+	isAlive_ = true;
+
+	//種類
+	collisionType_ = CollisionType::AABBType;
+
+
+
+	//半径
+	radius_ = 1.0f;
+
+	//AABBのmax部分に加算する縦横高さのサイズ
+	upSideSize_ = { .x = radius_ ,.y = radius_ ,.z = radius_ };
+
+	//AABBのmin部分に加算する縦横高さのサイズ
+	downSideSize_ = { .x = radius_ ,.y = radius_ ,.z = radius_ };
+
+	//判定
+	//自分
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
+	//相手
+	SetCollisionMask(COLLISION_ATTRIBUTE_NONE);
+
+
+
+
+	//攻撃
+	uint32_t debugModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/CG3/Sphere", "Sphere.obj");
+	attackModel_ = new EnemyAttackCollision();
+	attackModel_->Initialize(debugModelHandle);
+	isAttack_ = false;
+
+
+
+
 }
 
 void Enemy::Update() {
@@ -31,7 +68,6 @@ void Enemy::Update() {
 		ImGui::End();
 #endif // DEBUG
 
-		t_ = 0.0f;
 		attackTime_ = 0;
 		preTrackingPlayerPosition_ = {};
 		preTrackingPosition_ = {};
@@ -54,7 +90,6 @@ void Enemy::Update() {
 		ImGui::End();
 #endif // DEBUG
 		//通常の動き
-		t_ = 0.0f;
 		preTrackingPlayerPosition_ = {};
 		preTrackingPosition_ = {};
 		if (speed_.x != 0.0f ||
@@ -64,7 +99,7 @@ void Enemy::Update() {
 		}
 
 		worldTransform_.translate_ = VectorCalculation::Add(worldTransform_.translate_, speed_);
-
+		worldTransform_.translate_.y = 0.0f;
 
 		break;
 
@@ -112,8 +147,7 @@ void Enemy::Update() {
 		
 		Vector3 speedVelocity = VectorCalculation::Multiply(direction_, SPEED_AMOUNT);
 		worldTransform_.translate_ = VectorCalculation::Add(worldTransform_.translate_, speedVelocity);
-
-
+		worldTransform_.translate_.y = 0.0f;
 
 
 		break;
@@ -147,7 +181,6 @@ void Enemy::Update() {
 		//4秒経ったらまた0になる
 		if (attackTime_ > 240) {
 			attackTime_ = 0;
-
 		}
 
 		break;
@@ -155,6 +188,8 @@ void Enemy::Update() {
 	}
 
 
+	//倒された処理
+	Killed();
 
 
 	//ワールドトランスフォーム
@@ -168,23 +203,60 @@ void Enemy::Update() {
 	aabb_.min = VectorCalculation::Subtract(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
 	aabb_.max = VectorCalculation::Add(GetWorldPosition(), {.x = radius_, .y = radius_, .z =radius_});
 
-
+	Vector3 enemyWorldPosition = GetWorldPosition();
+	attackModel_->SetEnemyPosition(enemyWorldPosition);
+	attackModel_->SetEnemyDirection(direction_);
+	attackModel_->Update();
 
 }
 
 void Enemy::Draw(Camera& camera, DirectionalLight& directionalLight){
 	//描画
-	model_->Draw(worldTransform_, camera, material_, directionalLight);
+	if (isAlive_ == true) {
+		model_->Draw(worldTransform_, camera, material_, directionalLight);
 
+	}
+	
 
+	//攻撃用
+	if (isAttack_ == true) {
+		attackModel_->Draw(camera, directionalLight);
+	}
 }
 
-Vector3 Enemy::GetWorldPosition() const{
+Vector3 Enemy::GetWorldPosition() {
 	Vector3 position = {
 		.x = worldTransform_.worldMatrix_.m[3][0],
 		.y = worldTransform_.worldMatrix_.m[3][1],
 		.z = worldTransform_.worldMatrix_.m[3][2],
 	};
-	
+
 	return position;
 }
+
+void Enemy::OnCollision(){
+	isAlive_ = false;
+	
+}
+
+void Enemy::Killed(){
+	//倒された場合
+	if (isAlive_ == false) {
+		deleteTime_+=1;
+	}
+
+
+	//消える
+	if (deleteTime_ > 60 * 2) {
+		isKilled_ == true;
+	}
+
+
+
+}
+
+
+Enemy::~Enemy() {
+	delete attackModel_;
+}
+
