@@ -6,11 +6,10 @@
 #include "Input.h"
 #include "VectorCalculation.h"
 #include "Matrix4x4Calculation.h"
+#include "Func/PlayerFunc.h"
 
 
 // 前方宣言
-class Input;
-class AdjustmentItems;
 struct Camera;
 struct DirectionalLight;
 
@@ -35,8 +34,8 @@ public:
 	// Aボタンが押された時の処理
 	void FuncAButton();
 
-	// 移動処理
-	void Move(XINPUT_STATE joyState);
+	// stick入力時の処理
+	void FuncStickFunc(XINPUT_STATE joyState);
 
 
 #pragma region Accessor アクセッサ
@@ -45,11 +44,28 @@ public:
 	Vector3 GetWorldPos() const {
 		return { transform_.worldMatrix_.m[3][0], transform_.worldMatrix_.m[3][1], transform_.worldMatrix_.m[3][2] };
 	}
+	
+	// Groundの四隅
+	void SetGroundCorners(Vector3 LB, Vector3 RB, Vector3 LF, Vector3 RF) {
+		groundCorners_.push_back(LB);
+		groundCorners_.push_back(RB);
+		groundCorners_.push_back(LF);
+		groundCorners_.push_back(RF);
+	}
 
 #pragma endregion 
 
 
 private:
+
+	// 移動処理
+	void Move();
+
+	// 移動限界処理
+	void MoveLimited();
+
+	// Y軸の姿勢を傾ける処理
+	void BodyOrientation();
 
 	// ジャンプのエンター処理
 	void EnterJampFunc();
@@ -72,7 +88,7 @@ private:
 	// Imguiの描画
 	void DrawImGui();
 
-	
+
 private:
 
 	// モデル
@@ -88,6 +104,11 @@ private:
 	// 移動速度
 	float moveSpeed_ = 0.3f;
 
+	// 姿勢
+	float bodyOrientation_ = 0.0f;
+	// 姿勢計算の補間速度
+	float orientationLerpSpeed_ = 0.1f;
+	
 	// ジャンプのフラグ
 	bool isJumping_ = false;
 	// 地面にいるかどうかのフラグ
@@ -106,14 +127,21 @@ private:
 	// Y軸方向の速度
 	float stompVel_ = 0.0f;
 	// 急降下のスピード
-	float stompSpeed_ = 30.0f;
+	float stompSpeed_ = 1.0f;
 	// 重力の強さ
-	float stompGravoty_ = 40.0f;
-	
+	float stompGravoty_ = 1.0f;
 
+	// Groundの四隅座標
+	std::vector<Vector3> groundCorners_{};
+	
 
 #pragma region System システム
 
+	// LStickの入力
+	Vector2 iLStick_{};
+
+	// デッドゾーン
+	const float DZone_ = 0.2f;
 
 #pragma endregion 
 

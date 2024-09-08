@@ -2,6 +2,8 @@
 #include "Input.h"
 #include "AdjustmentItems.h"
 
+#include <algorithm>
+
 
 // コピーコンストラクタ
 Player::Player(uint32_t modelHandle)
@@ -77,28 +79,39 @@ void Player::FuncAButton()
 }
 
 
-// 移動処理
-void Player::Move(XINPUT_STATE joyState)
+// stick入力時の処理
+void Player::FuncStickFunc(XINPUT_STATE joyState)
 {
-	// velocityは0で更新
-	velocity_ = { 0.0f, 0.0f, 0.0f };
-
 	//コントローラーの入力
-	Vector2 leftStickInput = {
+	iLStick_ = {
 		.x = (static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX * 1.0f),
 		.y = (static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX * 1.0f),
 	};
 
-	// デッドゾーン
-	const float DZone = 0.2f;
+	// 移動処理
+	Move();
+
+	// Y軸の姿勢処理
+	BodyOrientation();
+}
+
+
+// 移動処理
+void Player::Move()
+{
+	// ストンプ中は移動できない。早期return
+	if (isStomping_) { return; }
+
+	// velocityは0で更新
+	velocity_ = { 0.0f, 0.0f, 0.0f };
 
 	// 移動量の計算
-	if (std::abs(leftStickInput.x) > DZone || std::abs(leftStickInput.y) > DZone) {
+	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
 
 		// 移動量
 		velocity_ = {
-			.x = leftStickInput.x,
-			.z = leftStickInput.y,
+			.x = iLStick_.x,
+			.z = iLStick_.y,
 		};
 
 		// 移動量を正規化し速さを乗算
@@ -107,12 +120,46 @@ void Player::Move(XINPUT_STATE joyState)
 		// 移動
 		transform_.translate_ = VectorCalculation::Add(transform_.translate_, velocity_);
 
-		// 移動限界
-		const float kMoveMit = 100.0f;
-		transform_.translate_.x = max(transform_.translate_.x, -kMoveMit);
-		transform_.translate_.x = min(transform_.translate_.x, +kMoveMit);
-		transform_.translate_.z = max(transform_.translate_.z, -kMoveMit);
-		transform_.translate_.z = min(transform_.translate_.z, +kMoveMit);
+		// 移動限界処理
+		MoveLimited();
+	}
+}
+
+
+// 移動限界処理
+void Player::MoveLimited()
+{
+	float minX{}, maxX{}, minZ{}, maxZ{};
+
+	// 四隅の頂点から最大・最小値を計算
+	for (const auto& corner : groundCorners_) {
+		minX = min(groundCorners_[0].x, corner.x);
+		maxX = max(groundCorners_[0].x, corner.x);
+		minZ = min(groundCorners_[0].z, corner.z);
+		maxZ = max(groundCorners_[0].z, corner.z);
+	}
+	
+	// 移動限界を設定
+	transform_.translate_.x = max(transform_.translate_.x, minX);
+	transform_.translate_.x = min(transform_.translate_.x, maxX);
+	transform_.translate_.z = max(transform_.translate_.z, minZ);
+	transform_.translate_.z = min(transform_.translate_.z, maxZ);
+}
+
+
+// Y軸の姿勢を傾ける処理
+void Player::BodyOrientation()
+{
+	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
+
+		// 目標回転角度
+		float targetAngle = std::atan2(iLStick_.x, iLStick_.y);
+
+		// 現在の角度と目標角度から最短を求める
+		float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
+
+		// 現在の角度を目標角度の間を補間
+		transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
 	}
 }
 
@@ -206,6 +253,16 @@ void Player::DrawImGui()
 		ImGui::DragFloat3("Transform", &transform_.translate_.x, 0.01f);
 		ImGui::Text("");
 
+		ImGui::Text("姿勢関連数値");
+		ImGui::DragFloat("姿勢の補間速度", &orientationLerpSpeed_, 0.01f);
+		ImGui::Text("");
+
+		ImGui::Text("入力関連数値");
+		ImGui::DragFloat2("L_Stick", &iLStick_.x, 0.0f);
+		float atan = std::atan2(iLStick_.x, iLStick_.y);
+		ImGui::DragFloat("Stick_tan2", &atan, 0.0f);
+		
+
 		ImGui::Text("ジャンプ関連数値");
 		ImGui::DragFloat("j初速", &jumpForce_, 0.01f);
 		ImGui::DragFloat("j重力", &jumpGravity_, 0.01f);
@@ -221,7 +278,6 @@ void Player::DrawImGui()
 		ImGui::Checkbox("Is_Stomp", &isStomping_);
 		ImGui::DragFloat("s速度", &stompVel_, 0.0f);
 		ImGui::Text("");
-
 
 		ImGui::TreePop();
 	}
