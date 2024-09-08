@@ -99,7 +99,7 @@ void Enemy::Update() {
 		}
 
 		worldTransform_.translate_ = VectorCalculation::Add(worldTransform_.translate_, speed_);
-		worldTransform_.translate_.y = 0.0f;
+		worldTransform_.translate_.y = 1.0f;
 
 		break;
 
@@ -144,10 +144,9 @@ void Enemy::Update() {
 		direction_ = VectorCalculation::Normalize(direction_);
 
 		//加算
-		
 		Vector3 speedVelocity = VectorCalculation::Multiply(direction_, SPEED_AMOUNT);
 		worldTransform_.translate_ = VectorCalculation::Add(worldTransform_.translate_, speedVelocity);
-		worldTransform_.translate_.y = 0.0f;
+		worldTransform_.translate_.y = 1.0f;
 
 
 		break;
@@ -157,8 +156,10 @@ void Enemy::Update() {
 		attackTime_ += 1;
 
 
+		const int RESET_TIME = 200;
+
 		//2～4秒までが攻撃
-		if (attackTime_ > 120 && attackTime_ <= 240) {
+		if (attackTime_ > 120 && attackTime_ <= RESET_TIME) {
 			if (attackTime_ == 121) {
 				isAttack_ = true;
 
@@ -179,7 +180,7 @@ void Enemy::Update() {
 		}
 
 		//4秒経ったらまた0になる
-		if (attackTime_ > 240) {
+		if (attackTime_ > RESET_TIME) {
 			attackTime_ = 0;
 		}
 
@@ -248,7 +249,7 @@ void Enemy::Killed(){
 
 	//消える
 	if (deleteTime_ > 60 * 2) {
-		isKilled_ == true;
+		isKilled_= true;
 	}
 
 
