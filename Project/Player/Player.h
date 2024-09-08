@@ -130,6 +130,8 @@ private:
 	float stompSpeed_ = 1.0f;
 	// 重力の強さ
 	float stompGravoty_ = 1.0f;
+	// ストンプのフレーム時間ごとの時間経過
+	float stompDeltaTime_ = 0.9f;
 
 	// Groundの四隅座標
 	std::vector<Vector3> groundCorners_{};
