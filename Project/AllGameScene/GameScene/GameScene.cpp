@@ -68,7 +68,9 @@ void GameScene::Initialize() {
 	enemyManager_->Initialize(normalEnemyModelhandle);
 	enemyManager_->SetStageRectPosition(stageLeftBack, stageRightBack, stageLeftFront, stageRightFront);
 
-
+	particleMaterial_.Initialize();
+	particleMaterial_.lightingKinds_ = Directional;
+	particle__.reset(Particle3D::Create());
 
 	
 
@@ -133,7 +135,7 @@ void GameScene::Update(GameManager* gameManager) {
 	enemyManager_->Update();
 	enemyManager_->DeleteEnemy();
 	
-
+	particleMaterial_.Update();
 
 	//地面の更新
 	ground_->Update();
@@ -154,14 +156,15 @@ void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
 	/* ----- Player プレイヤー ----- */
-	player_->Draw3D(camera_, directtionalLight_);
+	//player_->Draw3D(camera_, directtionalLight_);
+	//
+	////地面の描画
+	//ground_->Draw(camera_, directtionalLight_);
+	//
+	////敵の描画
+	//enemyManager_->Draw(camera_, directtionalLight_);
 
-	//地面の描画
-	ground_->Draw(camera_, directtionalLight_);
-
-	//敵の描画
-	enemyManager_->Draw(camera_, directtionalLight_);
-
+	particle__->Draw(camera_, particleMaterial_, directtionalLight_);
 }
 
 void GameScene::PreDrawPostEffectFirst(){

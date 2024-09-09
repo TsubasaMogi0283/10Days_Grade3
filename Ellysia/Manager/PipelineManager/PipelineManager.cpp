@@ -581,7 +581,7 @@ void PipelineManager::GenerateModelPSO() {
 	//Tableで利用する数
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
-	//CBVを使う
+	//DirectionalLight
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -589,7 +589,6 @@ void PipelineManager::GenerateModelPSO() {
 	rootParameters[3].Descriptor.ShaderRegister = 1;
 
 
-	//CBVを使う
 	//カメラ用
 	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//VertwxShaderで使う
@@ -709,8 +708,6 @@ void PipelineManager::GenerateModelPSO() {
 	//InputLayout・・VertexShaderへ渡す頂点データがどのようなものかを指定するオブジェクト
 
 
-
-	//余分に読み込んでしまうけどこれしか方法が無かった
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
@@ -1337,7 +1334,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	D3D12_ROOT_PARAMETER rootParameters[8] = {};
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -1401,7 +1398,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//Tableで利用する数
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
-	//CBVを使う
+
 	//DirectionalLight
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
@@ -1410,13 +1407,37 @@ void PipelineManager::GenerateParticle3DPSO() {
 	rootParameters[3].Descriptor.ShaderRegister = 1;
 
 
-	//CBVを使う
 	//カメラ
 	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//VertwxShaderで使う
 	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//register...Shader上のResource配置情報
 	rootParameters[4].Descriptor.ShaderRegister = 1;
+
+
+	//PointLight
+	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//PixelShaderで使う
+	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号2を使う
+	rootParameters[5].Descriptor.ShaderRegister = 2;
+
+
+	//SpotLight
+	rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//PixelShaderで使う
+	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号2を使う
+	rootParameters[6].Descriptor.ShaderRegister = 3;
+
+	//PS用のカメラ
+	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//PixelShaderで使う
+	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号2を使う
+	rootParameters[7].Descriptor.ShaderRegister = 4;
+
+
 
 
 

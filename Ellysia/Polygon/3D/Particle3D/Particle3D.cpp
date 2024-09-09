@@ -1,21 +1,24 @@
 #include "Particle3D.h" 
+
+
+#include <cassert>
+
+
 #include <Camera.h>
 #include <TextureManager.h>
 #include <PipelineManager.h>
 #include "DirectXSetup.h"
+#include "Material.h"
+#include "DirectionalLight.h"
 
+#include <VectorCalculation.h>
 
 #include <numbers>
 #include <Collision.h>
 #include "SrvManager.h"
-static uint32_t modelIndex;
 static uint32_t descriptorSizeSRV_ = 0u;
 
-
-
-//RandomParticle用
-///パーティクルだけはvoid型で初期化する
-Particle3D* Particle3D::Create(uint32_t modelHandle) {
+Particle3D* Particle3D::Create() {
 	Particle3D* particle3D = new Particle3D();
 
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
@@ -35,13 +38,11 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 	particle3D->emitter_.transform.translate = { 0.0f,0.0f,0.0f };
 
 #pragma endregion
-
-	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	particle3D->materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(MaterialData)).Get();
-
+	//モデルは普通の平面にする
+	uint32_t planeModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
 
 	//テクスチャの読み込み
-	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(modelHandle).textureFilePath);
+	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(planeModelHandle).textureFilePath);
 
 
 
@@ -50,7 +51,7 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 
 
 	//頂点リソースを作る
-	particle3D->vertices_ = ModelManager::GetInstance()->GetModelData(modelHandle).vertices;
+	particle3D->vertices_ = ModelManager::GetInstance()->GetModelData(planeModelHandle).vertices;
 
 	particle3D->vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * particle3D->vertices_.size());
 
@@ -78,9 +79,9 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 	
 	particle3D->instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&particle3D->instancingData_));
 
-	//Lighting
-	particle3D->directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLightData)).Get();
-	
+
+
+
 
 
 	return particle3D;
@@ -161,14 +162,6 @@ void Particle3D::Update(Camera& camera){
 			continue;
 		}
 		
-		//フィールド設定すると風の影響を受ける
-		if (isSetField_ == true) {
-			if (IsCollisionAABBAndPoint(accelerationField_.area,(*particleIterator).transform.translate)) {
-				(*particleIterator).velocity.x += accelerationField_.acceleration.x * DELTA_TIME;
-				(*particleIterator).velocity.y += accelerationField_.acceleration.y * DELTA_TIME;
-				(*particleIterator).velocity.z += accelerationField_.acceleration.z * DELTA_TIME;
-			}
-		}
 
 		
 		particleIterator->currentTime += DELTA_TIME;
@@ -234,44 +227,25 @@ void Particle3D::Update(Camera& camera){
 	}
 }
 
-//描画
-void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
+void Particle3D::Draw(Camera& camera, Material& material, DirectionalLight& directionalLight){
+	
+	if (material.lightingKinds_ != Directional) {
+		return;
+	}
 	
 	//更新
 	Update(camera);
 
 
 
-#pragma region マテリアルにデータを書き込む
-	//書き込むためのアドレスを取得
-	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-	MaterialData* materialData_ = nullptr;
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	materialData_->color = materialColor_;
-	materialData_->lightingKinds = isEnableLighting_;
 
-	materialData_->uvTransform = Matrix4x4Calculation::MakeIdentity4x4();
-
-	materialResource_->Unmap(0, nullptr);
-
-#pragma endregion
-
-#pragma region DirectionalLight
-	
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color = directionalLightColor_;                                                                                                                                                                                          
-	directionalLightData_->direction = lightingDirection_;
-	directionalLightData_->intensity = directionalLightIntensity_;
-	directionalLightResource_->Unmap(0, nullptr);
-
-#pragma endregion
 
 	//コマンドを積む
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetParticle3DRootSignature().Get());
 	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetParticle3DGraphicsPipelineState().Get());
 
 
-	
+
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
@@ -280,29 +254,30 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 
 	//CBVを設定する
 	//マテリアル
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, material.bufferResource_->GetGPUVirtualAddress());
 
 	//インスタンシング
-
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-
 	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(1, InstancingIndex_);
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	if (textureHandle_!= 0) {
-		TextureManager::GraphicsCommand(2,textureHandle );
+	if (textureHandle_ != 0) {
+		TextureManager::GraphicsCommand(2, textureHandle_);
 	}
-	
+
 	//DirectionalLight
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLight.bufferResource_->GetGPUVirtualAddress());
 
 	//カメラ
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
-	
 
-	
-	
+
+	//カメラ
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
+
+
 	//DrawCall
 	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), numInstance_, 0, 0);
+
 }
+

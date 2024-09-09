@@ -1,26 +1,12 @@
 #pragma once
-#include <string>
-#include <cassert>
-#include <fstream>
-#include <sstream>
-#include <array>
-#include <memory>
-#include <list>
-#include <random>
 
-#include <DirectXTeX.h>
-#include "Matrix4x4.h"
-#include <Material.h>
 #include <TransformationMatrix.h>
-#include <DirectionalLight.h>
-#include "ModelData.h"
 
 
-#include "Vector4.h"
 #include "Matrix4x4Calculation.h"
 #include <VertexData.h>
 
-#include <VectorCalculation.h>
+
 #include <d3dx12.h>
 
 
@@ -30,6 +16,11 @@
 #include "Particle.h"
 #include <AccelerationField.h>
 #include "ModelManager.h"
+#include <random>
+
+
+struct Material;
+struct DirectionalLight;
 
 struct Emitter {
 	//エミッタのTransform;
@@ -49,7 +40,7 @@ public:
 	Particle3D()=default;
 
 	//初期化
-	static Particle3D* Create(uint32_t modelHandle);
+	static Particle3D* Create();
 
 
 private:
@@ -69,10 +60,7 @@ public:
 	void Update(Camera& camera);
 
 	//通常の描画
-	//void Draw();
-
-	//テクスチャを上書きをする描画
-	void Draw(uint32_t textureHandle,Camera& camera);
+	void Draw(Camera& camera,Material &material,DirectionalLight& directionalLight);
 
 
 	//デストラクタ
@@ -84,15 +72,6 @@ public:
 public:
 	//アクセッサのまとめ
 
-	//透明度の変更
-	void SetColor(Vector4 color) {
-		this->materialColor_ = color;
-	}
-
-	void SetTransparency(float transparency) {
-		this->materialColor_.w = transparency;
-	}
-	
 	//ビルボードにするかどうか
 	//デフォルトではするようにしている
 	bool IsBillBordMode(bool isBillBordMode) {
@@ -151,20 +130,9 @@ public:
 
 #pragma endregion
 
-#pragma region Lightingの設定
-	void SetLighting(bool enableLighting) {
-		this->isEnableLighting_ = enableLighting;
-	}
-	//方向
-	void SetDirection(Vector3 direction) {
-		this->lightingDirection_ = direction;
-	}
-
-#pragma endregion
 
 private:
-	//TextureManagerを参考にする
-	std::list<ModelData> modelInformationList_;
+
 
 	//頂点リソースを作る
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
@@ -176,31 +144,13 @@ private:
 	int32_t instanceCount_ = 1;
 
 
-	//マテリアル用のリソースを作る
-	ComPtr<ID3D12Resource> materialResource_ = nullptr;
-	//色関係のメンバ変数
-	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
-
-	//Lighting用
-	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
-	DirectionalLightData* directionalLightData_ = nullptr;
-	//色
-	Vector4 directionalLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	float directionalLightIntensity_ = 3.0f;
-
-	//基本はtrueで
-	bool isEnableLighting_ = 1;
-	//方向
-	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
-
 
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_ = {};
 
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
-
+	//最大数
 	static const int32_t MAX_INSTANCE_NUMBER_ = 100;
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
