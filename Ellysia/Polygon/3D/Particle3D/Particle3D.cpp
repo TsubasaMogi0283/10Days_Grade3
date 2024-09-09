@@ -2,25 +2,25 @@
 
 
 #include <cassert>
-
+#include <numbers>
 
 #include <Camera.h>
 #include <TextureManager.h>
 #include <PipelineManager.h>
 #include "DirectXSetup.h"
+
 #include "Material.h"
 #include "DirectionalLight.h"
 
 #include <VectorCalculation.h>
 
-#include <numbers>
+
 #include <Collision.h>
 #include "SrvManager.h"
 static uint32_t descriptorSizeSRV_ = 0u;
 
-Particle3D* Particle3D::Create() {
+Particle3D* Particle3D::Create(uint32_t moveType) {
 	Particle3D* particle3D = new Particle3D();
-
 
 	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
@@ -43,19 +43,15 @@ Particle3D* Particle3D::Create() {
 	//テクスチャの読み込み
 	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(planeModelHandle).textureFilePath);
 
-
-
-	particle3D->InstancingIndex_ = SrvManager::GetInstance()->Allocate();
-
-
+	//動きの種類
+	particle3D->moveType_ = moveType;
 
 	//頂点リソースを作る
 	particle3D->vertices_ = ModelManager::GetInstance()->GetModelData(planeModelHandle).vertices;
-
 	particle3D->vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * particle3D->vertices_.size());
 
-	//読み込みのところでバッファインデックスを作った方がよさそう
-	//vertexResourceがnullらしい
+
+
 	//リソースの先頭のアドレスから使う
 	particle3D->vertexBufferView_.BufferLocation = particle3D->vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースは頂点のサイズ
@@ -70,19 +66,16 @@ Particle3D* Particle3D::Create() {
 	std::memcpy(vertexData, particle3D->vertices_.data(), sizeof(VertexData) * particle3D->vertices_.size());
 	particle3D->vertexResource_->Unmap(0, nullptr);
 
+
+
 	//インスタンシング
 	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
-	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
-	particle3D->instancingSrvHandleCPU_= SrvManager::GetInstance()->GetCPUDescriptorHandle(particle3D->InstancingIndex_);
-	particle3D->instancingSrvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(particle3D->InstancingIndex_);
-	
-
-	SrvManager::GetInstance()->CreateSRVForStructuredBuffer(particle3D->InstancingIndex_, particle3D->instancingResource_.Get(), MAX_INSTANCE_NUMBER_, sizeof(ParticleForGPU));
-	
+	//SRVを作る
+	particle3D->instancingIndex_ = SrvManager::GetInstance()->Allocate();
+	SrvManager::GetInstance()->CreateSRVForStructuredBuffer(particle3D->instancingIndex_, particle3D->instancingResource_.Get(), MAX_INSTANCE_NUMBER_, sizeof(ParticleForGPU));
+	//書き込み
 	particle3D->instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&particle3D->instancingData_));
-
-
 
 
 
@@ -166,77 +159,57 @@ void Particle3D::Update(Camera& camera){
 		}
 		
 
-		
+
+
+		//強制的にビルボードにするよ
 		particleIterator->currentTime += DELTA_TIME;
 		particleIterator->transform.translate.x += particleIterator->velocity.x * DELTA_TIME;
 		particleIterator->transform.translate.y += particleIterator->velocity.y * DELTA_TIME;
 		particleIterator->transform.translate.z += particleIterator->velocity.z * DELTA_TIME;
 		
+		//Y軸でπ/2回転
+		//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
+		Matrix4x4 backToFrontMatrix = Matrix4x4Calculation::MakeRotateYMatrix(std::numbers::pi_v<float>);
 
-		//ビルボード有り
-		if (isBillBordMode_ == true) {
-			//Y軸でπ/2回転
-			//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
-			Matrix4x4 backToFrontMatrix = Matrix4x4Calculation::MakeRotateYMatrix(std::numbers::pi_v<float>);
+		//カメラの回転を適用する
+		Matrix4x4 billBoardMatrix = Matrix4x4Calculation::Multiply(backToFrontMatrix, camera.worldMatrix_);
+		//平行成分はいらないよ
+		//あくまで回転だけ
+		billBoardMatrix.m[3][0] = 0.0f;
+		billBoardMatrix.m[3][1] = 0.0f;
+		billBoardMatrix.m[3][2] = 0.0f;
 
-			//カメラの回転を適用する
-			Matrix4x4 billBoardMatrix = Matrix4x4Calculation::Multiply(backToFrontMatrix, camera.worldMatrix_);
-			//平行成分はいらないよ
-			//あくまで回転だけ
-			billBoardMatrix.m[3][0] = 0.0f;
-			billBoardMatrix.m[3][1] = 0.0f;
-			billBoardMatrix.m[3][2] = 0.0f;
+		//行列を作っていくよ
+		Matrix4x4 scaleMatrix = Matrix4x4Calculation::MakeScaleMatrix(particleIterator->transform.scale);
+		Matrix4x4 translateMatrix = Matrix4x4Calculation::MakeTranslateMatrix(particleIterator->transform.translate);
 
-			//行列を作っていくよ
-			Matrix4x4 scaleMatrix = Matrix4x4Calculation::MakeScaleMatrix(particleIterator->transform.scale);
-			Matrix4x4 translateMatrix = Matrix4x4Calculation::MakeTranslateMatrix(particleIterator->transform.translate);
-			
 
-			//パーティクル個別のRotateは関係ないよ
-			//その代わりにさっき作ったbillBoardMatrixを入れるよ
-			Matrix4x4 worldMatrix = Matrix4x4Calculation::Multiply(scaleMatrix,Matrix4x4Calculation::Multiply(billBoardMatrix,translateMatrix));
-			
-			//最大値を超えて描画しないようにする
-			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
-				instancingData_[numInstance_].World = worldMatrix;
-				instancingData_[numInstance_].color = particleIterator->color;
+		//パーティクル個別のRotateは関係ないよ
+		//その代わりにさっき作ったbillBoardMatrixを入れるよ
+		Matrix4x4 worldMatrix = Matrix4x4Calculation::Multiply(scaleMatrix, Matrix4x4Calculation::Multiply(billBoardMatrix, translateMatrix));
 
-				//アルファはVector4でのwだね
-				//float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
-				//instancingData_[numInstance_].color.w=alpha;
+		//最大値を超えて描画しないようにする
+		if (numInstance_ < MAX_INSTANCE_NUMBER_) {
+			instancingData_[numInstance_].World = worldMatrix;
+			instancingData_[numInstance_].color = particleIterator->color;
 
-				++numInstance_;
+			if (isToTransparent_ == true) {
+
 			}
-		}
-		//ビルボード無し
-		else if (isBillBordMode_ == false) {
-			//ビルボードやらない版
-			Matrix4x4 worldMatrix = Matrix4x4Calculation::MakeAffineMatrix(
-				particleIterator->transform.scale,
-				particleIterator->transform.rotate,
-				particleIterator->transform.translate);
-			
-			//WVP行列を作成
-			
-			//最大値を超えて描画しないようにする
-			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
-				instancingData_[numInstance_].World = worldMatrix;
-				instancingData_[numInstance_].color = particleIterator->color;
+			//アルファはVector4でのwだね
+			//float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+			//instancingData_[numInstance_].color.w=alpha;
 
-				//アルファはVector4でいうwだね
-				float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
-				instancingData_[numInstance_].color.w = alpha;
-
-				++numInstance_;
-			}
+			++numInstance_;
 		}
 	}
 }
 
 void Particle3D::Draw(Camera& camera, Material& material, DirectionalLight& directionalLight){
 	
+	//Directionalではなかったらassert
 	if (material.lightingKinds_ != Directional) {
-		return;
+		assert(0);
 	}
 	
 	//更新
@@ -263,7 +236,7 @@ void Particle3D::Draw(Camera& camera, Material& material, DirectionalLight& dire
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, material.bufferResource_->GetGPUVirtualAddress());
 
 	//インスタンシング
-	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(1, InstancingIndex_);
+	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(1, instancingIndex_);
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

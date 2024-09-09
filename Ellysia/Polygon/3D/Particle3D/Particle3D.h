@@ -19,6 +19,17 @@
 #include <random>
 
 
+enum ParticleMoveType {
+	
+	//通常の放出
+	NormalRelease,
+	//鉛直投げ上げ
+	ThrowUp,
+	//自由落下
+	FreeFall,
+};
+
+
 struct Material;
 struct DirectionalLight;
 
@@ -36,11 +47,17 @@ struct Emitter {
 class Particle3D {
 public:
 
-	//コンストラクタ
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Particle3D()=default;
 
-	//初期化
-	static Particle3D* Create();
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="moveType"></param>
+	/// <returns></returns>
+	static Particle3D* Create(uint32_t moveType);
 
 
 private:
@@ -57,26 +74,30 @@ private:
 
 public:
 
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="camera"></param>
 	void Update(Camera& camera);
 
-	//通常の描画
+	/// <summary>
+	/// 平行光源
+	/// </summary>
+	/// <param name="camera"></param>
+	/// <param name="material"></param>
+	/// <param name="directionalLight"></param>
 	void Draw(Camera& camera,Material &material,DirectionalLight& directionalLight);
 
 
-	//デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Particle3D()=default;
 
 
 
 
 public:
-	//アクセッサのまとめ
-
-	//ビルボードにするかどうか
-	//デフォルトではするようにしている
-	bool IsBillBordMode(bool isBillBordMode) {
-		this->isBillBordMode_ = isBillBordMode;
-	}
 
 
 #pragma region エミッタの中の設定
@@ -120,14 +141,6 @@ public:
 	}
 
 
-	//以下の2つはセットで使ってね
-	void SetField(bool isSetField) {
-		this->isSetField_ = isSetField;
-	}
-	void SetAccelerationField(AccelerationField accelerationField) {
-		this->accelerationField_ = accelerationField;
-	}
-
 #pragma endregion
 
 
@@ -145,9 +158,6 @@ private:
 
 
 
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
-	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_ = {};
-
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
 	//最大数
@@ -155,25 +165,25 @@ private:
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 
-	int InstancingIndex_=0;
+	int instancingIndex_=0;
 
 	//パーティクル
 	std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
 
-	//ビルボード
-	bool isBillBordMode_ = true;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
+	//動きの種類
+	uint32_t moveType_ = NormalRelease;
+
+	//透明になっていくか
+	bool isToTransparent_ = false;
 
 
 	//エミッタの設定
 	Emitter emitter_ = {};
 	const float DELTA_TIME = 1.0f / 60.0f;
 
-	//フィールド
-	bool isSetField_ = false;
-	AccelerationField accelerationField_ = {};
 
 };
