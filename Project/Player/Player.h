@@ -76,6 +76,9 @@ private:
 	// ジャンプ終了処理
 	void JumpExsit();
 
+	// レベルに応じたジャンプの高さの計算
+	float CalcJumpForceForLevel(int level) const;
+
 	// ストンプのエンター処理
 	void EnterStompFunc();
 
@@ -115,8 +118,10 @@ private:
 	bool isGrounded_ = true;
 	// Y軸方向の速度
 	float jumpVel_ = 0.0f;
-	// ジャンプ時の初速
-	float jumpForce_ = 25.0f;
+	// ベースのジャンプの初速速度
+	float baseJumpForce_ = 20.0f;
+	// ジャンプの成長率
+	float jumpGrowthRate_ = 1.1f;
 	// 重力の強さ
 	float jumpGravity_ = 30.0f;
 	// ジャンプのフレーム時間ごとの時間経過
@@ -135,6 +140,10 @@ private:
 
 	// Groundの四隅座標
 	std::vector<Vector3> groundCorners_{};
+
+	// キルストリーク
+	bool isKillStreak_ = false;
+	int killStrealCount_ = 0;
 	
 
 #pragma region System システム

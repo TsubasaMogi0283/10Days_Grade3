@@ -169,7 +169,7 @@ void Player::EnterJampFunc()
 {
 	isJumping_ = true; // ジャンプ中
 	isGrounded_ = false; // 地面から離れた状態
-	jumpVel_ = jumpForce_; // 初速を入れる
+	jumpVel_ = CalcJumpForceForLevel(killStrealCount_); // ジャンプの初速を求める
 }
 
 
@@ -200,6 +200,13 @@ void Player::JumpExsit()
 {
 	isJumping_ = false; // ジャンプ終了
 	jumpVel_ = 0.0f; // Y軸速度をリセット
+}
+
+
+// レベルに応じたジャンプの高さの計算
+float Player::CalcJumpForceForLevel(int level) const
+{
+	return baseJumpForce_ * float(std::pow(jumpGrowthRate_, level));
 }
 
 
@@ -259,6 +266,11 @@ void Player::DrawImGui()
 		ImGui::DragFloat3("Transform", &transform_.translate_.x, 0.01f);
 		ImGui::Text("");
 
+		ImGui::Text("キル関連数値");
+		ImGui::Checkbox("キルストリーク", &isKillStreak_);
+		ImGui::SliderInt("キルストリーク数", &killStrealCount_, 0, 5);
+		ImGui::Text("");
+
 		ImGui::Text("姿勢関連数値");
 		ImGui::DragFloat("姿勢の補間速度", &orientationLerpSpeed_, 0.01f);
 		ImGui::Text("");
@@ -267,10 +279,10 @@ void Player::DrawImGui()
 		ImGui::DragFloat2("L_Stick", &iLStick_.x, 0.0f);
 		float atan = std::atan2(iLStick_.x, iLStick_.y);
 		ImGui::DragFloat("Stick_tan2", &atan, 0.0f);
-		
+		ImGui::Text("");
 
 		ImGui::Text("ジャンプ関連数値");
-		ImGui::DragFloat("j初速", &jumpForce_, 0.01f);
+		ImGui::DragFloat("j初速", &baseJumpForce_, 0.01f);
 		ImGui::DragFloat("j重力", &jumpGravity_, 0.01f);
 		ImGui::DragFloat("jデルタタイム", &jumpDeltaTime_, 0.001f);
 		ImGui::Checkbox("Is_Jump", &isJumping_);
