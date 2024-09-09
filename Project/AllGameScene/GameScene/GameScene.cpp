@@ -156,7 +156,7 @@ void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
 	/* ----- Player プレイヤー ----- */
-	//player_->Draw3D(camera_, directtionalLight_);
+	player_->Draw3D(camera_, directtionalLight_);
 	//
 	////地面の描画
 	//ground_->Draw(camera_, directtionalLight_);

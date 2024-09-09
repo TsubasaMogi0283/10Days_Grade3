@@ -1334,7 +1334,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[8] = {};
+	D3D12_ROOT_PARAMETER rootParameters[5] = {};
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -1355,7 +1355,6 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 
 	//今回はDescriptorTableを使う
-	//Instancing
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//VertwxShaderで使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
@@ -1389,7 +1388,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 
 	//DescriptorTableを使う
-	//Texture
+	//Texture用
 	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//PixelShaderを使う
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -1399,46 +1398,20 @@ void PipelineManager::GenerateParticle3DPSO() {
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
 
-	//DirectionalLight
+	//カメラ
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
-	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//レジスタ番号1を使う
-	rootParameters[3].Descriptor.ShaderRegister = 1;
+	rootParameters[3].Descriptor.ShaderRegister = 0;
 
 
-	//カメラ
+	//DirectionalLight
 	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//VertwxShaderで使う
-	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	//register...Shader上のResource配置情報
+	//PixelShaderで使う
+	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号1を使う
 	rootParameters[4].Descriptor.ShaderRegister = 1;
-
-
-	//PointLight
-	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//PixelShaderで使う
-	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//レジスタ番号2を使う
-	rootParameters[5].Descriptor.ShaderRegister = 2;
-
-
-	//SpotLight
-	rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//PixelShaderで使う
-	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//レジスタ番号2を使う
-	rootParameters[6].Descriptor.ShaderRegister = 3;
-
-	//PS用のカメラ
-	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//PixelShaderで使う
-	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//レジスタ番号2を使う
-	rootParameters[7].Descriptor.ShaderRegister = 4;
-
-
-
 
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
@@ -1486,16 +1459,19 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//InputLayout・・VertexShaderへ渡す頂点データがどのようなものかを指定するオブジェクト
 	//InputLayout
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
+	//float4
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
+	//float2
 	inputElementDescs[1].SemanticName = "TEXCOORD";
 	inputElementDescs[1].SemanticIndex = 0;
 	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
+	//float3
 	inputElementDescs[2].SemanticName = "NORMAL";
 	inputElementDescs[2].SemanticIndex = 0;
 	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;

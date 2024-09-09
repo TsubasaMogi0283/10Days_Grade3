@@ -21,8 +21,7 @@ static uint32_t descriptorSizeSRV_ = 0u;
 Particle3D* Particle3D::Create() {
 	Particle3D* particle3D = new Particle3D();
 
-	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-	//ブレンドモードの設定
+
 	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
 
@@ -33,9 +32,9 @@ Particle3D* Particle3D::Create() {
 	//発生頻度用の時刻。0.0で初期化
 	particle3D->emitter_.frequencyTime = 0.0f;
 	//SRT
-	particle3D->emitter_.transform.scale = { 1.0f,1.0f,1.0f };
+	particle3D->emitter_.transform.scale = { 10.0f,10.0f,10.0f };
 	particle3D->emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
-	particle3D->emitter_.transform.translate = { 0.0f,0.0f,0.0f };
+	particle3D->emitter_.transform.translate = { 0.0f,0.0f,4.0f };
 
 #pragma endregion
 	//モデルは普通の平面にする
@@ -65,7 +64,11 @@ Particle3D* Particle3D::Create() {
 	particle3D->vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 
-
+	//頂点バッファにデータを書き込む
+	VertexData* vertexData = nullptr;
+	particle3D->vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
+	std::memcpy(vertexData, particle3D->vertices_.data(), sizeof(VertexData) * particle3D->vertices_.size());
+	particle3D->vertexResource_->Unmap(0, nullptr);
 
 	//インスタンシング
 	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
@@ -126,7 +129,7 @@ std::list<Particle> Particle3D::Emission(const Emitter& emmitter, std::mt19937& 
 	std::list<Particle> particles;
 
 	for (uint32_t count = 0; count < emmitter.count; ++count) {
-
+		//emmitterで設定したカウントまで増やしていくよ
 		particles.push_back(MakeNewParticle(randomEngine));
 	}
 
@@ -179,15 +182,18 @@ void Particle3D::Update(Camera& camera){
 			//カメラの回転を適用する
 			Matrix4x4 billBoardMatrix = Matrix4x4Calculation::Multiply(backToFrontMatrix, camera.worldMatrix_);
 			//平行成分はいらないよ
+			//あくまで回転だけ
 			billBoardMatrix.m[3][0] = 0.0f;
 			billBoardMatrix.m[3][1] = 0.0f;
 			billBoardMatrix.m[3][2] = 0.0f;
 
+			//行列を作っていくよ
 			Matrix4x4 scaleMatrix = Matrix4x4Calculation::MakeScaleMatrix(particleIterator->transform.scale);
 			Matrix4x4 translateMatrix = Matrix4x4Calculation::MakeTranslateMatrix(particleIterator->transform.translate);
 			
 
 			//パーティクル個別のRotateは関係ないよ
+			//その代わりにさっき作ったbillBoardMatrixを入れるよ
 			Matrix4x4 worldMatrix = Matrix4x4Calculation::Multiply(scaleMatrix,Matrix4x4Calculation::Multiply(billBoardMatrix,translateMatrix));
 			
 			//最大値を超えて描画しないようにする
@@ -195,9 +201,9 @@ void Particle3D::Update(Camera& camera){
 				instancingData_[numInstance_].World = worldMatrix;
 				instancingData_[numInstance_].color = particleIterator->color;
 
-				//アルファはVector4でいうwだね
-				float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
-				instancingData_[numInstance_].color.w=alpha;
+				//アルファはVector4でのwだね
+				//float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+				//instancingData_[numInstance_].color.w=alpha;
 
 				++numInstance_;
 			}
@@ -265,15 +271,12 @@ void Particle3D::Draw(Camera& camera, Material& material, DirectionalLight& dire
 		TextureManager::GraphicsCommand(2, textureHandle_);
 	}
 
+	//カメラ
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, camera.bufferResource_->GetGPUVirtualAddress());
+
+
 	//DirectionalLight
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLight.bufferResource_->GetGPUVirtualAddress());
-
-	//カメラ
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
-
-
-	//カメラ
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, directionalLight.bufferResource_->GetGPUVirtualAddress());
 
 
 	//DrawCall
