@@ -57,7 +57,7 @@ public:
 	/// </summary>
 	/// <param name="moveType"></param>
 	/// <returns></returns>
-	static Particle3D* Create(uint32_t moveType);
+	static Particle3D* Create(uint32_t &modelHandle,uint32_t moveType);
 
 
 private:
@@ -98,6 +98,17 @@ public:
 
 
 public:
+
+
+
+	/// <summary>
+	/// 透明になっていくようにするかどうか
+	/// </summary>
+	/// <param name="isToTransparent"></param>
+	void SetIsToTransparent(bool isToTransparent) {
+		this->isToTransparent_ = isToTransparent;
+	}
+
 
 
 #pragma region エミッタの中の設定
@@ -161,7 +172,7 @@ private:
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
 	//最大数
-	static const int32_t MAX_INSTANCE_NUMBER_ = 100;
+	static const int32_t MAX_INSTANCE_NUMBER_ = 7;
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 
@@ -175,15 +186,19 @@ private:
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	//動きの種類
-	uint32_t moveType_ = NormalRelease;
+	uint32_t moveType_ = ThrowUp;
 
 	//透明になっていくか
-	bool isToTransparent_ = false;
+	bool isToTransparent_ = true;
 
 
 	//エミッタの設定
 	Emitter emitter_ = {};
 	const float DELTA_TIME = 1.0f / 60.0f;
+
+
+	//鉛直投げ上げ
+	float velocityY_ = 1.2f;
 
 
 };

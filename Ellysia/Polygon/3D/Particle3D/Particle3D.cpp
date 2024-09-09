@@ -17,9 +17,7 @@
 
 #include <Collision.h>
 #include "SrvManager.h"
-static uint32_t descriptorSizeSRV_ = 0u;
-
-Particle3D* Particle3D::Create(uint32_t moveType) {
+Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 	Particle3D* particle3D = new Particle3D();
 
 	//Addでやるべきとのこと
@@ -37,17 +35,15 @@ Particle3D* Particle3D::Create(uint32_t moveType) {
 	particle3D->emitter_.transform.translate = { 0.0f,0.0f,4.0f };
 
 #pragma endregion
-	//モデルは普通の平面にする
-	uint32_t planeModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
-
+	
 	//テクスチャの読み込み
-	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(planeModelHandle).textureFilePath);
+	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(modelHandle).textureFilePath);
 
 	//動きの種類
 	particle3D->moveType_ = moveType;
 
 	//頂点リソースを作る
-	particle3D->vertices_ = ModelManager::GetInstance()->GetModelData(planeModelHandle).vertices;
+	particle3D->vertices_ = ModelManager::GetInstance()->GetModelData(modelHandle).vertices;
 	particle3D->vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * particle3D->vertices_.size());
 
 
@@ -89,22 +85,31 @@ Particle3D* Particle3D::Create(uint32_t moveType) {
 
 //生成関数
 Particle Particle3D::MakeNewParticle(std::mt19937& randomEngine) {
-	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
+	std::uniform_real_distribution<float> distribute(-2.0f, 2.0f);
 	Particle particle;
 	particle.transform.scale = { 1.0f,1.0f,1.0f };
 	particle.transform.rotate = { 0.0f,0.0f,0.0f };
 	//ランダムの値
 	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
 	particle.transform.translate = VectorCalculation::Add(emitter_.transform.translate,randomTranslate);
+	if (moveType_ == ThrowUp) {
+		particle.transform.translate = {.x= randomTranslate.x,.y=0.1f,.z= randomTranslate.z };
+
+	}
 	
 	//速度
 	std::uniform_real_distribution<float>distVelocity(-1.0f, 1.0f);
 	particle.velocity = {distVelocity(randomEngine),distVelocity(randomEngine),distVelocity(randomEngine)};
 
+
+
+
 	//Color
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
 	
+
+
 
 	//時間
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
@@ -153,55 +158,131 @@ void Particle3D::Update(Camera& camera){
 	numInstance_ = 0;
 	for (std::list<Particle>::iterator particleIterator = particles_.begin();
 		particleIterator != particles_.end();++particleIterator) {
-		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
+		
+		//行列の初期化
+		Matrix4x4 worldMatrix = {};
+		Matrix4x4 scaleMatrix = {};
+		Matrix4x4 translateMatrix = {};
+		Matrix4x4 billBoardMatrix = {};
+		Matrix4x4 backToFrontMatrix = {};
+
+
+
+		switch (moveType_) {
 			
-			continue;
-		}
-		
+		case NormalRelease:
+			#pragma region //通常の放出
+			//if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
+			//
+			//	continue;
+			//}
+			//強制的にビルボードにするよ
+			
+			particleIterator->transform.translate.x += particleIterator->velocity.x * DELTA_TIME;
+			particleIterator->transform.translate.y += particleIterator->velocity.y * DELTA_TIME;
+			particleIterator->transform.translate.z += particleIterator->velocity.z * DELTA_TIME;
+
+			//Y軸でπ/2回転
+			//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
+			backToFrontMatrix = Matrix4x4Calculation::MakeRotateYMatrix(std::numbers::pi_v<float>);
+
+			//カメラの回転を適用する
+			billBoardMatrix = Matrix4x4Calculation::Multiply(backToFrontMatrix, camera.worldMatrix_);
+			//平行成分はいらないよ
+			//あくまで回転だけ
+			billBoardMatrix.m[3][0] = 0.0f;
+			billBoardMatrix.m[3][1] = 0.0f;
+			billBoardMatrix.m[3][2] = 0.0f;
+
+			//行列を作っていくよ
+			scaleMatrix = Matrix4x4Calculation::MakeScaleMatrix(particleIterator->transform.scale);
+			translateMatrix = Matrix4x4Calculation::MakeTranslateMatrix(particleIterator->transform.translate);
 
 
+			//パーティクル個別のRotateは関係ないよ
+			//その代わりにさっき作ったbillBoardMatrixを入れるよ
+			worldMatrix = Matrix4x4Calculation::Multiply(scaleMatrix, Matrix4x4Calculation::Multiply(billBoardMatrix, translateMatrix));
 
-		//強制的にビルボードにするよ
-		particleIterator->currentTime += DELTA_TIME;
-		particleIterator->transform.translate.x += particleIterator->velocity.x * DELTA_TIME;
-		particleIterator->transform.translate.y += particleIterator->velocity.y * DELTA_TIME;
-		particleIterator->transform.translate.z += particleIterator->velocity.z * DELTA_TIME;
-		
-		//Y軸でπ/2回転
-		//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
-		Matrix4x4 backToFrontMatrix = Matrix4x4Calculation::MakeRotateYMatrix(std::numbers::pi_v<float>);
+			//最大値を超えて描画しないようにする
+			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
+				instancingData_[numInstance_].World = worldMatrix;
+				instancingData_[numInstance_].color = particleIterator->color;
 
-		//カメラの回転を適用する
-		Matrix4x4 billBoardMatrix = Matrix4x4Calculation::Multiply(backToFrontMatrix, camera.worldMatrix_);
-		//平行成分はいらないよ
-		//あくまで回転だけ
-		billBoardMatrix.m[3][0] = 0.0f;
-		billBoardMatrix.m[3][1] = 0.0f;
-		billBoardMatrix.m[3][2] = 0.0f;
+				//透明になっていくようにするかどうか
+				if (isToTransparent_ == true) {
+					//アルファはVector4でのwだね
+					float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+					instancingData_[numInstance_].color.w = alpha;
 
-		//行列を作っていくよ
-		Matrix4x4 scaleMatrix = Matrix4x4Calculation::MakeScaleMatrix(particleIterator->transform.scale);
-		Matrix4x4 translateMatrix = Matrix4x4Calculation::MakeTranslateMatrix(particleIterator->transform.translate);
+				}
 
-
-		//パーティクル個別のRotateは関係ないよ
-		//その代わりにさっき作ったbillBoardMatrixを入れるよ
-		Matrix4x4 worldMatrix = Matrix4x4Calculation::Multiply(scaleMatrix, Matrix4x4Calculation::Multiply(billBoardMatrix, translateMatrix));
-
-		//最大値を超えて描画しないようにする
-		if (numInstance_ < MAX_INSTANCE_NUMBER_) {
-			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = particleIterator->color;
-
-			if (isToTransparent_ == true) {
-
+				++numInstance_;
 			}
-			//アルファはVector4でのwだね
-			//float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
-			//instancingData_[numInstance_].color.w=alpha;
 
-			++numInstance_;
+			break;
+
+
+			#pragma endregion
+
+
+		case ThrowUp:
+
+			//強制的にビルボードにするよ
+			float accel = -0.001f;
+			velocityY_ += accel;
+
+
+			particleIterator->transform.translate.x += particleIterator->velocity.x/3.0f;
+			particleIterator->transform.translate.y += velocityY_;
+			particleIterator->transform.translate.z += particleIterator->velocity.z / 3.0f;
+
+			//Y軸でπ/2回転
+			//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
+			backToFrontMatrix = Matrix4x4Calculation::MakeRotateYMatrix(std::numbers::pi_v<float>);
+
+			//カメラの回転を適用する
+			billBoardMatrix = Matrix4x4Calculation::Multiply(backToFrontMatrix, camera.worldMatrix_);
+			//平行成分はいらないよ
+			//あくまで回転だけ
+			billBoardMatrix.m[3][0] = 0.0f;
+			billBoardMatrix.m[3][1] = 0.0f;
+			billBoardMatrix.m[3][2] = 0.0f;
+
+			//行列を作っていくよ
+			scaleMatrix = Matrix4x4Calculation::MakeScaleMatrix(particleIterator->transform.scale);
+			translateMatrix = Matrix4x4Calculation::MakeTranslateMatrix(particleIterator->transform.translate);
+
+
+			//パーティクル個別のRotateは関係ないよ
+			//その代わりにさっき作ったbillBoardMatrixを入れるよ
+			worldMatrix = Matrix4x4Calculation::Multiply(scaleMatrix, Matrix4x4Calculation::Multiply(billBoardMatrix, translateMatrix));
+
+			//最大値を超えて描画しないようにする
+			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
+				instancingData_[numInstance_].World = worldMatrix;
+				instancingData_[numInstance_].color = particleIterator->color;
+
+				//ワールド座標
+				Vector3 worldPosition = {
+					.x = worldMatrix.m[3][0],
+					.y = worldMatrix.m[3][1],
+					.z = worldMatrix.m[3][2]
+				};
+
+				//0より小さくなったら透明
+				if (worldPosition.y<0.0f) {
+					//アルファはVector4でのwだね
+					instancingData_[numInstance_].color.w = 0.0f;
+				
+				}
+
+				++numInstance_;
+			}
+			break;
+
 		}
+
+		
 	}
 }
 
