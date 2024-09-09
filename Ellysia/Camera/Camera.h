@@ -25,15 +25,33 @@ struct CameraForGPU {
 
 struct Camera {
 public:
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
-	//行列を計算
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetWorldPosition();
 
-	//転送する
+
+private:
+	/// <summary>
+	/// 転送
+	/// </summary>
 	void Transfer();
+
+
+
+
+
 
 public:
 	//リソース

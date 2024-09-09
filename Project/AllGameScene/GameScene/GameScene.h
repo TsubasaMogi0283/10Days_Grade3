@@ -21,6 +21,7 @@
 
 #include "Player/Player.h"
 #include <Enemy/EnemyManager.h>
+#include <Particle3D.h>
 
 
 
@@ -123,6 +124,10 @@ private:
 
 
 #pragma endregion 
+
+
+	Material particleMaterial_ = {};
+	std::unique_ptr<Particle3D> particle__ = nullptr;
 
 
 
