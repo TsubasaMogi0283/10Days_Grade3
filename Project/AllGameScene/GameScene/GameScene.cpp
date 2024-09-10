@@ -130,6 +130,13 @@ void GameScene::Update(GameManager* gameManager) {
 	/* ----- Player プレイヤー ----- */
 	player_->Update();
 
+	//プレイヤーの攻撃
+	if (player_->IsStomping() == true) {
+		collisionManager_->RegisterList(player_->GetPlayerAttack());
+	}
+	//本体
+	//collisionManager_->RegisterList(player_.get());
+
 	/* ----- Input 入力関連処理 ----- */
 	FuncInput();
 
@@ -142,13 +149,16 @@ void GameScene::Update(GameManager* gameManager) {
 		collisionManager_->RegisterList(enemy);
 
 		//攻撃
-		collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
+		if (enemy->GetIsAttack() == true) {
+			//collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
+		}
+		
 	}
 	
 
 
 	//敵管理クラスの更新
-	Vector3 playerPosition = player_->GetWorldPos();
+	Vector3 playerPosition = player_->GetWorldPosition();
 	enemyManager_->SetPlayerPosition(playerPosition);
 
 	enemyManager_->Update();

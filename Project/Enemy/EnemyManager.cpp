@@ -17,7 +17,7 @@ void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle
 	feEnemyModelHandle_ = feModelHandle;
 
 	//生成
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 1; ++i) {
 		//岩
 		GenarateRockEnemy(rockModelhandle);
 		//鉄
@@ -205,13 +205,16 @@ void EnemyManager::Update(){
 
 		//AABBを取得
 		AABB enemyAABB = enemy->GetAABB();
+		Vector3 position = enemy->GetWorldPosition();
 
 		//X反転
-		if ((enemyAABB.min.x < stageLeftBackPosition.x) || (enemyAABB.max.x > stageRightBackPosition.x)) {
+		if (enemy->GetWorldPosition().x-enemy->GetRadius() < stageLeftFrontPosition.x || 
+			enemy->GetWorldPosition().x + enemy->GetRadius() > stageRightFrontPosition.x) {
 			enemy->InvertSpeedX();
 		}
 		//Z反転
-		if ((enemyAABB.min.z < stageLeftFrontPosition.z) || (enemyAABB.max.z > stageLeftBackPosition.z)) {
+		if (enemy->GetWorldPosition().z - enemy->GetRadius() < stageLeftFrontPosition.z ||
+			enemy->GetWorldPosition().z + enemy->GetRadius() > stageLeftBackPosition.z) {
 			enemy->InvertSpeedZ();
 		}
 
@@ -224,10 +227,10 @@ void EnemyManager::Update(){
 	
 	if (enemyCount < MAX_ENEMY_COUNT_) {
 		//時間が増える
-		genarateTime_ += 1;
+		//genarateTime_ += 1;
 
 		//3秒くらいしたら生成
-		if (genarateTime_ == 180) {
+		if (genarateTime_ == 240) {
 			std::random_device seedGenerator;
 			std::mt19937 randomEngine(seedGenerator());
 

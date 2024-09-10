@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "FollowCamera/FollowCamera.h"
 #include <algorithm>
+#include <Collider/CollisionConfig.h>
 
 
 // コピーコンストラクタ
@@ -21,9 +22,28 @@ void Player::Init()
 	// トランスフォームの初期化
 	transform_.Initialize();
 	transform_.translate_.y = 1.0f;
-
+	radius_ = 1.0f;
+	transform_.scale_ = { .x = radius_,.y = radius_,.z = radius_ };
 	// マテリアルの初期化
 	mtl_.Initialize();
+
+
+	//種類
+	collisionType_ = CollisionType::SphereType;
+
+
+	//判定
+	//自分
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYER);
+	//敵の攻撃
+	SetCollisionMask(COLLISION_ATTRIBUTE_ENEMY_ATTACK);
+
+	
+
+	//攻撃
+	attack_ = std::make_unique<PlayerAttack>();
+	attack_->Initialize(transform_.translate_);
+
 }
 
 
@@ -49,6 +69,9 @@ void Player::Update()
 		StompFunc();
 	}
 
+	Vector3 worldPosition = GetWorldPosition();
+	attack_->SetPlayerPosition(worldPosition);
+	attack_->Update();
 
 #ifdef _DEBUG
 	// ImGuiの描画
@@ -61,6 +84,16 @@ void Player::Update()
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
 	model_->Draw(transform_, camera, mtl_, light);
+
+	//攻撃
+#ifdef _DEBUG
+	if (isGrounded_==false) {
+		attack_->Draw(camera, light);
+	}
+	
+#endif // _DEBUG
+
+	
 }
 
 
@@ -95,6 +128,14 @@ void Player::FuncStickFunc(XINPUT_STATE joyState)
 
 	// Y軸の姿勢処理
 	BodyOrientation();
+}
+
+void Player::OnCollision(){
+#ifdef _DEBUG
+	ImGui::Begin("PlayerOnCollision");
+	ImGui::End();
+#endif // _DEBUG
+
 }
 
 

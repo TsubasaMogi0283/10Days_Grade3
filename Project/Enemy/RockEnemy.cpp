@@ -19,15 +19,11 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 
 	//半径
 	radius_ = 1.0f;
-	aabb_.max = { .x = position.x + radius_,.y = position.y + radius_,.z = position.z + radius_ };
-	aabb_.min = { .x = position.x - radius_,.y = position.x - radius_,.z = position.x - radius_ };
-
-
 	//生きているかどうか
 	isAlive_ = true;
 
 	//種類
-	collisionType_ = CollisionType::AABBType;
+	collisionType_ = CollisionType::SphereType;
 
 
 
@@ -38,7 +34,7 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 	//自分
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	//相手
-	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER);
+	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER_ATTACK);
 
 
 
@@ -207,14 +203,26 @@ void RockEnemy::Update() {
 		particle->Update();
 	}
 
-	//AABB
-	aabb_.min = VectorCalculation::Subtract(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
-	aabb_.max = VectorCalculation::Add(GetWorldPosition(), {.x = radius_, .y = radius_, .z =radius_});
 
 	Vector3 enemyWorldPosition = GetWorldPosition();
 	attackCollision_->SetEnemyPosition(enemyWorldPosition);
 	attackCollision_->SetEnemyDirection(direction_);
 	attackCollision_->Update();
+
+
+
+
+
+
+
+#ifdef _DEBUG
+	ImGui::Begin("岩タイプの敵"); 
+	ImGui::InputFloat3("位置", &worldTransform_.translate_.x);
+	ImGui::InputInt("消える時間", &deleteTime_);
+	ImGui::End();
+#endif // _DEBUG
+
+
 
 }
 
@@ -252,6 +260,12 @@ Vector3 RockEnemy::GetWorldPosition() {
 
 void RockEnemy::OnCollision(){
 	isAlive_ = false;
+#ifdef _DEBUG
+	ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_Always);
+	ImGui::Begin("RockEnemyOnCollision");
+	ImGui::End();
+#endif // _DEBUG
+
 	
 }
 
@@ -259,8 +273,11 @@ void RockEnemy::Killed(){
 	//倒された場合
 	if (isAlive_ == false) {
 		deleteTime_+=1;
+		if (deleteTime_==1) {
+			ReleaseParticle();
+		}
 		//放出
-		ReleaseParticle();
+		
 		isDisplayParticle_ = true;
 		
 		
@@ -280,7 +297,8 @@ void RockEnemy::Killed(){
 void RockEnemy::ReleaseParticle(){
 
 	RockEnemyParticle* rockParticle = new RockEnemyParticle();
-	uint32_t particleModelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
+	//uint32_t particleModelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle","SampleParticle.obj");
+	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 	Vector3 enemyPosition = GetWorldPosition();
 	rockParticle->Initialize(particleModelHandle, enemyPosition);
 	rockParticles_.push_back(rockParticle);
@@ -288,6 +306,10 @@ void RockEnemy::ReleaseParticle(){
 
 
 RockEnemy::~RockEnemy() {
+	
+	for (RockEnemyParticle* particle : rockParticles_) {
+		delete particle;
+	}
 	delete attackCollision_;
 }
 

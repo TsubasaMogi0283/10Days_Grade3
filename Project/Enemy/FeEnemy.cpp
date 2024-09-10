@@ -20,15 +20,12 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& spee
 
 	//半径
 	radius_ = 1.0f;
-	aabb_.max = { .x = position.x + radius_,.y = position.y + radius_,.z = position.z + radius_ };
-	aabb_.min = { .x = position.x - radius_,.y = position.x - radius_,.z = position.x - radius_ };
-
 
 
 	isAlive_ = true;
 
 	//種類
-	collisionType_ = CollisionType::AABBType;
+	collisionType_ = CollisionType::SphereType;
 
 
 
@@ -39,7 +36,7 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& spee
 	//自分
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	//相手
-	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER);
+	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER_ATTACK);
 
 
 
@@ -210,9 +207,6 @@ void FeEnemy::Update() {
 		particle->Update();
 	}
 
-	//AABB
-	aabb_.min = VectorCalculation::Subtract(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
-	aabb_.max = VectorCalculation::Add(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
 
 	Vector3 enemyWorldPosition = GetWorldPosition();
 	attackCollision_->SetEnemyPosition(enemyWorldPosition);
@@ -256,6 +250,13 @@ Vector3 FeEnemy::GetWorldPosition() {
 void FeEnemy::OnCollision() {
 	isAlive_ = false;
 
+#ifdef _DEBUG
+	ImGui::Begin("FeEnemyOnCollision");
+	ImGui::End();
+#endif // _DEBUG
+
+
+
 }
 
 void FeEnemy::Killed() {
@@ -263,7 +264,10 @@ void FeEnemy::Killed() {
 	if (isAlive_ == false) {
 		deleteTime_ += 1;
 		//放出
-		ReleaseParticle();
+		if (deleteTime_ == 1) {
+			ReleaseParticle();
+		}
+		
 		isDisplayParticle_ = true;
 
 
@@ -291,6 +295,10 @@ void FeEnemy::ReleaseParticle() {
 
 
 FeEnemy::~FeEnemy() {
+	for (FeEnemyParticle* particle : feParticles_) {
+		delete particle;
+	}
+
 	delete attackCollision_;
 }
 

@@ -23,7 +23,7 @@ void EnemyAttackCollision::Initialize(uint32_t& modelHandle){
 	#pragma region 当たり判定
 
 	//種類
-	collisionType_ = CollisionType::AABBType;
+	collisionType_ = CollisionType::SphereType;
 
 	
 
