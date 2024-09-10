@@ -6,6 +6,7 @@
 
 #include "RockEnemy.h"
 #include "FeEnemy.h"
+#include <random>
 
 void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle){
 	
@@ -43,8 +44,8 @@ void EnemyManager::GenarateRockEnemy(uint32_t& rockModelhandle){
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
-	std::uniform_real_distribution<float> distributeZ(stageLeftBackPosition.z, stageLeftFrontPosition.z);
-
+	std::uniform_real_distribution<float> distributeZ(stageLeftFrontPosition.z, stageLeftBackPosition.z);
+	
 	//ランダムの値
 	Vector3 randomTranslate = { distributeX(randomEngine),0.0f,distributeZ(randomEngine) };
 
