@@ -39,7 +39,7 @@ void GameScene::Initialize() {
 	/* ----- Player プレイヤー ----- */
 	PlayerAssetsHandle handles = {
 		.player = modelManager_->LoadModelFile("Resources/Player", "Player.obj"),
-		.stompSpeed = modelManager_->LoadModelFile("Resources/Player/Effect/StompSpeedEffect", "StompSpeedEffect.obj"),
+		.stompSpeed = modelManager_->LoadModelFile("Resources/Player/Effects/StompSpeedEffect", "StompSpeedEffect.obj"),
 	};
 	player_ = std::make_unique<Player>(handles);
 	player_->Init();
