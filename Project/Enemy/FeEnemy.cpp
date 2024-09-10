@@ -39,7 +39,7 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& spee
 	//自分
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	//相手
-	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER);
+	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER_ATTACK);
 
 
 

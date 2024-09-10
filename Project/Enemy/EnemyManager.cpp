@@ -205,13 +205,16 @@ void EnemyManager::Update(){
 
 		//AABBを取得
 		AABB enemyAABB = enemy->GetAABB();
+		Vector3 position = enemy->GetWorldPosition();
 
 		//X反転
-		if ((enemyAABB.min.x < stageLeftBackPosition.x) || (enemyAABB.max.x > stageRightBackPosition.x)) {
+		if (enemy->GetWorldPosition().x-enemy->GetRadius() < stageLeftFrontPosition.x || 
+			enemy->GetWorldPosition().x + enemy->GetRadius() > stageRightFrontPosition.x) {
 			enemy->InvertSpeedX();
 		}
 		//Z反転
-		if ((enemyAABB.min.z < stageLeftFrontPosition.z) || (enemyAABB.max.z > stageLeftBackPosition.z)) {
+		if (enemy->GetWorldPosition().z - enemy->GetRadius() < stageLeftFrontPosition.z ||
+			enemy->GetWorldPosition().z + enemy->GetRadius() > stageLeftBackPosition.z) {
 			enemy->InvertSpeedZ();
 		}
 

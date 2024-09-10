@@ -34,7 +34,7 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 	//自分
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	//相手
-	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER);
+	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER_ATTACK);
 
 
 
@@ -261,6 +261,7 @@ Vector3 RockEnemy::GetWorldPosition() {
 void RockEnemy::OnCollision(){
 	isAlive_ = false;
 #ifdef _DEBUG
+	ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_Always);
 	ImGui::Begin("RockEnemyOnCollision");
 	ImGui::End();
 #endif // _DEBUG
