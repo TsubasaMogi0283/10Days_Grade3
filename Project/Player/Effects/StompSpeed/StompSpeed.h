@@ -36,6 +36,9 @@ namespace pEffect {
 
 	private:
 
+		// 乱数回転処理
+		void RandOrientation();
+
 		// Imguiの描画
 		void DrawImGui();
 
@@ -49,6 +52,10 @@ namespace pEffect {
 		WorldTransform transform_{};
 		// マテリアル
 		Material mtl_{};
+
+		// 出現させるか
+		bool isActive_ = false;
+
 
 	};
 }

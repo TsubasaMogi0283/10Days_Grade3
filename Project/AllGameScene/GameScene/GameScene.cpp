@@ -179,7 +179,7 @@ void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
 	/* ----- FollowCamera フォローカメラ ----- */
-	//followCamera_->Draw3D(camera_, directtionalLight_);
+	followCamera_->Draw3D(camera_, directtionalLight_);
 
 	/* ----- Player プレイヤー ----- */
 	player_->Draw3D(camera_, directtionalLight_);

@@ -1,5 +1,5 @@
 #include "StompSpeed.h"
-
+#include <random>
 
 
 // コピーコンストラクタ
@@ -33,6 +33,11 @@ void pEffect::StompSpeed::Update()
 	// マテリアルの更新
 	mtl_.Update();
 
+	// アクティブなら
+	if (isActive_)
+		// 乱数回転処理
+		RandOrientation();
+
 
 #ifdef _DEBUG
 	// ImGuiの描画
@@ -44,16 +49,40 @@ void pEffect::StompSpeed::Update()
 // 描画処理
 void pEffect::StompSpeed::Draw3D(Camera& camera, DirectionalLight& light)
 {
+	if (!isActive_) { return; }
 	model_->Draw(transform_, camera, mtl_, light);
+}
+
+
+// 乱数回転処理
+void pEffect::StompSpeed::RandOrientation()
+{
+	// ランダムな回転値を生成するための乱数エンジン
+	std::random_device rd;
+	std::mt19937 mt(rd());
+
+	// 回転値の範囲（-180度から180度まで）
+	std::uniform_real_distribution<float> dist(-4.0f, +40.0f);
+
+	float setRad = dist(mt);
+
+	transform_.rotate_.y = setRad;
 }
 
 
 // Imguiの描画
 void pEffect::StompSpeed::DrawImGui()
 {
-	if (ImGui::TreeNode("Player")) {
+	if (ImGui::TreeNode("StompSpeed")) {
 
+		ImGui::Checkbox("アクティブ", &isActive_);
+		ImGui::Text("");
 
+		ImGui::Text("トランスフォーム");
+		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.01f, 0.1f, 10.0f);
+		ImGui::DragFloat3("Rotate", &transform_.rotate_.x, 0.001f);
+		ImGui::DragFloat3("Transform", &transform_.translate_.x, 0.01f);
+		ImGui::Text("");
 
 		ImGui::TreePop();
 	}

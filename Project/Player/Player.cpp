@@ -58,6 +58,11 @@ void Player::Update()
 	}
 
 
+#ifdef _DEBUG
+	// ImGuiの描画
+	DrawImGui();
+#endif // _DEBUG
+
 
 #pragma region Effect エフェクト
 
@@ -65,12 +70,6 @@ void Player::Update()
 	stompSpeedEffect_->Update();
 
 #pragma endregion 
-
-
-#ifdef _DEBUG
-	// ImGuiの描画
-	DrawImGui();
-#endif // _DEBUG
 }
 
 
