@@ -5,10 +5,9 @@
 
 
 // コピーコンストラクタ
-Player::Player(uint32_t modelHandle)
+Player::Player(PlayerAssetsHandle handles)
 {
-	// モデルハンドの設定
-	this->modelHandle_ = modelHandle;
+	this->handles_ = handles;
 }
 
 
@@ -16,7 +15,7 @@ Player::Player(uint32_t modelHandle)
 void Player::Init()
 {
 	// モデルの初期化
-	model_.reset(Model::Create(modelHandle_));
+	model_.reset(Model::Create(handles_.player));
 
 	// トランスフォームの初期化
 	transform_.Initialize();

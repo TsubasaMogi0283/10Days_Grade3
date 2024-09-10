@@ -14,6 +14,12 @@ struct Camera;
 struct DirectionalLight;
 class FollowCamera;
 
+// プレイヤー関連のモデルハンドル
+struct PlayerAssetsHandle {
+	uint32_t player;
+	uint32_t stompSpeed;
+};
+
 
 /* Playerクラス */
 class Player {
@@ -25,7 +31,7 @@ public:
 	~Player() = default;
 
 	// コピーコンストラクタ
-	Player(uint32_t modelHandle);
+	Player(PlayerAssetsHandle handles);
 
 	// 初期化、更新、描画
 	void Init();
@@ -110,8 +116,10 @@ private:
 
 private:
 
+	// プレイヤー関連のモデルハンドル
+	PlayerAssetsHandle handles_{};
+
 	// モデル
-	uint32_t modelHandle_ = 0;
 	std::unique_ptr<Model> model_;
 	// トランスフォーム
 	WorldTransform transform_{};
