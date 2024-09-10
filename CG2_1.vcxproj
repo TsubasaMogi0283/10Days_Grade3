@@ -190,6 +190,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Collider\CollisionManager.cpp" />
     <ClCompile Include="Project\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemy.cpp" />
+    <ClCompile Include="Project\Enemy\FeEnemyParticle.cpp" />
     <ClCompile Include="Project\Enemy\RockEnemyParticle.cpp" />
     <ClCompile Include="Project\Player\Func\PlayerFunc.cpp" />
     <ClCompile Include="Project\Player\Player.cpp" />
@@ -465,6 +466,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Enemy\EnemyManager.h" />
     <ClInclude Include="Project\Enemy\EnemyParticle.h" />
     <ClInclude Include="Project\Enemy\FeEnemy.h" />
+    <ClInclude Include="Project\Enemy\FeEnemyParticle.h" />
     <ClInclude Include="Project\Enemy\RockEnemyParticle.h" />
     <ClInclude Include="Project\Player\Func\PlayerFunc.h" />
     <ClInclude Include="Project\Player\Player.h" />

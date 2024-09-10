@@ -55,7 +55,8 @@ void GameScene::Initialize() {
 		ground_->GetLeftFront(), ground_->GetRightFront());
 
 	//敵
-	uint32_t normalEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/RockEnemy","Rock.obj");
+	uint32_t rockEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/RockEnemy","Rock.obj");
+	uint32_t feEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/FeEnemy","Fe.obj");
 
 	Vector3 stageLeftBack = ground_->GetLeftBack();
 	Vector3 stageRightBack = ground_->GetRightBack();
@@ -65,17 +66,10 @@ void GameScene::Initialize() {
 
 	//敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(normalEnemyModelhandle);
+	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
 	enemyManager_->SetStageRectPosition(stageLeftBack, stageRightBack, stageLeftFront, stageRightFront);
 
-	particleMaterial_.Initialize();
-	particleMaterial_.lightingKinds_ = Directional;
-	////モデルは普通の平面にする
-	//uint32_t planeModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
-	//
-	//particle__.reset(Particle3D::Create(planeModelHandle,ThrowUp));
 
-	
 
 	//平行光源
 	directtionalLight_.Initialize();
@@ -138,7 +132,7 @@ void GameScene::Update(GameManager* gameManager) {
 	enemyManager_->Update();
 	enemyManager_->DeleteEnemy();
 	
-	particleMaterial_.Update();
+
 
 	//地面の更新
 	ground_->Update();
@@ -156,8 +150,6 @@ void GameScene::DrawSpriteBack(){
 }
 
 void GameScene::DrawObject3D(){
-	//skydome_->Draw(camera_);
-
 	/* ----- Player プレイヤー ----- */
 	player_->Draw3D(camera_, directtionalLight_);
 	
@@ -167,7 +159,7 @@ void GameScene::DrawObject3D(){
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);
 
-	//particle__->Draw(camera_, particleMaterial_, directtionalLight_);
+
 }
 
 void GameScene::PreDrawPostEffectFirst(){

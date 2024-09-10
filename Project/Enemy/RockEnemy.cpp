@@ -203,6 +203,10 @@ void RockEnemy::Update() {
 	material_.Update();
 
 
+	for (RockEnemyParticle* particle : rockParticles_) {
+		particle->Update();
+	}
+
 	//AABB
 	aabb_.min = VectorCalculation::Subtract(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
 	aabb_.max = VectorCalculation::Add(GetWorldPosition(), {.x = radius_, .y = radius_, .z =radius_});

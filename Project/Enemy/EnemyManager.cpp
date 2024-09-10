@@ -5,23 +5,26 @@
 #include "ModelManager.h"
 
 #include "RockEnemy.h"
+#include "FeEnemy.h"
 
-void EnemyManager::Initialize(uint32_t& modelhandle){
+void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle){
 	
 
 #pragma region 通常の敵の生成
 
-	Enemy* enemy1 = new RockEnemy();
+	Enemy* rockEnemy1 = new RockEnemy();
 	Vector3 enemyPosition1 = { 10.0f,0.0f,1.0f };
-	enemy1->Initialize(modelhandle, enemyPosition1);
-	enemyes_.push_back(enemy1);
+	rockEnemy1->Initialize(rockModelhandle, enemyPosition1);
+	enemyes_.push_back(rockEnemy1);
 
 
 
-	Enemy* enemy2 = new RockEnemy();
+
+
+	Enemy* feEnemy2 = new FeEnemy();
 	Vector3 enemyPosition2 = { 1.0f,0.0f,10.0f };
-	enemy2->Initialize(modelhandle, enemyPosition2);
-	enemyes_.push_back(enemy2);
+	feEnemy2->Initialize(feModelHandle, enemyPosition2);
+	enemyes_.push_back(feEnemy2);
 
 
 #pragma endregion
@@ -40,6 +43,40 @@ void EnemyManager::DeleteEnemy(){
 		}
 		return false;
 	});
+}
+
+void EnemyManager::GenarateRockEnemy(uint32_t& rockModelhandle){
+	Enemy* rockEnemy1 = new RockEnemy();
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+	std::uniform_real_distribution<float> distribute(-stageLeftBackPosition.x, 2.0f);
+
+	//ランダムの値
+	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
+	particle.transform.translate = VectorCalculation::Add(emitter_.transform.translate, randomTranslate);
+	if (moveType_ == ThrowUp) {
+		Vector3 offset = { .x = randomTranslate.x,.y = 0.1f,.z = randomTranslate.z };
+		particle.transform.translate = VectorCalculation::Add(emitter_.transform.translate, offset);
+
+	}
+
+	//速度
+	std::uniform_real_distribution<float>distVelocity(-1.0f, 1.0f);
+	particle.velocity = { distVelocity(randomEngine),distVelocity(randomEngine),distVelocity(randomEngine) };
+
+	Vector3 enemyPosition1 = { 10.0f,0.0f,1.0f };
+	rockEnemy1->Initialize(rockModelhandle, enemyPosition1);
+	enemyes_.push_back(rockEnemy1);
+
+
+}
+
+void EnemyManager::GenarateFeEnemy(uint32_t& feModelHandle){
+	Enemy* feEnemy2 = new FeEnemy();
+	Vector3 enemyPosition2 = { 1.0f,0.0f,10.0f };
+	feEnemy2->Initialize(feModelHandle, enemyPosition2);
+	enemyes_.push_back(feEnemy2);
+
 }
 
 
