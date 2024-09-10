@@ -34,6 +34,8 @@ void GameScene::Initialize() {
 	uint32_t followCameraModelHD = modelManager_->LoadModelFile("Resources/FollowCamera", "FollowCamera.obj");
 	followCamera_ = std::make_unique<FollowCamera>(followCameraModelHD);
 	followCamera_->Init();
+	//カメラ
+	camera_ = followCamera_->GetCameraData();
 
 	/* ----- Player プレイヤー ----- */
 	uint32_t playerModelHD = modelManager_->LoadModelFile("Resources/Player", "Player.obj");
@@ -88,12 +90,6 @@ void GameScene::Initialize() {
 	directtionalLight_.Initialize();
 	directtionalLight_.direction_ = { .x = 0.0f,.y = -1.0f,.z = 0.0f };
 
-
-	//カメラ
-	camera_.Initialize();
-	camera_.rotate_ = { .x = 0.24f,.y = 0.0f,.z = 0.0f };
-	camera_.translate_ = { .x = 0.0f,.y = 0.2f,.z = 0.0f };
-
 	///ポストエフェクト
 	back_ = std::make_unique<BackText>();
 	back_->Initialize();
@@ -123,20 +119,13 @@ void GameScene::Update(GameManager* gameManager) {
 
 	/* ----- FollowCamera フォローカメラ ----- */
 	followCamera_->Update();
+	camera_ = followCamera_->GetCameraData();
 	
 	/* ----- Player プレイヤー ----- */
 	player_->Update();
 
 	/* ----- Input 入力関連処理 ----- */
 	FuncInput();
-
-
-
-	//プレイヤーに追従する
-	Vector3 cameraOffset = VectorCalculation::Add(
-		{ player_->GetWorldPos().x, 0.0f, player_->GetWorldPos().z },
-		{ 0.0, 20.0f, -60.0f });
-	camera_.translate_ = cameraOffset;
 
 
 	//敵管理クラスの更新
@@ -153,9 +142,6 @@ void GameScene::Update(GameManager* gameManager) {
 
 	//ライトの更新
 	directtionalLight_.Update();
-
-	//カメラの更新
-	camera_.Update();
 }
 
 void GameScene::DrawSpriteBack(){
@@ -166,7 +152,7 @@ void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
 	/* ----- FollowCamera フォローカメラ ----- */
-	followCamera_->Draw3D(camera_, directtionalLight_);
+	//followCamera_->Draw3D(camera_, directtionalLight_);
 
 	/* ----- Player プレイヤー ----- */
 	player_->Draw3D(camera_, directtionalLight_);

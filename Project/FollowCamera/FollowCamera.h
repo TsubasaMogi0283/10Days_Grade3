@@ -41,6 +41,9 @@ public:
 	// Player
 	void SetPlayer(Player* player) { this->player_ = player; }
 
+	// Camera
+	Camera& GetCameraData() { return this->camera_; }
+
 #pragma endregion 
 
 
@@ -80,10 +83,10 @@ private:
 	float addOrientationSpeed_ = 0.3f;
 	// 姿勢計算の補間速度
 	float orientationLerpSpeed_ = 0.5f;
+	// 相対位置
+	Vector3 constOffset_{};
 	// プレイヤーからのオフセット
 	Vector3 offset_{};
-	// Yの固定位置
-	float constYPos_ = 0.0f;
 
 
 #pragma region System システム

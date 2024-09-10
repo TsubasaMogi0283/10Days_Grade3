@@ -30,9 +30,11 @@ void FollowCamera::Init()
 	// マテリアルの初期化
 	mtl_.Initialize();
 
+	// 相対位置
+	constOffset_ = { 0.0f, 20.0f, -50.0f };
+
 	// オフセットの設定
-	offset_ = { 0.0f, 5.0f, -10.0f };
-	constYPos_ = offset_.y;
+	offset_ = constOffset_;
 }
 
 
@@ -103,7 +105,7 @@ void FollowCamera::CalcOrientation()
 void FollowCamera::FollowFunc()
 {
 	// オフセットの設定
-	offset_ = { 0.0f, 5.0f, -10.0f };
+	offset_ = constOffset_;
 
 	// カメラの前方方向に基づいてカメラのオフセットを回転させる
 	Matrix4x4 rotateMat = Matrix4x4Calculation::MakeIdentity4x4();
@@ -116,7 +118,7 @@ void FollowCamera::FollowFunc()
 	camera_.translate_ = VectorCalculation::Add(player_->GetWorldPos(), offset_);
 
 	// Yの位置だけ固定
-	camera_.translate_.y = constYPos_;
+	camera_.translate_.y = constOffset_.y;
 }
 
 
