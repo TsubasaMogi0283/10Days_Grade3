@@ -10,9 +10,12 @@ void PlayerAttack::Initialize(Vector3& position){
 	collisionType_ = CollisionType::SphereType;
 	radius_ = 1.0f;
 
-	//初期化
+	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { radius_,radius_,radius_ };
+	worldTransform_.translate_ = position;
+
+	//マテリアルの初期化
 	material_.Initialize();
 	material_.lightingKinds_ = Directional;
 

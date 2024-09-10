@@ -256,6 +256,13 @@ Vector3 FeEnemy::GetWorldPosition() {
 void FeEnemy::OnCollision() {
 	isAlive_ = false;
 
+#ifdef _DEBUG
+	ImGui::Begin("FeEnemyOnCollision");
+	ImGui::End();
+#endif // _DEBUG
+
+
+
 }
 
 void FeEnemy::Killed() {

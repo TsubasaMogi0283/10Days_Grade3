@@ -19,10 +19,6 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 
 	//半径
 	radius_ = 1.0f;
-	aabb_.max = { .x = position.x + radius_,.y = position.y + radius_,.z = position.z + radius_ };
-	aabb_.min = { .x = position.x - radius_,.y = position.x - radius_,.z = position.x - radius_ };
-
-
 	//生きているかどうか
 	isAlive_ = true;
 
@@ -207,14 +203,26 @@ void RockEnemy::Update() {
 		particle->Update();
 	}
 
-	//AABB
-	aabb_.min = VectorCalculation::Subtract(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
-	aabb_.max = VectorCalculation::Add(GetWorldPosition(), {.x = radius_, .y = radius_, .z =radius_});
 
 	Vector3 enemyWorldPosition = GetWorldPosition();
 	attackCollision_->SetEnemyPosition(enemyWorldPosition);
 	attackCollision_->SetEnemyDirection(direction_);
 	attackCollision_->Update();
+
+
+
+
+
+
+
+#ifdef _DEBUG
+	ImGui::Begin("岩タイプの敵"); 
+	ImGui::InputFloat3("位置", &worldTransform_.translate_.x);
+	ImGui::InputInt("消える時間", &deleteTime_);
+	ImGui::End();
+#endif // _DEBUG
+
+
 
 }
 
@@ -252,6 +260,11 @@ Vector3 RockEnemy::GetWorldPosition() {
 
 void RockEnemy::OnCollision(){
 	isAlive_ = false;
+#ifdef _DEBUG
+	ImGui::Begin("RockEnemyOnCollision");
+	ImGui::End();
+#endif // _DEBUG
+
 	
 }
 

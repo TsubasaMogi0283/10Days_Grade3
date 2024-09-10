@@ -131,7 +131,9 @@ void GameScene::Update(GameManager* gameManager) {
 	player_->Update();
 
 	//プレイヤーの攻撃
-	collisionManager_->RegisterList(player_->GetPlayerAttack());
+	if (player_->IsStomping() == true) {
+		collisionManager_->RegisterList(player_->GetPlayerAttack());
+	}
 	//本体
 	collisionManager_->RegisterList(player_.get());
 

@@ -87,9 +87,9 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 
 	//攻撃
 #ifdef _DEBUG
-	if (isStomping_ == true) {
+	///if (isStomping_ == true) {
 		attack_->Draw(camera, light);
-	}
+	//}
 	
 #endif // _DEBUG
 
