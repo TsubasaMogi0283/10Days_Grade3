@@ -58,6 +58,12 @@ public:
 
 private:
 
+	//ポストエフェクト
+	//今は使わない
+	std::unique_ptr<BackText> back_ = nullptr;
+
+
+
 	std::unique_ptr<Sprite> failedTexture_ = nullptr;
 	std::unique_ptr<Sprite> text_ = nullptr;
 

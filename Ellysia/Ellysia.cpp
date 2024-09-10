@@ -20,7 +20,7 @@ Ellysia* Ellysia::GetInstance() {
 
 void Ellysia::Initialize(){
 	//ここでタイトルバーの名前を決めてね
-	const wchar_t* titleBarName = L"静寂の霊園";
+	const wchar_t* titleBarName = L"3025_脳天一撃";
 	//ウィンドウのサイズを決める
 	const int WINDOW_SIZE_WIDTH_ = 1280;
 	const int WINDOW_SIZE_HEIGHT_ = 720;

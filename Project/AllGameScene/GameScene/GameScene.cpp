@@ -198,7 +198,6 @@ void GameScene::DrawPostEffect(){
 
 void GameScene::DrawSprite() {
 
-
 }
 
 GameScene::~GameScene(){
