@@ -277,9 +277,6 @@
     <ClCompile Include="Ellysia\Math\Vector\Material.cpp">
       <Filter>Ellysia\Source File\Polygone\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Project\AllGameScene\LoseScene\LoseScene.cpp">
-      <Filter>Project\GameScene\Lose</Filter>
-    </ClCompile>
     <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp">
       <Filter>Project\GameScene\Game</Filter>
     </ClCompile>
@@ -301,6 +298,7 @@
     <ClCompile Include="Project\Enemy\FeEnemy.cpp" />
     <ClCompile Include="Project\Enemy\RockEnemyParticle.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemyParticle.cpp" />
+    <ClCompile Include="Project\Player\Effects\StompSpeed\StompSpeed.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -406,6 +404,7 @@
     <ClInclude Include="Project\Enemy\EnemyParticle.h" />
     <ClInclude Include="Project\Enemy\RockEnemyParticle.h" />
     <ClInclude Include="Project\Enemy\FeEnemyParticle.h" />
+    <ClInclude Include="Project\Player\Effects\StompSpeed\StompSpeed.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -694,9 +693,6 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\PostEffect\GrayScale\GrayScale.h">
       <Filter>Ellysia\Header File\Polygone\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\AllGameScene\LoseScene\LoseScene.h">
-      <Filter>Project\GameScene\Lose</Filter>
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h">
       <Filter>Project\GameScene\Game</Filter>

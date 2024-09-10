@@ -23,6 +23,15 @@ void Player::Init()
 
 	// マテリアルの初期化
 	mtl_.Initialize();
+
+
+#pragma region Effect エフェクト
+
+	// StompSpeed
+	stompSpeedEffect_ = std::make_unique<pEffect::StompSpeed>(handles_.stompSpeed);
+	stompSpeedEffect_->Init();
+
+#pragma endregion 
 }
 
 
@@ -49,6 +58,15 @@ void Player::Update()
 	}
 
 
+
+#pragma region Effect エフェクト
+
+	// StompSpeed
+	stompSpeedEffect_->Update();
+
+#pragma endregion 
+
+
 #ifdef _DEBUG
 	// ImGuiの描画
 	DrawImGui();
@@ -60,6 +78,15 @@ void Player::Update()
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
 	model_->Draw(transform_, camera, mtl_, light);
+
+
+#pragma region Effect エフェクト
+
+	// StompSpeed
+	stompSpeedEffect_->Draw3D(camera, light);
+
+#pragma endregion 
+
 }
 
 

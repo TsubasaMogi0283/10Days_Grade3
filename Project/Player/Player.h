@@ -7,6 +7,7 @@
 #include "VectorCalculation.h"
 #include "Matrix4x4Calculation.h"
 #include "Func/PlayerFunc.h"
+#include "Effects/StompSpeed/StompSpeed.h"
 
 
 // 前方宣言
@@ -181,6 +182,12 @@ private:
 	const float DZone_ = 0.2f;
 
 #pragma endregion 
+
+
+private: // エフェクト
+
+	// StompSpeedEffect
+	std::unique_ptr<pEffect::StompSpeed> stompSpeedEffect_;
 
 
 private: // フォローカメラ
