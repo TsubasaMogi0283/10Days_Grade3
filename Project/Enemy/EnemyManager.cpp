@@ -17,7 +17,7 @@ void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle
 	feEnemyModelHandle_ = feModelHandle;
 
 	//生成
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 1; ++i) {
 		//岩
 		GenarateRockEnemy(rockModelhandle);
 		//鉄
@@ -227,10 +227,10 @@ void EnemyManager::Update(){
 	
 	if (enemyCount < MAX_ENEMY_COUNT_) {
 		//時間が増える
-		genarateTime_ += 1;
+		//genarateTime_ += 1;
 
 		//3秒くらいしたら生成
-		if (genarateTime_ == 180) {
+		if (genarateTime_ == 240) {
 			std::random_device seedGenerator;
 			std::mt19937 randomEngine(seedGenerator());
 

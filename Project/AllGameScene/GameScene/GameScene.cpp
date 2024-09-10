@@ -149,7 +149,10 @@ void GameScene::Update(GameManager* gameManager) {
 		collisionManager_->RegisterList(enemy);
 
 		//攻撃
-		collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
+		if (enemy->GetIsAttack() == true) {
+			collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
+		}
+		
 	}
 	
 
