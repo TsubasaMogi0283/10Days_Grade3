@@ -46,8 +46,8 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& spee
 
 	//攻撃
 	uint32_t debugModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/CG3/Sphere", "Sphere.obj");
-	attackModel_ = new EnemyAttackCollision();
-	attackModel_->Initialize(debugModelHandle);
+	attackCollision_ = new EnemyAttackCollision();
+	attackCollision_->Initialize(debugModelHandle);
 	isAttack_ = false;
 
 
@@ -215,9 +215,9 @@ void FeEnemy::Update() {
 	aabb_.max = VectorCalculation::Add(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
 
 	Vector3 enemyWorldPosition = GetWorldPosition();
-	attackModel_->SetEnemyPosition(enemyWorldPosition);
-	attackModel_->SetEnemyDirection(direction_);
-	attackModel_->Update();
+	attackCollision_->SetEnemyPosition(enemyWorldPosition);
+	attackCollision_->SetEnemyDirection(direction_);
+	attackCollision_->Update();
 
 }
 
@@ -238,7 +238,7 @@ void FeEnemy::Draw(Camera& camera, DirectionalLight& directionalLight) {
 #ifdef _DEBUG
 	//攻撃用
 	if (isAttack_ == true) {
-		attackModel_->Draw(camera, directionalLight);
+		attackCollision_->Draw(camera, directionalLight);
 	}
 #endif
 }
@@ -291,6 +291,6 @@ void FeEnemy::ReleaseParticle() {
 
 
 FeEnemy::~FeEnemy() {
-	delete attackModel_;
+	delete attackCollision_;
 }
 

@@ -46,9 +46,6 @@ public:
 	/// </summary>
 	void Tracking();
 
-
-
-
 	/// <summary>
 	/// プレイヤーの座標を取得
 	/// </summary>
@@ -83,6 +80,11 @@ public:
 	void DeleteEnemy();
 
 
+	//リストの取得
+	std::list<Enemy*> GetEnemyList() {
+		return enemyes_;
+	}
+
 
 private:
 	/// <summary>
@@ -99,12 +101,20 @@ private:
 private:
 	ModelManager* modelManager_ = nullptr;
 
+	//最大数
+	const uint32_t MAX_ENEMY_COUNT_ = 15u;
+
+	uint32_t genarateTime_ = 0u;
+
 
 	//通常の敵
 	std::list<Enemy*> enemyes_ = {};
 
-
-
+private:
+	//岩
+	uint32_t rockEnemyModelHandle_ = 0u;
+	//鉄
+	uint32_t feEnemyModelHandle_ = 0u;
 
 
 

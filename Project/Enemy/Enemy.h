@@ -132,6 +132,14 @@ public:
 		speed_.z *= -1.0f;
 	}
 
+	/// <summary>
+	/// 衝突判定用の攻撃を取得
+	/// </summary>
+	/// <returns></returns>
+	EnemyAttackCollision* GetEnemyAttackCollision() const{
+		return attackCollision_;
+	}
+
 
 protected:
 	//モデル
@@ -152,7 +160,7 @@ protected:
 protected:
 
 	//攻撃用
-	EnemyAttackCollision* attackModel_ = nullptr;
+	EnemyAttackCollision* attackCollision_ = nullptr;
 	//攻撃しているかどうか
 	bool isAttack_ = false;
 	//倒されたか

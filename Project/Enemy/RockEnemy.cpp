@@ -23,7 +23,7 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 	aabb_.min = { .x = position.x - radius_,.y = position.x - radius_,.z = position.x - radius_ };
 
 
-
+	//生きているかどうか
 	isAlive_ = true;
 
 	//種類
@@ -45,8 +45,8 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 
 	//攻撃
 	uint32_t debugModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/CG3/Sphere", "Sphere.obj");
-	attackModel_ = new EnemyAttackCollision();
-	attackModel_->Initialize(debugModelHandle);
+	attackCollision_ = new EnemyAttackCollision();
+	attackCollision_->Initialize(debugModelHandle);
 	isAttack_ = false;
 
 
@@ -212,9 +212,9 @@ void RockEnemy::Update() {
 	aabb_.max = VectorCalculation::Add(GetWorldPosition(), {.x = radius_, .y = radius_, .z =radius_});
 
 	Vector3 enemyWorldPosition = GetWorldPosition();
-	attackModel_->SetEnemyPosition(enemyWorldPosition);
-	attackModel_->SetEnemyDirection(direction_);
-	attackModel_->Update();
+	attackCollision_->SetEnemyPosition(enemyWorldPosition);
+	attackCollision_->SetEnemyDirection(direction_);
+	attackCollision_->Update();
 
 }
 
@@ -235,7 +235,7 @@ void RockEnemy::Draw(Camera& camera, DirectionalLight& directionalLight){
 #ifdef _DEBUG
 	//攻撃用
 	if (isAttack_ == true) {
-		attackModel_->Draw(camera, directionalLight);
+		attackCollision_->Draw(camera, directionalLight);
 	}
 #endif
 }
@@ -288,6 +288,6 @@ void RockEnemy::ReleaseParticle(){
 
 
 RockEnemy::~RockEnemy() {
-	delete attackModel_;
+	delete attackCollision_;
 }
 

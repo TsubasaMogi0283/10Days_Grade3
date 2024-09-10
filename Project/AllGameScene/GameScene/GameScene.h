@@ -20,6 +20,7 @@
 
 #include "Player/Player.h"
 #include <Enemy/EnemyManager.h>
+#include <Collider/CollisionManager.h>
 
 
 
@@ -122,6 +123,8 @@ private:
 
 
 #pragma endregion 
+
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
 
 	//敵管理クラス
