@@ -273,8 +273,11 @@ void RockEnemy::Killed(){
 	//倒された場合
 	if (isAlive_ == false) {
 		deleteTime_+=1;
+		if (deleteTime_==1) {
+			ReleaseParticle();
+		}
 		//放出
-		ReleaseParticle();
+		
 		isDisplayParticle_ = true;
 		
 		
@@ -283,6 +286,7 @@ void RockEnemy::Killed(){
 
 	//消える
 	if (deleteTime_ > 60 * 2) {
+		//rockParticles_.clear();
 		isKilled_= true;
 		isDisplayParticle_ = false;
 	}
@@ -302,6 +306,10 @@ void RockEnemy::ReleaseParticle(){
 
 
 RockEnemy::~RockEnemy() {
+	
+	for (RockEnemyParticle* particle : rockParticles_) {
+		delete particle;
+	}
 	delete attackCollision_;
 }
 
