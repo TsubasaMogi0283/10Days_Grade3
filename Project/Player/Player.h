@@ -53,6 +53,15 @@ public:
 		groundCorners_.push_back(RF);
 	}
 
+	// 着地状態
+	bool IsGrounded() const { return this->isGrounded_; }
+
+	// ジャンプ中か
+	bool IsJumping() const { return this->isJumping_; }
+
+	// ストンプ中か
+	bool IsStomping() const { return this->isStomping_; }
+
 #pragma endregion 
 
 

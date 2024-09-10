@@ -300,6 +300,7 @@
     </ClCompile>
     <ClCompile Include="Project\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Project\Player\Func\PlayerFunc.cpp" />
+    <ClCompile Include="Project\FollowCamera\FollowCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -399,6 +400,7 @@
     <ClInclude Include="External\TsumiInput\TInput.h" />
     <ClInclude Include="Project\Enemy\EnemyManager.h" />
     <ClInclude Include="Project\Player\Func\PlayerFunc.h" />
+    <ClInclude Include="Project\FollowCamera\FollowCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

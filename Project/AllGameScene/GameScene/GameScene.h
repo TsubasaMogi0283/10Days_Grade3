@@ -19,6 +19,7 @@
 #include <Enemy/Enemy.h>
 
 
+#include "FollowCamera/FollowCamera.h"
 #include "Player/Player.h"
 #include <Enemy/EnemyManager.h>
 #include <Particle3D.h>
@@ -80,9 +81,9 @@ public:
 private:
 
 	/// <summary>
-	/// プレイヤーの移動処理
+	/// 入力関連処理
 	/// </summary>
-	void PlayerInput();
+	void FuncInput();
 
 
 
@@ -103,9 +104,10 @@ private:
 	std::unique_ptr<BackText> back_ = nullptr;
 
 
+	/* ----- FollowCamera フォローカメラ ----- */
+	std::unique_ptr<FollowCamera> followCamera_;
 
 	/* ----- Player プレイヤー ----- */
-	// 本体
 	std::unique_ptr<Player> player_;
 
 
