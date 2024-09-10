@@ -87,7 +87,7 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 
 	//攻撃
 #ifdef _DEBUG
-	if (isStomping_ == true&& isJumping_==false) {
+	if (isGrounded_==false) {
 		attack_->Draw(camera, light);
 	}
 	
