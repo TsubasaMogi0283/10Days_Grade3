@@ -72,6 +72,12 @@ void GameScene::Initialize() {
 	
 
 
+
+
+
+	collisionManager_ = std::make_unique<CollisionManager>();
+	
+
 	//平行光源
 	directtionalLight_.Initialize();
 	directtionalLight_.direction_ = { .x = 0.0f,.y = -1.0f,.z = 0.0f };
@@ -90,6 +96,9 @@ void GameScene::Initialize() {
 
 
 void GameScene::Update(GameManager* gameManager) {
+
+	//衝突管理クラスのクリア
+	collisionManager_->ClearList();
 
 
 #ifdef _DEBUG
@@ -114,9 +123,16 @@ void GameScene::Update(GameManager* gameManager) {
 	player_->Update();
 	PlayerInput();
 
+	//リストの取得
+	std::list<Enemy*> enemyes = enemyManager_->GetEnemyList();
+	for (Enemy* enemy : enemyes) {
+		//本体
+		collisionManager_->RegisterList(enemy);
 
-
-
+		//攻撃
+		collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
+	}
+	
 
 
 	//プレイヤーに追従する
@@ -134,6 +150,9 @@ void GameScene::Update(GameManager* gameManager) {
 	enemyManager_->DeleteEnemy();
 	
 
+	//衝突チェック
+	collisionManager_->CheckAllCollision();
+
 
 	//地面の更新
 	ground_->Update();
@@ -143,6 +162,8 @@ void GameScene::Update(GameManager* gameManager) {
 
 	//カメラの更新
 	camera_.Update();
+
+	
 
 }
 

@@ -9,9 +9,14 @@
 #include <random>
 
 void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle){
-	
-	feModelHandle;
 
+	//モデルデータを保存
+	//岩
+	rockEnemyModelHandle_ = rockModelhandle;
+	//鉄
+	feEnemyModelHandle_ = feModelHandle;
+
+	//生成
 	for (int i = 0; i < 10; ++i) {
 		//岩
 		GenarateRockEnemy(rockModelhandle);
@@ -20,9 +25,6 @@ void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle
 
 	}
 	
-	enemyes_;
-
-
 }
 
 
@@ -83,9 +85,6 @@ void EnemyManager::GenarateFeEnemy(uint32_t& feModelHandle){
 	enemyes_.push_back(feEnemy2);
 
 }
-
-
-
 
 void EnemyManager::Tracking(){
 
@@ -199,7 +198,6 @@ void EnemyManager::Tracking(){
 
 }
 
-
 void EnemyManager::Update(){
 
 	
@@ -220,6 +218,42 @@ void EnemyManager::Update(){
 		//敵の更新
 		enemy->Update();
 	}
+
+	//敵の数
+	uint32_t enemyCount = enemyes_.size();
+	
+	if (enemyCount < MAX_ENEMY_COUNT_) {
+		//時間が増える
+		genarateTime_ += 1;
+
+		//3秒くらいしたら生成
+		if (genarateTime_ == 180) {
+			std::random_device seedGenerator;
+			std::mt19937 randomEngine(seedGenerator());
+
+			//ランダムの値
+			//位置
+			std::uniform_real_distribution<uint32_t> enemyKinds(1, 2);
+			uint32_t enemyKind = enemyKinds(randomEngine);
+
+			//岩
+			if (enemyKind == 1) {
+				//岩
+				GenarateRockEnemy(rockEnemyModelHandle_);
+
+				
+			}
+			else if (enemyKind == 2) {
+				//鉄
+				GenarateFeEnemy(feEnemyModelHandle_);
+			}
+
+
+			genarateTime_ = 0;
+		}
+
+	}
+
 
 	//追跡
 	Tracking();
