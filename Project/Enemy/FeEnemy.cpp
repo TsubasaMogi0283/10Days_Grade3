@@ -28,7 +28,7 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& spee
 	isAlive_ = true;
 
 	//種類
-	collisionType_ = CollisionType::AABBType;
+	collisionType_ = CollisionType::SphereType;
 
 
 

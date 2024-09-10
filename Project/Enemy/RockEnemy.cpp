@@ -27,7 +27,7 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 	isAlive_ = true;
 
 	//種類
-	collisionType_ = CollisionType::AABBType;
+	collisionType_ = CollisionType::SphereType;
 
 
 
