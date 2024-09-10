@@ -48,7 +48,7 @@ public:
 	/// </summary>
 	/// <param name="modelHandle"></param>
 	/// <param name="position"></param>
-	virtual void Initialize(uint32_t& modelHandle, Vector3& position) = 0;
+	virtual void Initialize(uint32_t& modelHandle, Vector3& position,Vector3 &speed) = 0;
 
 	/// <summary>
 	/// 更新

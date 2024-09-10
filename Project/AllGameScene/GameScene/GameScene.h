@@ -124,12 +124,8 @@ private:
 #pragma endregion 
 
 
-	Material particleMaterial_ = {};
-	
-
-
+	//敵管理クラス
 	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
-
 
 
 

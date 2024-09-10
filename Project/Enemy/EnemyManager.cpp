@@ -5,26 +5,23 @@
 #include "ModelManager.h"
 
 #include "RockEnemy.h"
+#include "FeEnemy.h"
+#include <random>
 
-void EnemyManager::Initialize(uint32_t& modelhandle){
+void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle){
 	
+	feModelHandle;
 
-#pragma region 通常の敵の生成
+	for (int i = 0; i < 10; ++i) {
+		//岩
+		GenarateRockEnemy(rockModelhandle);
+		//鉄
+		GenarateFeEnemy(feModelHandle);
 
-	Enemy* enemy1 = new RockEnemy();
-	Vector3 enemyPosition1 = { 10.0f,0.0f,1.0f };
-	enemy1->Initialize(modelhandle, enemyPosition1);
-	enemyes_.push_back(enemy1);
+	}
+	
+	enemyes_;
 
-
-
-	Enemy* enemy2 = new RockEnemy();
-	Vector3 enemyPosition2 = { 1.0f,0.0f,10.0f };
-	enemy2->Initialize(modelhandle, enemyPosition2);
-	enemyes_.push_back(enemy2);
-
-
-#pragma endregion
 
 }
 
@@ -40,6 +37,51 @@ void EnemyManager::DeleteEnemy(){
 		}
 		return false;
 	});
+}
+
+void EnemyManager::GenarateRockEnemy(uint32_t& rockModelhandle){
+	Enemy* rockEnemy1 = new RockEnemy();
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+	
+	//ランダムの値
+	//位置
+	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
+	std::uniform_real_distribution<float> distributeZ(stageLeftFrontPosition.z, stageLeftBackPosition.z);
+	Vector3 randomPosition = { .x = distributeX(randomEngine),.y = 0.0f,.z = distributeZ(randomEngine) };
+
+	//スピード
+	std::uniform_real_distribution<float> distributeSpeedX(-0.1f, 0.1f);
+	std::uniform_real_distribution<float> distributeSpeedZ(-0.1f, 0.1f);
+	Vector3 randomSpeed = { .x = distributeSpeedX(randomEngine),.y = 0.0f, .z = distributeSpeedZ(randomEngine) };
+
+	rockEnemy1->Initialize(rockModelhandle, randomPosition, randomSpeed);
+	enemyes_.push_back(rockEnemy1);
+
+
+}
+
+void EnemyManager::GenarateFeEnemy(uint32_t& feModelHandle){
+	Enemy* feEnemy2 = new FeEnemy();
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+
+	
+	//ランダムの値
+	//位置
+	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
+	std::uniform_real_distribution<float> distributeZ(stageLeftFrontPosition.z, stageLeftBackPosition.z);
+	Vector3 randomPosition = { .x = distributeX(randomEngine),.y = 0.0f,.z = distributeZ(randomEngine) };
+	
+	//スピード
+	std::uniform_real_distribution<float> distributeSpeedX(-0.1f, 0.1f);
+	std::uniform_real_distribution<float> distributeSpeedZ(-0.1f, 0.1f);
+	Vector3 randomSpeed = {.x= distributeSpeedX(randomEngine),.y=0.0f, .z= distributeSpeedZ(randomEngine) };
+	
+
+	feEnemy2->Initialize(feModelHandle, randomPosition, randomSpeed);
+	enemyes_.push_back(feEnemy2);
+
 }
 
 

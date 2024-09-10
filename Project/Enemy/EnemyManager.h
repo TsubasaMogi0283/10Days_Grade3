@@ -16,8 +16,9 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="modelhandle"></param>
-	void Initialize(uint32_t& modelhandle);
+	/// <param name="rockModelhandle"></param>
+	/// <param name="feModelHandle"></param>
+	void Initialize(uint32_t& rockModelhandle,uint32_t &feModelHandle);
 
 	/// <summary>
 	/// 更新
@@ -80,6 +81,20 @@ public:
 	/// エネミーを消す処理
 	/// </summary>
 	void DeleteEnemy();
+
+
+
+private:
+	/// <summary>
+	/// 岩の敵
+	/// </summary>
+	void GenarateRockEnemy(uint32_t& rockModelhandle);
+
+	/// <summary>
+	/// 鉄の敵
+	/// </summary>
+	void GenarateFeEnemy(uint32_t& feModelHandle);
+
 
 private:
 	ModelManager* modelManager_ = nullptr;
