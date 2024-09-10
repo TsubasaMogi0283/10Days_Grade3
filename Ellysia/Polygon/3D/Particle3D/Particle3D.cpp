@@ -8,15 +8,14 @@
 #include <TextureManager.h>
 #include <PipelineManager.h>
 #include "DirectXSetup.h"
-
 #include "Material.h"
 #include "DirectionalLight.h"
 
 #include <VectorCalculation.h>
-
-
 #include <Collision.h>
 #include "SrvManager.h"
+
+
 Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 	Particle3D* particle3D = new Particle3D();
 
@@ -87,7 +86,7 @@ Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 Particle Particle3D::MakeNewParticle(std::mt19937& randomEngine) {
 	std::uniform_real_distribution<float> distribute(-2.0f, 2.0f);
 	Particle particle;
-	particle.transform.scale = { 1.0f,1.0f,1.0f };
+	particle.transform.scale = { 10.0f,10.0f,10.0f };
 	particle.transform.rotate = { 0.0f,0.0f,0.0f };
 	//ランダムの値
 	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
@@ -106,8 +105,8 @@ Particle Particle3D::MakeNewParticle(std::mt19937& randomEngine) {
 
 
 	//Color
-	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
-	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	//std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	particle.color = {1.0f,1.0f,1.0f,1.0f};
 	
 
 

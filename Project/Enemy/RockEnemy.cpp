@@ -286,7 +286,6 @@ void RockEnemy::Killed(){
 
 	//消える
 	if (deleteTime_ > 60 * 2) {
-		//rockParticles_.clear();
 		isKilled_= true;
 		isDisplayParticle_ = false;
 	}
@@ -298,7 +297,8 @@ void RockEnemy::Killed(){
 void RockEnemy::ReleaseParticle(){
 
 	RockEnemyParticle* rockParticle = new RockEnemyParticle();
-	uint32_t particleModelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
+	//uint32_t particleModelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle","SampleParticle.obj");
+	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 	Vector3 enemyPosition = GetWorldPosition();
 	rockParticle->Initialize(particleModelHandle, enemyPosition);
 	rockParticles_.push_back(rockParticle);
