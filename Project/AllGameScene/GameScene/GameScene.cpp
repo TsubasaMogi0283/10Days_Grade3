@@ -213,15 +213,14 @@ GameScene::~GameScene(){
 /// </summary>
 void GameScene::FuncInput()
 {
-	// stickの入力
-	if (input_->GetJoystickState(joyState_)) {
+	// stickの入力を取得 
+	input_->GetJoystickState(joyState_);
 
-		// カメラの操作
-		followCamera_->FuncStickFunc(joyState_);
+	// カメラの操作
+	followCamera_->FuncStickFunc(joyState_);
 
-		// 入力があれば移動
-		player_->FuncStickFunc(joyState_);
-	}
+	// 入力があれば移動
+	player_->FuncStickFunc(joyState_);
 
 	// Aボタンの入力
 	if (tInput_->Trigger(PadData::A)) {
