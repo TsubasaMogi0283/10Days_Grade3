@@ -1,16 +1,22 @@
 #pragma once
 #include <memory>
 
-#include "Model.h"
+
 #include "WorldTransform.h"
+#include "Model.h"
 #include "Material.h"
+#include <AABB.h>
 #include "EnemyAttackCollision.h"
-#include "AABB.h"
 #include "Collider/Collider.h"
+
+
+
+
 
 struct Camera;
 struct DirectionalLight;
-class DraftPlayer;
+
+
 
 //後々StatePatternで分けるつもり
 enum EnemyCondition {
@@ -31,56 +37,39 @@ enum EnemyCondition {
 
 
 
-class Enemy : public Collider{
+//基底クラス
+//これをもとに敵を作っていく
+
+class Enemy : public Collider {
 public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	Enemy() = default;
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="modelHandle"></param>
 	/// <param name="position"></param>
-	void Initialize(uint32_t& modelHandle,Vector3 &position);
+	virtual void Initialize(uint32_t& modelHandle, Vector3& position) = 0;
 
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	virtual void Update()=0;
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="camera"></param>
 	/// <param name="directionalLight"></param>
-	void Draw(Camera &camera,DirectionalLight& directionalLight);
-
+	virtual void Draw(Camera& camera, DirectionalLight& directionalLight) = 0;
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Enemy();
-
+	virtual ~Enemy() = default;
 
 
 public:
-	/// <summary>
-	/// ワールド座標の取得
-	/// </summary>
-	/// <returns></returns>
-	Vector3 GetWorldPosition()override;
 
-	/// <summary>
-	/// 当たり判定
-	/// </summary>
-	void OnCollision()override;
-
-	/// <summary>
-	/// 倒された
-	/// </summary>
-	void Killed();
 
 	/// <summary>
 	/// 方向の取得
@@ -89,12 +78,6 @@ public:
 	Vector3 GetDirection()const {
 		return direction_;
 	}
-
-
-
-
-
-
 
 
 
@@ -116,7 +99,7 @@ public:
 	/// 状態の取得
 	/// </summary>
 	/// <returns></returns>
-	uint32_t GetCondition() const{
+	uint32_t GetCondition() const {
 		return condition_;
 	}
 
@@ -149,33 +132,38 @@ public:
 		speed_.z *= -1.0f;
 	}
 
-private:
-	//モデル
-	std::unique_ptr<Model>model_ = nullptr;
 
+protected:
+	//モデル
+	std::unique_ptr<Model> model_ = nullptr;
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_ = {};
-
 	//マテリアル
 	Material material_ = {};
-
-
-	bool isAlive_=true;
-
-	AABB aabb_ = {};
+	//生きているかどうか
+	bool isAlive_ = true;
 
 	//向き
 	Vector3 direction_ = {};
 
-private:
+
+
+
+protected:
 
 	//攻撃用
 	EnemyAttackCollision* attackModel_ = nullptr;
+	//攻撃しているかどうか
 	bool isAttack_ = false;
+	//倒されたか
 	bool isKilled_ = false;
+	//消える
 	int deleteTime_ = 0;
+	//時間
+	int32_t attackTime_ = 0;
 
-private:
+
+protected:
 
 	//移動速度
 	Vector3 preSpeed_ = {};
@@ -184,7 +172,6 @@ private:
 	//プレイヤーの座標
 	Vector3 playerPosition_ = {};
 
-
 	//追跡
 	bool isTracking_ = false;
 	Vector3 preTrackingPosition_ = {};
@@ -192,14 +179,10 @@ private:
 
 
 
-	//攻撃
-	int32_t attackTime_ = 0;
+	
 
+protected:
 
-
-
-
-private:
 	//状態
 	uint32_t preCondition_ = EnemyCondition::NoneMove;
 	uint32_t condition_ = EnemyCondition::Move;
@@ -208,4 +191,3 @@ private:
 
 
 };
-

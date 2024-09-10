@@ -27,12 +27,6 @@ void EnemyAttackCollision::Initialize(uint32_t& modelHandle){
 
 	
 
-	//AABBのmax部分に加算する縦横高さのサイズ
-	upSideSize_ = { .x = radius_ ,.y = radius_ ,.z = radius_ };
-
-	//AABBのmin部分に加算する縦横高さのサイズ
-	downSideSize_ = { .x = radius_ ,.y = radius_ ,.z = radius_ };
-
 
 	//自分
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY_ATTACK);
@@ -54,13 +48,9 @@ void EnemyAttackCollision::Update(){
 	worldTransform_.Update();
 	material_.Update();
 
+	aabb_.max= VectorCalculation::Add(enemyWorldPosition_, { .x = radius_ ,.y = radius_ ,.z = radius_ });
+	aabb_.min = VectorCalculation::Subtract(enemyWorldPosition_, { .x = radius_ ,.y = radius_ ,.z = radius_ });;
 
-
-	//AABBのmax部分に加算する縦横高さのサイズ
-	upSideSize_ = VectorCalculation::Add(enemyWorldPosition_, { .x = radius_ ,.y = radius_ ,.z = radius_ });
-
-	//AABBのmin部分に加算する縦横高さのサイズ
-	downSideSize_ = VectorCalculation::Subtract(enemyWorldPosition_, { .x = radius_ ,.y = radius_ ,.z = radius_ });;
 
 }
 

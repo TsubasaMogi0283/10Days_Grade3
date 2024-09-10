@@ -45,7 +45,7 @@ void GameScene::Initialize() {
 
 
 	//地面
-	uint32_t groundModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
+	uint32_t groundModelHandle = modelManager_->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(groundModelHandle);
 
@@ -55,7 +55,7 @@ void GameScene::Initialize() {
 		ground_->GetLeftFront(), ground_->GetRightFront());
 
 	//敵
-	uint32_t normalEnemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy","Rock.obj");
+	uint32_t normalEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/RockEnemy","Rock.obj");
 
 	Vector3 stageLeftBack = ground_->GetLeftBack();
 	Vector3 stageRightBack = ground_->GetRightBack();
@@ -70,10 +70,10 @@ void GameScene::Initialize() {
 
 	particleMaterial_.Initialize();
 	particleMaterial_.lightingKinds_ = Directional;
-	//モデルは普通の平面にする
-	uint32_t planeModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
-
-	particle__.reset(Particle3D::Create(planeModelHandle,ThrowUp));
+	////モデルは普通の平面にする
+	//uint32_t planeModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
+	//
+	//particle__.reset(Particle3D::Create(planeModelHandle,ThrowUp));
 
 	
 
@@ -167,7 +167,7 @@ void GameScene::DrawObject3D(){
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);
 
-	particle__->Draw(camera_, particleMaterial_, directtionalLight_);
+	//particle__->Draw(camera_, particleMaterial_, directtionalLight_);
 }
 
 void GameScene::PreDrawPostEffectFirst(){
