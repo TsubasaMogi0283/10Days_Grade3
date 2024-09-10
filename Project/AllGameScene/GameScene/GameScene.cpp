@@ -1,8 +1,7 @@
 #include "GameScene.h"
 
 #include <imgui.h>
-#include <Input.h>
-#include "LoseScene/LoseScene.h"
+#include "ResultScene/ResultScene.h"
 
 #include "GameManager.h"
 #include "ModelManager.h"
@@ -56,7 +55,7 @@ void GameScene::Initialize() {
 
 
 	//地面
-	uint32_t groundModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
+	uint32_t groundModelHandle = modelManager_->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(groundModelHandle);
 
@@ -66,8 +65,10 @@ void GameScene::Initialize() {
 		ground_->GetLeftFront(), ground_->GetRightFront());
 
 	//敵
-	uint32_t normalEnemyModelhandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy","Rock.obj");
+	uint32_t rockEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/RockEnemy","Rock.obj");
+	uint32_t feEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/FeEnemy","Fe.obj");
 
+	//ステージの座標を取得
 	Vector3 stageLeftBack = ground_->GetLeftBack();
 	Vector3 stageRightBack = ground_->GetRightBack();
 	Vector3 stageLeftFront = ground_->GetLeftFront();
@@ -76,16 +77,16 @@ void GameScene::Initialize() {
 
 	//敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(normalEnemyModelhandle);
 	enemyManager_->SetStageRectPosition(stageLeftBack, stageRightBack, stageLeftFront, stageRightFront);
 
-	particleMaterial_.Initialize();
-	particleMaterial_.lightingKinds_ = Directional;
-	//モデルは普通の平面にする
-	uint32_t planeModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
+	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
+	
 
-	particle__.reset(Particle3D::Create(planeModelHandle,ThrowUp));
 
+
+
+	//衝突判定管理クラスの初期化
+	collisionManager_ = std::make_unique<CollisionManager>();
 	
 
 	//平行光源
@@ -101,6 +102,9 @@ void GameScene::Initialize() {
 
 void GameScene::Update(GameManager* gameManager) {
 
+	//衝突管理クラスのクリア
+	collisionManager_->ClearList();
+
 
 #ifdef _DEBUG
 
@@ -115,7 +119,7 @@ void GameScene::Update(GameManager* gameManager) {
 	//仮置き
 	//スペースキーで次のシーンへ
 	if (Input::GetInstance()->IsTriggerKey(DIK_L) == true) {
-		gameManager->ChangeScene(new LoseScene());
+		gameManager->ChangeScene(new ResultScene());
 		return;
 	}
 
@@ -130,6 +134,19 @@ void GameScene::Update(GameManager* gameManager) {
 	FuncInput();
 
 
+	#pragma region 敵
+	//リストの取得
+	std::list<Enemy*> enemyes = enemyManager_->GetEnemyList();
+	for (Enemy* enemy : enemyes) {
+		//本体
+		collisionManager_->RegisterList(enemy);
+
+		//攻撃
+		collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
+	}
+	
+
+
 	//敵管理クラスの更新
 	Vector3 playerPosition = player_->GetWorldPos();
 	enemyManager_->SetPlayerPosition(playerPosition);
@@ -137,7 +154,12 @@ void GameScene::Update(GameManager* gameManager) {
 	enemyManager_->Update();
 	enemyManager_->DeleteEnemy();
 	
-	particleMaterial_.Update();
+
+#pragma endregion
+
+	//衝突チェック
+	collisionManager_->CheckAllCollision();
+
 
 	//地面の更新
 	ground_->Update();
@@ -165,7 +187,7 @@ void GameScene::DrawObject3D(){
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);
 
-	particle__->Draw(camera_, particleMaterial_, directtionalLight_);
+
 }
 
 void GameScene::PreDrawPostEffectFirst(){

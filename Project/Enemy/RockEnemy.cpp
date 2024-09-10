@@ -1,12 +1,12 @@
-#include "Enemy.h"
+#include "RockEnemy.h"
 #include "Camera.h"
 #include "DirectionalLight.h"
 #include <VectorCalculation.h>
 #include <Collider/CollisionConfig.h>
 #include <numbers>
+#include "ModelManager.h"
 
-
-void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
+void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& speed){
 	//モデルの生成
 	model_.reset(Model::Create(modelHandle));
 
@@ -14,13 +14,16 @@ void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
 	worldTransform_.Initialize();
 	worldTransform_.translate_ = position;
 	material_.Initialize() ;
-	speed_ = { -0.0f,0.0f,-0.1f };
+	speed_ = speed;
 
+
+	//半径
+	radius_ = 1.0f;
 	aabb_.max = { .x = position.x + radius_,.y = position.y + radius_,.z = position.z + radius_ };
 	aabb_.min = { .x = position.x - radius_,.y = position.x - radius_,.z = position.x - radius_ };
 
 
-
+	//生きているかどうか
 	isAlive_ = true;
 
 	//種類
@@ -28,28 +31,22 @@ void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
 
 
 
-	//半径
-	radius_ = 1.0f;
+	
 
-	//AABBのmax部分に加算する縦横高さのサイズ
-	upSideSize_ = { .x = radius_ ,.y = radius_ ,.z = radius_ };
-
-	//AABBのmin部分に加算する縦横高さのサイズ
-	downSideSize_ = { .x = radius_ ,.y = radius_ ,.z = radius_ };
 
 	//判定
 	//自分
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	//相手
-	SetCollisionMask(COLLISION_ATTRIBUTE_NONE);
+	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER);
 
 
 
 
 	//攻撃
 	uint32_t debugModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/CG3/Sphere", "Sphere.obj");
-	attackModel_ = new EnemyAttackCollision();
-	attackModel_->Initialize(debugModelHandle);
+	attackCollision_ = new EnemyAttackCollision();
+	attackCollision_->Initialize(debugModelHandle);
 	isAttack_ = false;
 
 
@@ -57,7 +54,7 @@ void Enemy::Initialize(uint32_t& modelHandle, Vector3& position){
 
 }
 
-void Enemy::Update() {
+void RockEnemy::Update() {
 
 	const float SPEED_AMOUNT = 0.2f;
 	//状態
@@ -206,32 +203,44 @@ void Enemy::Update() {
 	material_.Update();
 
 
+	for (RockEnemyParticle* particle : rockParticles_) {
+		particle->Update();
+	}
+
 	//AABB
 	aabb_.min = VectorCalculation::Subtract(GetWorldPosition(), { .x = radius_, .y = radius_, .z = radius_ });
 	aabb_.max = VectorCalculation::Add(GetWorldPosition(), {.x = radius_, .y = radius_, .z =radius_});
 
 	Vector3 enemyWorldPosition = GetWorldPosition();
-	attackModel_->SetEnemyPosition(enemyWorldPosition);
-	attackModel_->SetEnemyDirection(direction_);
-	attackModel_->Update();
+	attackCollision_->SetEnemyPosition(enemyWorldPosition);
+	attackCollision_->SetEnemyDirection(direction_);
+	attackCollision_->Update();
 
 }
 
-void Enemy::Draw(Camera& camera, DirectionalLight& directionalLight){
+void RockEnemy::Draw(Camera& camera, DirectionalLight& directionalLight){
 	//描画
 	if (isAlive_ == true) {
 		model_->Draw(worldTransform_, camera, material_, directionalLight);
 
 	}
 	
+	//パーティクルの描画
+	if (isDisplayParticle_ == true) {
+		for (RockEnemyParticle* particle : rockParticles_) {
+			particle->Draw(camera, directionalLight);
+		}
+	}
 
+#ifdef _DEBUG
 	//攻撃用
 	if (isAttack_ == true) {
-		attackModel_->Draw(camera, directionalLight);
+		attackCollision_->Draw(camera, directionalLight);
 	}
+#endif
 }
 
-Vector3 Enemy::GetWorldPosition() {
+Vector3 RockEnemy::GetWorldPosition() {
 	Vector3 position = {
 		.x = worldTransform_.worldMatrix_.m[3][0],
 		.y = worldTransform_.worldMatrix_.m[3][1],
@@ -241,29 +250,44 @@ Vector3 Enemy::GetWorldPosition() {
 	return position;
 }
 
-void Enemy::OnCollision(){
+void RockEnemy::OnCollision(){
 	isAlive_ = false;
 	
 }
 
-void Enemy::Killed(){
+void RockEnemy::Killed(){
 	//倒された場合
 	if (isAlive_ == false) {
 		deleteTime_+=1;
+		//放出
+		ReleaseParticle();
+		isDisplayParticle_ = true;
+		
+		
 	}
 
 
 	//消える
 	if (deleteTime_ > 60 * 2) {
 		isKilled_= true;
+		isDisplayParticle_ = false;
 	}
 
 
 
 }
 
+void RockEnemy::ReleaseParticle(){
 
-Enemy::~Enemy() {
-	delete attackModel_;
+	RockEnemyParticle* rockParticle = new RockEnemyParticle();
+	uint32_t particleModelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
+	Vector3 enemyPosition = GetWorldPosition();
+	rockParticle->Initialize(particleModelHandle, enemyPosition);
+	rockParticles_.push_back(rockParticle);
+}
+
+
+RockEnemy::~RockEnemy() {
+	delete attackCollision_;
 }
 

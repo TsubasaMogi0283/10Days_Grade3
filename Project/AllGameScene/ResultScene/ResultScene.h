@@ -13,11 +13,11 @@
 class GameManager;
 
 
-class LoseScene : public IGameScene {
+class ResultScene : public IGameScene {
 public:
 
 	//コンストラクタ
-	LoseScene() = default;
+	ResultScene() = default;
 
 
 	/// 初期化
@@ -51,7 +51,7 @@ public:
 
 #pragma endregion
 	/// デストラクタ
-	~LoseScene();
+	~ResultScene();
 
 
 

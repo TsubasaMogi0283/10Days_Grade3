@@ -1,8 +1,11 @@
 #pragma once
+
 #include <list>
 
-#include "Enemy.h"
 
+class ModelManager;
+
+#include "Enemy.h"
 class EnemyManager{
 public:
 	/// <summary>
@@ -13,8 +16,9 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="modelhandle"></param>
-	void Initialize(uint32_t& modelhandle);
+	/// <param name="rockModelhandle"></param>
+	/// <param name="feModelHandle"></param>
+	void Initialize(uint32_t& rockModelhandle,uint32_t &feModelHandle);
 
 	/// <summary>
 	/// 更新
@@ -41,9 +45,6 @@ public:
 	/// 追跡
 	/// </summary>
 	void Tracking();
-
-
-
 
 	/// <summary>
 	/// プレイヤーの座標を取得
@@ -78,13 +79,42 @@ public:
 	/// </summary>
 	void DeleteEnemy();
 
+
+	//リストの取得
+	std::list<Enemy*> GetEnemyList() {
+		return enemyes_;
+	}
+
+
 private:
+	/// <summary>
+	/// 岩の敵
+	/// </summary>
+	void GenarateRockEnemy(uint32_t& rockModelhandle);
+
+	/// <summary>
+	/// 鉄の敵
+	/// </summary>
+	void GenarateFeEnemy(uint32_t& feModelHandle);
+
+
+private:
+	ModelManager* modelManager_ = nullptr;
+
+	//最大数
+	const uint32_t MAX_ENEMY_COUNT_ = 15u;
+
+	uint32_t genarateTime_ = 0u;
+
 
 	//通常の敵
 	std::list<Enemy*> enemyes_ = {};
 
-
-
+private:
+	//岩
+	uint32_t rockEnemyModelHandle_ = 0u;
+	//鉄
+	uint32_t feEnemyModelHandle_ = 0u;
 
 
 

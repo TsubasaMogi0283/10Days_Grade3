@@ -2,26 +2,29 @@
 #include <VectorCalculation.h>
 #include <SingleCalculation.h>
 
-void EnemyManager::Initialize(uint32_t& modelhandle){
+#include "ModelManager.h"
 
+#include "RockEnemy.h"
+#include "FeEnemy.h"
+#include <random>
 
-#pragma region 通常の敵の生成
+void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle){
 
-	Enemy* enemy1 = new Enemy();
-	Vector3 enemyPosition1 = { 10.0f,0.0f,1.0f };
-	enemy1->Initialize(modelhandle, enemyPosition1);
-	enemyes_.push_back(enemy1);
+	//モデルデータを保存
+	//岩
+	rockEnemyModelHandle_ = rockModelhandle;
+	//鉄
+	feEnemyModelHandle_ = feModelHandle;
 
+	//生成
+	for (int i = 0; i < 10; ++i) {
+		//岩
+		GenarateRockEnemy(rockModelhandle);
+		//鉄
+		GenarateFeEnemy(feModelHandle);
 
-
-	Enemy* enemy2 = new Enemy();
-	Vector3 enemyPosition2 = { 1.0f,0.0f,10.0f };
-	enemy2->Initialize(modelhandle, enemyPosition2);
-	enemyes_.push_back(enemy2);
-
-
-#pragma endregion
-
+	}
+	
 }
 
 
@@ -38,8 +41,50 @@ void EnemyManager::DeleteEnemy(){
 	});
 }
 
+void EnemyManager::GenarateRockEnemy(uint32_t& rockModelhandle){
+	Enemy* rockEnemy1 = new RockEnemy();
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+	
+	//ランダムの値
+	//位置
+	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
+	std::uniform_real_distribution<float> distributeZ(stageLeftFrontPosition.z, stageLeftBackPosition.z);
+	Vector3 randomPosition = { .x = distributeX(randomEngine),.y = 0.0f,.z = distributeZ(randomEngine) };
+
+	//スピード
+	std::uniform_real_distribution<float> distributeSpeedX(-0.1f, 0.1f);
+	std::uniform_real_distribution<float> distributeSpeedZ(-0.1f, 0.1f);
+	Vector3 randomSpeed = { .x = distributeSpeedX(randomEngine),.y = 0.0f, .z = distributeSpeedZ(randomEngine) };
+
+	rockEnemy1->Initialize(rockModelhandle, randomPosition, randomSpeed);
+	enemyes_.push_back(rockEnemy1);
 
 
+}
+
+void EnemyManager::GenarateFeEnemy(uint32_t& feModelHandle){
+	Enemy* feEnemy2 = new FeEnemy();
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+
+	
+	//ランダムの値
+	//位置
+	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
+	std::uniform_real_distribution<float> distributeZ(stageLeftFrontPosition.z, stageLeftBackPosition.z);
+	Vector3 randomPosition = { .x = distributeX(randomEngine),.y = 0.0f,.z = distributeZ(randomEngine) };
+	
+	//スピード
+	std::uniform_real_distribution<float> distributeSpeedX(-0.1f, 0.1f);
+	std::uniform_real_distribution<float> distributeSpeedZ(-0.1f, 0.1f);
+	Vector3 randomSpeed = {.x= distributeSpeedX(randomEngine),.y=0.0f, .z= distributeSpeedZ(randomEngine) };
+	
+
+	feEnemy2->Initialize(feModelHandle, randomPosition, randomSpeed);
+	enemyes_.push_back(feEnemy2);
+
+}
 
 void EnemyManager::Tracking(){
 
@@ -47,8 +92,7 @@ void EnemyManager::Tracking(){
 	//接近するときの距離
 	const float TRACKING_START_DISTANCE_ = 40.0f;
 	////攻撃するときの距離
-	const float ATTACK_START_DISTANCE_ = 3.0f;
-	//const float MINIMUM_DISTANCE = 2.0f;
+	const float ATTACK_START_DISTANCE_ = 4.0f;
 
 
 
@@ -152,125 +196,7 @@ void EnemyManager::Tracking(){
 		}
 	}
 
-
-
-	////1体より多い時
-	//if (enemyQuantity > 1u) {
-	//	for (std::list<Enemy*>::iterator it1 = enemyes_.begin(); it1 != enemyes_.end(); ++it1) {
-	//
-	//		//AABB
-	//		AABB enemy1AABB = (*it1)->GetAABB();
-	//		AABB enemy2AABB = {};
-	//		//位置1
-	//		Vector3 enemy1Position = (*it1)->GetWorldPosition();
-	//		//向き
-	//		Vector3 direction1 = (*it1)->GetDirection();
-	//
-	//		//float dot = 0.0f;
-	//
-	//		////2体目
-	//		//for (std::list<Enemy*>::iterator it2 = enemyes_.begin(); it2 != enemyes_.end(); ++it2) {
-	//		//
-	//		//	//it1とit2が一致した場合は計算をせずに次のループへ
-	//		//	if (it1 == it2) {
-	//		//		continue;
-	//		//	}
-	//		//
-	//		//	//2体目のAABBを取得
-	//		//	enemy2AABB = (*it2)->GetAABB();
-	//		//
-	//		//	//接触している場合
-	//		//	if ((enemy1AABB.min.x < enemy2AABB.max.x && enemy1AABB.max.x > enemy2AABB.min.x) &&
-	//		//		(enemy1AABB.min.y < enemy2AABB.max.y && enemy1AABB.max.y > enemy2AABB.min.y) &&
-	//		//		(enemy1AABB.min.z < enemy2AABB.max.z && enemy1AABB.max.z > enemy2AABB.min.z)) {
-	//		//		//ワールド座標
-	//		//		Vector3 enemy2Position = (*it2)->GetWorldPosition();
-	//		//
-	//		//
-	//		//		//敵同士の差分ベクトル
-	//		//		Vector3 enemyAndEnemyDifference = VectorCalculation::Subtract(enemy1Position, enemy2Position);
-	//		//
-	//		//		//進行方向の前にいると+
-	//		//		Vector3 normalizedEnemyAndEnemy = VectorCalculation::Normalize(enemyAndEnemyDifference);
-	//		//		//内積
-	//		//		dot = SingleCalculation::Dot(direction1, normalizedEnemyAndEnemy);
-	//		//
-	//		//
-	//		//		break;
-	//		//	}
-	//		//
-	//		//}
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//			//AABBを取得
-	//			AABB enemyAABB = enemy->GetAABB();
-	//
-	//			//状態
-	//			uint32_t condition = enemy->GetCondition();
-	//
-	//			//向き
-	//			Vector3 enemyDirection = enemy->GetDirection();
-	//
-	//			//プレイヤーと敵の差分ベクトル
-	//			//対象にするものがプレイヤーなのでプレイヤーから引いてね
-	//			Vector3 defference = VectorCalculation::Subtract(playerPosition_, enemy->GetWorldPosition());
-	//
-	//
-	//
-	//			Vector3 normalizedDefference = VectorCalculation::Normalize(defference);
-	//			float dot = SingleCalculation::Dot(normalizedDefference, enemyDirection);
-	//
-	//
-	//
-	//
-	//			//距離を求める
-	//			float distance = SingleCalculation::Length(defference);
-	//
-	//			//前方にいる時だけ追跡する
-	//			if (dot > 0.8f) {
-	//
-	//
-	//				if (distance < TRACKING_START_DISTANCE_ && condition == EnemyCondition::Move) {
-	//
-	//					//前の状態を保存
-	//					enemy->SetPreCondition(condition);
-	//
-	//					//現在の状態を保存
-	//					uint32_t newCondition = EnemyCondition::PreTracking;
-	//					enemy->SetPlayerPosition(playerPosition_);
-	//					enemy->SetCondition(newCondition);
-	//				}
-	//
-	//			}
-	//			else {
-	//				//前の状態を保存
-	//				enemy->SetPreCondition(condition);
-	//				//現在の状態を保存
-	//				uint32_t newCondition = EnemyCondition::Move;
-	//				enemy->SetCondition(newCondition);
-	//			}
-	//
-	//
-	//
-	//
-	//	}
-	//}
 }
-
 
 void EnemyManager::Update(){
 
@@ -289,18 +215,44 @@ void EnemyManager::Update(){
 			enemy->InvertSpeedZ();
 		}
 
-
-
 		//敵の更新
 		enemy->Update();
 	}
 
+	//敵の数
+	uint32_t enemyCount = static_cast<uint32_t>(enemyes_.size());
+	
+	if (enemyCount < MAX_ENEMY_COUNT_) {
+		//時間が増える
+		genarateTime_ += 1;
+
+		//3秒くらいしたら生成
+		if (genarateTime_ == 180) {
+			std::random_device seedGenerator;
+			std::mt19937 randomEngine(seedGenerator());
+
+			//ランダムの値
+			//位置
+			std::uniform_real_distribution<float> enemyKinds(1.0f, 2.9f);
+			uint32_t enemyKind = static_cast<uint32_t>(enemyKinds(randomEngine));
+
+			//岩
+			if (enemyKind == 1) {
+				//岩
+				GenarateRockEnemy(rockEnemyModelHandle_);
+
+				
+			}
+			else if (enemyKind == 2) {
+				//鉄
+				GenarateFeEnemy(feEnemyModelHandle_);
+			}
 
 
+			genarateTime_ = 0;
+		}
 
-
-
-
+	}
 
 
 	//追跡

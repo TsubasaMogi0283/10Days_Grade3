@@ -15,14 +15,13 @@
 #include "DirectionalLight.h"
 #include "SpotLight.h"
 #include <StageObject/Ground/Groud.h>
-#include <DraftPlayer/DraftPlayer.h>
-#include <Enemy/Enemy.h>
+#include "Enemy/RockEnemy.h"
 
 
 #include "FollowCamera/FollowCamera.h"
 #include "Player/Player.h"
 #include <Enemy/EnemyManager.h>
-#include <Particle3D.h>
+#include <Collider/CollisionManager.h>
 
 
 
@@ -127,15 +126,11 @@ private:
 
 #pragma endregion 
 
-
-	Material particleMaterial_ = {};
-	std::unique_ptr<Particle3D> particle__ = nullptr;
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
 
-
+	//敵管理クラス
 	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
-	//std::unique_ptr<Enemy> enemy_ = nullptr;
-
 
 
 
