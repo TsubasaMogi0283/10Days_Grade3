@@ -7,7 +7,7 @@
 #include <numbers>
 #include "ModelManager.h"
 
-void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position) {
+void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& speed) {
 	//モデルの生成
 	model_.reset(Model::Create(modelHandle));
 
@@ -15,7 +15,7 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position) {
 	worldTransform_.Initialize();
 	worldTransform_.translate_ = position;
 	material_.Initialize();
-	speed_ = { -0.0f,0.0f,-0.1f };
+	speed_ = speed;
 
 
 	//半径

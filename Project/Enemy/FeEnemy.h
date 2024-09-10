@@ -16,7 +16,7 @@ public:
 	/// </summary>
 	/// <param name="modelHandle"></param>
 	/// <param name="position"></param>
-	void Initialize(uint32_t& modelHandle, Vector3& position)override;
+	void Initialize(uint32_t& modelHandle, Vector3& position, Vector3& speed)override;
 
 	/// <summary>
 	/// 更新
