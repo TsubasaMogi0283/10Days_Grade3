@@ -29,10 +29,21 @@ GameScene::GameScene()
 
 void GameScene::Initialize() {
 
+	/* ----- FollowCamera フォローカメラ ----- */
+	uint32_t followCameraModelHD = modelManager_->LoadModelFile("Resources/FollowCamera", "FollowCamera.obj");
+	followCamera_ = std::make_unique<FollowCamera>(followCameraModelHD);
+	followCamera_->Init();
+	//カメラ
+	camera_ = followCamera_->GetCameraData();
+
 	/* ----- Player プレイヤー ----- */
 	uint32_t playerModelHD = modelManager_->LoadModelFile("Resources/Player", "Player.obj");
 	player_ = std::make_unique<Player>(playerModelHD);
 	player_->Init();
+	// PlayerにFollowCameraを渡す
+	player_->SetFollowCamera(followCamera_.get());
+	// FollowCameraにPlayerを渡す
+	followCamera_->SetPlayer(player_.get());
 
 
 	//平行光源
@@ -82,12 +93,6 @@ void GameScene::Initialize() {
 	directtionalLight_.Initialize();
 	directtionalLight_.direction_ = { .x = 0.0f,.y = -1.0f,.z = 0.0f };
 
-
-	//カメラ
-	camera_.Initialize();
-	camera_.rotate_ = { .x = 0.24f,.y = 0.0f,.z = 0.0f };
-	camera_.translate_ = { .x = 0.0f,.y = 0.2f,.z = 0.0f };
-
 	///ポストエフェクト
 	back_ = std::make_unique<BackText>();
 	back_->Initialize();
@@ -118,10 +123,15 @@ void GameScene::Update(GameManager* gameManager) {
 		return;
 	}
 
+	/* ----- FollowCamera フォローカメラ ----- */
+	followCamera_->Update();
+	camera_ = followCamera_->GetCameraData();
 	
 	/* ----- Player プレイヤー ----- */
 	player_->Update();
-	PlayerInput();
+
+	/* ----- Input 入力関連処理 ----- */
+	FuncInput();
 
 
 	#pragma region 敵
@@ -135,13 +145,6 @@ void GameScene::Update(GameManager* gameManager) {
 		collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
 	}
 	
-
-
-	//プレイヤーに追従する
-	Vector3 cameraOffset = VectorCalculation::Add(
-		{ player_->GetWorldPos().x, 0.0f, player_->GetWorldPos().z },
-		{ 0.0, 20.0f, -60.0f });
-	camera_.translate_ = cameraOffset;
 
 
 	//敵管理クラスの更新
@@ -163,12 +166,6 @@ void GameScene::Update(GameManager* gameManager) {
 
 	//ライトの更新
 	directtionalLight_.Update();
-
-	//カメラの更新
-	camera_.Update();
-
-	
-
 }
 
 void GameScene::DrawSpriteBack(){
@@ -176,6 +173,11 @@ void GameScene::DrawSpriteBack(){
 }
 
 void GameScene::DrawObject3D(){
+	//skydome_->Draw(camera_);
+
+	/* ----- FollowCamera フォローカメラ ----- */
+	//followCamera_->Draw3D(camera_, directtionalLight_);
+
 	/* ----- Player プレイヤー ----- */
 	player_->Draw3D(camera_, directtionalLight_);
 	
@@ -208,19 +210,21 @@ GameScene::~GameScene(){
 
 
 /// <summary>
-/// プレイヤーの移動処理
+/// 入力関連処理
 /// </summary>
-void GameScene::PlayerInput()
+void GameScene::FuncInput()
 {
-	// 移動処理
+	// stickの入力
 	if (input_->GetJoystickState(joyState_)) {
 
+		// カメラの操作
+		followCamera_->FuncStickFunc(joyState_);
+
 		// 入力があれば移動
-		//player_->Move(joyState_);
 		player_->FuncStickFunc(joyState_);
 	}
 
-	// ジャンプ処理
+	// Aボタンの入力
 	if (tInput_->Trigger(PadData::A)) {
 
 		// Aボタンが押された時の処理

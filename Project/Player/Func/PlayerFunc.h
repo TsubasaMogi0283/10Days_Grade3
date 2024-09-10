@@ -34,4 +34,5 @@ namespace pFunc {
 
 	// 角度の補正
 	float ShortestAngle(float currentAngle, float targetAngle);
+
 }

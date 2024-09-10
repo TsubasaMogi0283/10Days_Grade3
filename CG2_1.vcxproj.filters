@@ -297,6 +297,7 @@
     </ClCompile>
     <ClCompile Include="Project\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Project\Player\Func\PlayerFunc.cpp" />
+    <ClCompile Include="Project\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemy.cpp" />
     <ClCompile Include="Project\Enemy\RockEnemyParticle.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemyParticle.cpp" />
@@ -399,6 +400,7 @@
     <ClInclude Include="External\TsumiInput\TInput.h" />
     <ClInclude Include="Project\Enemy\EnemyManager.h" />
     <ClInclude Include="Project\Player\Func\PlayerFunc.h" />
+    <ClInclude Include="Project\FollowCamera\FollowCamera.h" />
     <ClInclude Include="Project\Enemy\FeEnemy.h" />
     <ClInclude Include="Project\Enemy\Enemy.h" />
     <ClInclude Include="Project\Enemy\EnemyParticle.h" />

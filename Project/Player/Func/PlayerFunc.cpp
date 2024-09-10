@@ -5,7 +5,7 @@
 // 線形補間関数（Lerp）
 float pFunc::Lerp(float a, float b, float t)
 {
-    return a + t * (b - a);
+    return a + (b - a) * t;
 }
 
 
