@@ -52,6 +52,12 @@ void FollowCamera::Update()
 	// マテリアルの更新
 	mtl_.Update();
 
+	// 前方ベクトルを求める
+	CalcForwardVec();
+
+	// 右方ベクトルを求める
+	CalcRightVec();
+
 
 #ifdef _DEBUG
 	// ImGuiの描画
@@ -122,6 +128,36 @@ void FollowCamera::FollowFunc()
 }
 
 
+// 前方ベクトルを求める
+void FollowCamera::CalcForwardVec()
+{
+	// デフォルトの前方ベクトル
+	Vector3 defForward = { 0.0f, 0.0f, 1.0f };
+
+	// Y軸の回転行列
+	Matrix4x4 rotateYMat = 
+		Matrix4x4Calculation::MakeRotateYMatrix(camera_.rotate_.y);
+
+	// 前方ベクトルを求める
+	forwardVec_ = VectorCalculation::TransformCalculation(defForward, rotateYMat);
+}
+
+
+// 右方ベクトルを求める
+void FollowCamera::CalcRightVec()
+{
+	// デフォルトの前方ベクトル
+	Vector3 defForward = { 1.0f, 0.0f, 0.0f };
+
+	// Y軸の回転行列
+	Matrix4x4 rotateYMat =
+		Matrix4x4Calculation::MakeRotateYMatrix(camera_.rotate_.y);
+
+	// 前方ベクトルを求める
+	rightVec_ = VectorCalculation::TransformCalculation(defForward, rotateYMat);
+}
+
+
 // ImGuiの描画
 void FollowCamera::DrawImGui()
 {
@@ -132,6 +168,10 @@ void FollowCamera::DrawImGui()
 		ImGui::DragFloat3("Transform", &camera_.translate_.x, 0.01f);
 		ImGui::Text("");
 
+		ImGui::Text("ベクトル");
+		ImGui::DragFloat3("Forward", &forwardVec_.x, 0.0f);
+		ImGui::DragFloat3("RightVec", &rightVec_.x, 0.0f);
+
 		ImGui::Text("入力関連数値");
 		ImGui::DragFloat2("R_Stick", &iRStick_.x, 0.0f);
 		ImGui::Text("");
@@ -139,3 +179,4 @@ void FollowCamera::DrawImGui()
 		ImGui::TreePop();
 	}
 }
+

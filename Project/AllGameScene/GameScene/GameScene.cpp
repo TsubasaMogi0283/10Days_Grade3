@@ -41,6 +41,8 @@ void GameScene::Initialize() {
 	uint32_t playerModelHD = modelManager_->LoadModelFile("Resources/Player", "Player.obj");
 	player_ = std::make_unique<Player>(playerModelHD);
 	player_->Init();
+	// PlayerにFollowCameraを渡す
+	player_->SetFollowCamera(followCamera_.get());
 	// FollowCameraにPlayerを渡す
 	followCamera_->SetPlayer(player_.get());
 

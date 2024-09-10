@@ -44,6 +44,12 @@ public:
 	// Camera
 	Camera& GetCameraData() { return this->camera_; }
 
+	// ForwardVec
+	Vector3& GetForwardVec() { return this->forwardVec_; }
+
+	// RightVec
+	Vector3& GetRightVec() { return this->rightVec_; }
+
 #pragma endregion 
 
 
@@ -54,6 +60,12 @@ private:
 
 	// フォロー処理
 	void FollowFunc();
+
+	// 前方ベクトルを求める
+	void CalcForwardVec();
+
+	// 右方ベクトルを求める
+	void CalcRightVec();
 
 	// ImGuiの描画
 	void DrawImGui();
@@ -87,6 +99,13 @@ private:
 	Vector3 constOffset_{};
 	// プレイヤーからのオフセット
 	Vector3 offset_{};
+
+	// 前方ベクトル
+	Vector3 forwardVec_{};
+	// 右方ベクトル
+	Vector3 rightVec_{};
+
+
 
 
 #pragma region System システム

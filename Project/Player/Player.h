@@ -12,6 +12,7 @@
 // 前方宣言
 struct Camera;
 struct DirectionalLight;
+class FollowCamera;
 
 
 /* Playerクラス */
@@ -53,6 +54,9 @@ public:
 		groundCorners_.push_back(RF);
 	}
 
+	// フォローカメラ
+	void SetFollowCamera(FollowCamera* camera) { this->followCamera_ = camera; }
+
 	// 着地状態
 	bool IsGrounded() const { return this->isGrounded_; }
 
@@ -66,6 +70,9 @@ public:
 
 
 private:
+
+	// 移動方向を求める
+	void CalcMoveDirection();
 
 	// 移動処理
 	void Move();
@@ -111,6 +118,8 @@ private:
 	// マテリアル
 	Material mtl_{};
 
+	// 移動方向
+	Vector3 moveDirection_{};
 	// 移動量
 	Vector3 velocity_{};
 	// 移動速度
@@ -164,6 +173,11 @@ private:
 	const float DZone_ = 0.2f;
 
 #pragma endregion 
+
+
+private: // フォローカメラ
+
+	FollowCamera* followCamera_ = nullptr;
 
 };
 

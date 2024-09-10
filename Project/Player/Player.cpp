@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Input.h"
+#include "FollowCamera/FollowCamera.h"
 #include <algorithm>
 
 
@@ -34,6 +35,9 @@ void Player::Update()
 
 	// マテリアルの更新
 	mtl_.Update();
+
+	// 移動方向を求める
+	CalcMoveDirection();
 
 	// ジャンプ処理
 	if (isJumping_) { // フラグが立っていたら入る
@@ -94,6 +98,21 @@ void Player::FuncStickFunc(XINPUT_STATE joyState)
 }
 
 
+// 移動方向を求める
+void Player::CalcMoveDirection()
+{
+	// カメラの前方と右方
+	Vector3 forward = followCamera_->GetForwardVec();
+	Vector3 right = followCamera_->GetRightVec();
+
+	moveDirection_ = {
+		.x = (iLStick_.x * right.x) + (iLStick_.y * forward.x),
+		.y = 0.0f,
+		.z = (iLStick_.x * right.z) + (iLStick_.y * forward.z),
+	};
+}
+
+
 // 移動処理
 void Player::Move()
 {
@@ -106,11 +125,8 @@ void Player::Move()
 	// 移動量の計算
 	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
 
-		// 移動量
-		velocity_ = {
-			.x = iLStick_.x,
-			.z = iLStick_.y,
-		};
+		// 移動量の計算(カメラの前方と右方に基づく)
+		velocity_ = moveDirection_;
 
 		// 移動量を正規化し速さを乗算
 		velocity_ = VectorCalculation::Multiply(VectorCalculation::Normalize(velocity_), moveSpeed_);
@@ -150,8 +166,11 @@ void Player::BodyOrientation()
 {
 	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
 
+		// 正規化した移動方向
+		Vector3 normalizeDirection = VectorCalculation::Normalize(moveDirection_);
+
 		// 目標回転角度
-		float targetAngle = std::atan2(iLStick_.x, iLStick_.y);
+		float targetAngle = std::atan2(normalizeDirection.x, normalizeDirection.z);
 
 		// 現在の角度と目標角度から最短を求める
 		float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
