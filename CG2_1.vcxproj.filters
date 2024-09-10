@@ -94,7 +94,7 @@
     <ClCompile Include="Ellysia\Polygon\PostEffect\Vignette\Vignette.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
     <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp" />
-    <ClCompile Include="Project\AllGameScene\LoseScene\LoseScene.cpp" />
+    <ClCompile Include="Project\AllGameScene\ResultScene\ResultScene.cpp" />
     <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Project\Collider\CollisionManager.cpp" />
     <ClCompile Include="Project\Player\Player.cpp" />
@@ -386,7 +386,7 @@
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
     <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h" />
-    <ClInclude Include="Project\AllGameScene\LoseScene\LoseScene.h" />
+    <ClInclude Include="Project\AllGameScene\ResultScene\ResultScene.h" />
     <ClInclude Include="Project\AllGameScene\TitleScene\TitleScene.h" />
     <ClInclude Include="Project\Collider\Collider.h" />
     <ClInclude Include="Project\Collider\CollisionConfig.h" />

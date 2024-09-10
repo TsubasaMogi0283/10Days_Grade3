@@ -1,17 +1,16 @@
-#include "LoseScene.h"
+#include "ResultScene.h"
 #include <TextureManager.h>
 #include <Input.h>
 #include "TitleScene/TitleScene.h"
-//#include "SampleScene/SampleScene.h"
 #include "GameManager.h"
 
 
 
-void LoseScene::Initialize(){
+void ResultScene::Initialize(){
 
 }
 
-void LoseScene::Update(GameManager* gameManager){
+void ResultScene::Update(GameManager* gameManager){
 
 
 
@@ -29,26 +28,26 @@ void LoseScene::Update(GameManager* gameManager){
 
 }
 
-void LoseScene::DrawSpriteBack()
+void ResultScene::DrawSpriteBack()
 {
 }
 
-void LoseScene::DrawObject3D()
+void ResultScene::DrawObject3D()
 {
 }
 
-void LoseScene::PreDrawPostEffectFirst()
+void ResultScene::PreDrawPostEffectFirst()
 {
 }
 
-void LoseScene::DrawPostEffect()
+void ResultScene::DrawPostEffect()
 {
 }
 
-void LoseScene::DrawSprite(){
+void ResultScene::DrawSprite(){
 
 }
 
-LoseScene::~LoseScene()
+ResultScene::~ResultScene()
 {
 }

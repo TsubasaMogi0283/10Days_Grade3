@@ -220,7 +220,7 @@ void EnemyManager::Update(){
 	}
 
 	//敵の数
-	uint32_t enemyCount = enemyes_.size();
+	uint32_t enemyCount = static_cast<uint32_t>(enemyes_.size());
 	
 	if (enemyCount < MAX_ENEMY_COUNT_) {
 		//時間が増える
@@ -233,8 +233,8 @@ void EnemyManager::Update(){
 
 			//ランダムの値
 			//位置
-			std::uniform_real_distribution<uint32_t> enemyKinds(1, 2);
-			uint32_t enemyKind = enemyKinds(randomEngine);
+			std::uniform_real_distribution<float> enemyKinds(1.0f, 2.9f);
+			uint32_t enemyKind = static_cast<uint32_t>(enemyKinds(randomEngine));
 
 			//岩
 			if (enemyKind == 1) {
