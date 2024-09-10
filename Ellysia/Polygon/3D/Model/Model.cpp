@@ -1,8 +1,9 @@
 #include "Model.h"
 #include <Camera.h>
 #include <TextureManager.h>
+#include "ModelManager.h"
 #include <PipelineManager.h>
-#include "DirectXSetup.h"
+
 #include <numbers>
 #include <SrvManager.h>
 
@@ -13,23 +14,36 @@
 #include <PointLight.h>
 #include <SpotLight.h>
 
-Model* Model::Create(uint32_t modelHandle) {
+Model::Model(){
+	directXSetup_ = DirectXSetup::GetInstance();
+	modelManager_ = ModelManager::GetInstance();
+	textureManager_ = TextureManager::GetInstance();
+
+}
+
+Model* Model::Create(uint32_t& modelHandle) {
 	//新たなModel型のインスタンスのメモリを確保
 	Model* model = new Model();
+
+
+	
 
 	//いずれSetModeBlendをなくしてGenerateModelPSOの所で指定できるようにしたい
 	PipelineManager::GetInstance()->SetModelBlendMode(1);
 	PipelineManager::GetInstance()->GenerateModelPSO();
+
+	//モデルデータ
+	model->modelData_ = model->modelManager_->GetModelData(modelHandle);
+
 	//テクスチャの読み込み
-	model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(modelHandle).textureFilePath);
+	model->textureHandle_ = model->textureManager_->LoadTexture(model->modelData_.textureFilePath);
 	//Drawでも使いたいので取り入れる
 	model->modelHandle_ = modelHandle;
 
-	//モデルデータ
-	model->modelData_ = ModelManager::GetInstance()->GetModelData(modelHandle);
+	
 
 	//頂点リソースを作る
-	model->vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * ModelManager::GetInstance()->GetModelData(modelHandle).vertices.size()).Get();
+	model->vertexResource_ = model->directXSetup_->CreateBufferResource(sizeof(VertexData) * ModelManager::GetInstance()->GetModelData(modelHandle).vertices.size()).Get();
 
 	//リソースの先頭のアドレスから使う
 	model->vertexBufferView_.BufferLocation = model->vertexResource_->GetGPUVirtualAddress();
@@ -41,7 +55,7 @@ Model* Model::Create(uint32_t modelHandle) {
 
 
 	//解析したデータを使ってResourceとBufferViewを作成する
-	model->indexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(uint32_t) * ModelManager::GetInstance()->GetModelData(modelHandle).indices.size()).Get();
+	model->indexResource_ = model->directXSetup_->CreateBufferResource(sizeof(uint32_t) * ModelManager::GetInstance()->GetModelData(modelHandle).indices.size()).Get();
 	model->indexBufferView_.BufferLocation = model->indexResource_->GetGPUVirtualAddress();
 	size_t indicesSize = model->modelData_.indices.size();
 	model->indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * indicesSize);
@@ -50,7 +64,7 @@ Model* Model::Create(uint32_t modelHandle) {
 
 
 	//カメラ
-	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
+	model->cameraResource_ = model->directXSetup_->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
 	return model;
 

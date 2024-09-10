@@ -1,8 +1,11 @@
 #pragma once
+
 #include <list>
 
-#include "Enemy.h"
 
+class ModelManager;
+
+#include "Enemy.h"
 class EnemyManager{
 public:
 	/// <summary>
@@ -79,6 +82,8 @@ public:
 	void DeleteEnemy();
 
 private:
+	ModelManager* modelManager_ = nullptr;
+
 
 	//通常の敵
 	std::list<Enemy*> enemyes_ = {};

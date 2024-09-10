@@ -93,7 +93,8 @@ Particle Particle3D::MakeNewParticle(std::mt19937& randomEngine) {
 	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
 	particle.transform.translate = VectorCalculation::Add(emitter_.transform.translate,randomTranslate);
 	if (moveType_ == ThrowUp) {
-		particle.transform.translate = {.x= randomTranslate.x,.y=0.1f,.z= randomTranslate.z };
+		Vector3 offset = { .x = randomTranslate.x,.y = 0.1f,.z = randomTranslate.z };
+		particle.transform.translate = VectorCalculation::Add(emitter_.transform.translate, offset);
 
 	}
 	
