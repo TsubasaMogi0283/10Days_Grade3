@@ -66,9 +66,10 @@ void GameScene::Initialize() {
 
 	//敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
 	enemyManager_->SetStageRectPosition(stageLeftBack, stageRightBack, stageLeftFront, stageRightFront);
 
+	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
+	
 
 
 	//平行光源

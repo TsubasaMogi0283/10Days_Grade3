@@ -9,25 +9,18 @@
 
 void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle){
 	
+	feModelHandle;
 
-#pragma region 通常の敵の生成
+	for (int i = 0; i < 10; ++i) {
+		//岩
+		GenarateRockEnemy(rockModelhandle);
+		//鉄
+		//GenarateFeEnemy(feModelHandle);
 
-	Enemy* rockEnemy1 = new RockEnemy();
-	Vector3 enemyPosition1 = { 10.0f,0.0f,1.0f };
-	rockEnemy1->Initialize(rockModelhandle, enemyPosition1);
-	enemyes_.push_back(rockEnemy1);
+	}
+	
+	enemyes_;
 
-
-
-
-
-	Enemy* feEnemy2 = new FeEnemy();
-	Vector3 enemyPosition2 = { 1.0f,0.0f,10.0f };
-	feEnemy2->Initialize(feModelHandle, enemyPosition2);
-	enemyes_.push_back(feEnemy2);
-
-
-#pragma endregion
 
 }
 
@@ -49,22 +42,13 @@ void EnemyManager::GenarateRockEnemy(uint32_t& rockModelhandle){
 	Enemy* rockEnemy1 = new RockEnemy();
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
-	std::uniform_real_distribution<float> distribute(-stageLeftBackPosition.x, 2.0f);
+	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
+	std::uniform_real_distribution<float> distributeZ(stageLeftBackPosition.z, stageLeftFrontPosition.z);
 
 	//ランダムの値
-	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
-	particle.transform.translate = VectorCalculation::Add(emitter_.transform.translate, randomTranslate);
-	if (moveType_ == ThrowUp) {
-		Vector3 offset = { .x = randomTranslate.x,.y = 0.1f,.z = randomTranslate.z };
-		particle.transform.translate = VectorCalculation::Add(emitter_.transform.translate, offset);
+	Vector3 randomTranslate = { distributeX(randomEngine),0.0f,distributeZ(randomEngine) };
 
-	}
-
-	//速度
-	std::uniform_real_distribution<float>distVelocity(-1.0f, 1.0f);
-	particle.velocity = { distVelocity(randomEngine),distVelocity(randomEngine),distVelocity(randomEngine) };
-
-	Vector3 enemyPosition1 = { 10.0f,0.0f,1.0f };
+	Vector3 enemyPosition1 = randomTranslate;
 	rockEnemy1->Initialize(rockModelhandle, enemyPosition1);
 	enemyes_.push_back(rockEnemy1);
 
@@ -73,7 +57,15 @@ void EnemyManager::GenarateRockEnemy(uint32_t& rockModelhandle){
 
 void EnemyManager::GenarateFeEnemy(uint32_t& feModelHandle){
 	Enemy* feEnemy2 = new FeEnemy();
-	Vector3 enemyPosition2 = { 1.0f,0.0f,10.0f };
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
+	std::uniform_real_distribution<float> distributeZ(stageLeftBackPosition.z, stageLeftFrontPosition.z);
+
+	//ランダムの値
+	Vector3 randomTranslate = { distributeX(randomEngine),0.0f,distributeZ(randomEngine) };
+
+	Vector3 enemyPosition2 = randomTranslate;
 	feEnemy2->Initialize(feModelHandle, enemyPosition2);
 	enemyes_.push_back(feEnemy2);
 
