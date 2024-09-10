@@ -3,11 +3,8 @@
 
 #include "d3dx12.h"
 #include <vector>
-static uint32_t textureIndex;
 
-
-static DirectX::ScratchImage mipImages_[TextureManager::TEXTURE_MAX_AMOUNT_];
-static D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc[TextureManager::TEXTURE_MAX_AMOUNT_];
+uint32_t TextureManager::index_=0u;
 
 
 TextureManager* TextureManager::GetInstance() {
@@ -21,10 +18,15 @@ TextureManager* TextureManager::GetInstance() {
 
 const D3D12_RESOURCE_DESC TextureManager::GetResourceDesc(uint32_t textureHandle) {
 	//テクスチャの情報を取得
-	D3D12_RESOURCE_DESC resourceDesc{};
-	resourceDesc = textureInformation_[textureHandle].resource_->GetDesc();
+	// handleからfilePathを取得
+	auto it = handleToFilePathMap_.find(textureHandle);
+	if (it != handleToFilePathMap_.end()) {
+		const std::string& filePath = it->second;
+		return textureInformation_[filePath].resource_->GetDesc();
+	}
 
-	return resourceDesc;
+	// エラーハンドリング: 見つからなかった場合の空のリソース記述子を返す
+	return D3D12_RESOURCE_DESC{};
 }
 
 
@@ -33,49 +35,59 @@ const D3D12_RESOURCE_DESC TextureManager::GetResourceDesc(uint32_t textureHandle
 //統合させた関数
 uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
+	TextureManager* textureManager = TextureManager::GetInstance();
+
 	//一度読み込んだものはその値を返す
 	//新規は勿論読み込みをする
-	for (int i = 0; i < TEXTURE_MAX_AMOUNT_; i++) {
-		//同じテクスチャがあった場合そのテクスチャハンドルを返す
-		if (TextureManager::GetInstance()->textureInformation_[i].name_ == filePath) {
-			return TextureManager::GetInstance()->textureInformation_[i].handle_;
-		}
+	auto it = TextureManager::GetInstance()->textureInformation_.find(filePath);
+	if (it != TextureManager::GetInstance()->textureInformation_.end()) {
+		return it->second.handle_;
 	}
 
 
 
-	//読み込むたびにインデックスが増やし重複を防ごう
-	textureIndex= SrvManager::GetInstance()->Allocate();
+	//読み込むたびにインデックスを増やし重複を防ごう
+	index_ = SrvManager::GetInstance()->Allocate();
 
 
 
-	//読み込んだデータを配列に保存
-	//テクスチャの名前
-	TextureManager::GetInstance()->textureInformation_[textureIndex].name_ = filePath;
+	//読み込んだデータを保存
+	TextureInformation textureInfo;
+	textureInfo.handle_ = index_;
+	textureInfo.name_ = filePath;
+
 	//テクスチャハンドル
-	TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = textureIndex;
+	textureInfo.handle_ = index_;
 
-	//Textureを読んで転送する
-	mipImages_[textureIndex] = LoadTextureData(filePath);
-
-	const DirectX::TexMetadata& metadata = mipImages_[textureIndex].GetMetadata();
-
-	TextureManager::GetInstance()->textureInformation_[textureIndex].resource_ = CreateTextureResource(metadata);
-	TextureManager::GetInstance()->textureInformation_[textureIndex].internegiateResource_ =UploadTextureData(TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), mipImages_[textureIndex]).Get();
+	//テクスチャの名前
+	textureInfo.name_ = filePath;
 	
 
-	//SRVの確保
-	//0番目はImGuiが使っているからダメだった
-	TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = textureIndex;
+	//Textureを読んで転送する
+	textureInfo.mipImages_ = LoadTextureData(filePath);
+
+	const DirectX::TexMetadata& metadata = textureInfo.mipImages_.GetMetadata();
+
+	textureInfo.resource_ = CreateTextureResource(metadata);
+	textureInfo.internegiateResource_ =UploadTextureData(
+		textureInfo.resource_.Get(), textureInfo.mipImages_).Get();
+	
+
+
 
 	//SRVの生成
 	SrvManager::GetInstance()->CreateSRVForTexture2D(
-		TextureManager::GetInstance()->textureInformation_[textureIndex].handle_,
-		TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(),
+		textureInfo.handle_,
+		textureInfo.resource_.Get(),
 		metadata.format, UINT(metadata.mipLevels),metadata.IsCubemap());
 
 
-	return textureIndex;
+	// 読み込んだデータをmapに保存
+	textureManager->GetTextureInformation()[filePath] = std::move(textureInfo);
+
+	TextureManager::GetInstance()->handleToFilePathMap_[index_] = filePath; // handle-to-filePathマップに保存
+
+	return textureInfo.handle_;
 }
 	
 
