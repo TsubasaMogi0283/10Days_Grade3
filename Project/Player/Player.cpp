@@ -69,6 +69,15 @@ void Player::Update()
 		StompFunc();
 	}
 
+	//上昇中
+	if (jumpVel_ >= 0.0f) {
+		isDrop_ = false;
+	}
+	//落下中
+	else {
+		isDrop_ = true;
+	}
+
 	Vector3 worldPosition = GetWorldPosition();
 	attack_->SetPlayerPosition(worldPosition);
 	attack_->Update();
@@ -87,7 +96,7 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 
 	//攻撃
 #ifdef _DEBUG
-	if (isGrounded_==false) {
+	if (isDrop_ ==true) {
 		attack_->Draw(camera, light);
 	}
 	
@@ -283,6 +292,9 @@ void Player::StompFunc()
 	// 重力をY軸速度に加える
 	stompVel_ -= stompGravoty_ * stompDeltaTime_;
 
+	
+
+
 	// 最大落下速度を制限する
 	const float maxFallSpeed = -30.0f;  // 例: 最大速度
 	if (stompVel_ < maxFallSpeed) {
@@ -353,6 +365,7 @@ void Player::DrawImGui()
 		ImGui::DragFloat("s重力", &stompGravoty_, 0.01f);
 		ImGui::DragFloat("sデルタタイム", &stompDeltaTime_, 0.001f);
 		ImGui::Checkbox("Is_Stomp", &isStomping_);
+		ImGui::Checkbox("Is_Drop", &isDrop_);
 		ImGui::DragFloat("s速度", &stompVel_, 0.0f);
 		ImGui::Text("");
 
