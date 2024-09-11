@@ -130,9 +130,14 @@ private:
 	void DrawImGui();
 
 	/// <summary>
-	/// 移動スピード激減
+	/// スピード管理
 	/// </summary>
-	void SpeedDown();
+	void SpeedManagiment();
+
+	/// <summary>
+	/// 点滅
+	/// </summary>
+	void Flashing();
 
 private:
 
