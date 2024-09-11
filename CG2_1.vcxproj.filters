@@ -299,6 +299,7 @@
     <ClCompile Include="Project\Enemy\RockEnemyParticle.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemyParticle.cpp" />
     <ClCompile Include="Project\Player\PlayerAttack.cpp" />
+    <ClCompile Include="Record.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -405,6 +406,7 @@
     <ClInclude Include="Project\Enemy\RockEnemyParticle.h" />
     <ClInclude Include="Project\Enemy\FeEnemyParticle.h" />
     <ClInclude Include="Project\Player\PlayerAttack.h" />
+    <ClInclude Include="Record.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

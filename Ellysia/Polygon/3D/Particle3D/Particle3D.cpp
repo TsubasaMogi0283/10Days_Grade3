@@ -19,8 +19,7 @@
 Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 	Particle3D* particle3D = new Particle3D();
 
-	//Addでやるべきとのこと
-	PipelineManager::GetInstance()->GenerateParticle3DPSO();
+	
 
 #pragma region デフォルトの設定 
 	particle3D->emitter_.count = 100;

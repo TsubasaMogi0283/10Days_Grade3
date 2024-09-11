@@ -200,6 +200,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Enemy\EnemyAttackCollision.cpp" />
     <ClCompile Include="Project\Player\PlayerAttack.cpp" />
     <ClCompile Include="Project\StageObject\Ground\Groud.cpp" />
+    <ClCompile Include="Record.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\AnimationObject3D\AnimationObject3D.PS.hlsl">
@@ -478,6 +479,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Enemy\EnemyAttackCollision.h" />
     <ClInclude Include="Project\Player\PlayerAttack.h" />
     <ClInclude Include="Project\StageObject\Ground\Groud.h" />
+    <ClInclude Include="Record.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

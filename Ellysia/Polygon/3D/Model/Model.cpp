@@ -28,9 +28,7 @@ Model* Model::Create(uint32_t& modelHandle) {
 
 	
 
-	//いずれSetModeBlendをなくしてGenerateModelPSOの所で指定できるようにしたい
-	PipelineManager::GetInstance()->SetModelBlendMode(1);
-	PipelineManager::GetInstance()->GenerateModelPSO();
+	
 
 	//モデルデータ
 	model->modelData_ = model->modelManager_->GetModelData(modelHandle);
