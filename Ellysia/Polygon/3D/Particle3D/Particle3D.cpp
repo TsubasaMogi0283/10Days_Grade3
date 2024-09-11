@@ -85,7 +85,7 @@ Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 Particle Particle3D::MakeNewParticle(std::mt19937& randomEngine) {
 	std::uniform_real_distribution<float> distribute(-2.0f, 2.0f);
 	Particle particle;
-	particle.transform.scale = { 10.0f,10.0f,10.0f };
+	particle.transform.scale = { 1.0f,1.0f,1.0f };
 	particle.transform.rotate = { 0.0f,0.0f,0.0f };
 	//ランダムの値
 	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
