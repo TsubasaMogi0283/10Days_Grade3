@@ -748,6 +748,10 @@ void PipelineManager::GenerateModelPSO() {
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
+
+
+
+
 	//ブレンドモードの選択
 	//switchでやった方が楽でしょう
 	switch (PipelineManager::GetInstance()->selectModelBlendMode_) {
