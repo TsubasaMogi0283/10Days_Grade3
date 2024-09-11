@@ -78,6 +78,13 @@ void Player::Update()
 		isDrop_ = true;
 	}
 
+	//スピード管理
+	SpeedManagiment();
+
+
+	//色
+	Flashing();
+
 	Vector3 worldPosition = GetWorldPosition();
 	attack_->SetPlayerPosition(worldPosition);
 	attack_->Update();
@@ -184,25 +191,11 @@ void Player::Move()
 		// 移動量を正規化し速さを乗算
 		velocity_ = VectorCalculation::Multiply(VectorCalculation::Normalize(velocity_), moveSpeed_);
 
-
-		if (speedDownTime_ > 180) {
-			isSpeedDown_ = false;
-		}
-
-		//スピードの制限を付ける
-		//敵の攻撃に衝突したらスピードが激減
-		if (isSpeedDown_ == true) {
-			speedMagnification_ = 0.1f;
-			//時間が増える
-			speedDownTime_ += 1;
-			
-		}
-		else {
-			speedDownTime_ = 0;
-			speedMagnification_ = 1.0f;
-		}
+		
+		//制限をかける
 		velocity_ = VectorCalculation::Multiply(velocity_, speedMagnification_);
 
+		
 		// 移動
 		transform_.translate_ = VectorCalculation::Add(transform_.translate_, velocity_);
 
@@ -346,6 +339,46 @@ void Player::StompExsit()
 	stompVel_ = 0.0f; // Y軸速度をリセット
 }
 
+void Player::SpeedManagiment() {
+	//設定した時間になったら元に戻る
+	//ネストを増やしたくないから外に出す
+	if (speedDownTime_ > 200) {
+		isSpeedDown_ = false;
+	}
+
+	//スピードの制限を付ける
+	//敵の攻撃に衝突したらスピードが激減
+	if (isSpeedDown_ == true) {
+		speedMagnification_ = 0.1f;
+		//時間が増える
+		speedDownTime_ += 1;
+
+	}
+	//通常
+	else {
+		speedDownTime_ = 0;
+		speedMagnification_ = 1.0f;
+	}
+
+	
+
+	
+}
+
+void Player::Flashing(){
+	if ((speedDownTime_ / 12) % 2 == 0) {
+		mtl_.color_.x = 1.0f;
+		mtl_.color_.y = 1.0f;
+		mtl_.color_.z = 1.0f;
+		mtl_.color_.w = 1.0f;
+	}
+	if ((speedDownTime_ / 12) % 2 == 1) {
+		mtl_.color_.x = 0.0f;
+		mtl_.color_.y = 0.0f;
+		mtl_.color_.z = 0.0f;
+		mtl_.color_.w = 0.0f;
+	}
+}
 
 // Imguiの描画
 void Player::DrawImGui()
@@ -404,7 +437,5 @@ void Player::DrawImGui()
 	}
 }
 
-void Player::SpeedDown(){
 
-}
 
