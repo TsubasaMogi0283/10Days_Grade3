@@ -19,7 +19,7 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& spee
 
 
 	//半径
-	radius_ = 1.0f;
+	radius_ = 2.0f;
 
 
 	isAlive_ = true;
@@ -287,7 +287,8 @@ void FeEnemy::Killed() {
 void FeEnemy::ReleaseParticle() {
 
 	FeEnemyParticle* rockParticle = new FeEnemyParticle();
-	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle", "SampleParticle.obj");
+	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
+	//uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/FeEnem","FeBreak.obj");
 	Vector3 enemyPosition = GetWorldPosition();
 	rockParticle->Initialize(particleModelHandle, enemyPosition);
 	feParticles_.push_back(rockParticle);

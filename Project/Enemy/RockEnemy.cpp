@@ -18,7 +18,7 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 
 
 	//半径
-	radius_ = 1.0f;
+	radius_ = 2.0f;
 	//生きているかどうか
 	isAlive_ = true;
 

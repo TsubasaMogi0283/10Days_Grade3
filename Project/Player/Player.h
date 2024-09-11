@@ -80,6 +80,13 @@ public:
 		return attack_.get();
 	}
 
+	/// <summary>
+	/// 落下中かどうか
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsDrop()const {
+		return isDrop_;
+	}
 
 #pragma endregion 
 
@@ -173,6 +180,9 @@ private:
 
 	// Groundの四隅座標
 	std::vector<Vector3> groundCorners_{};
+
+	//落下しているか
+	bool isDrop_ = false;
 
 	// キルストリーク
 	bool isKillStreak_ = false;
