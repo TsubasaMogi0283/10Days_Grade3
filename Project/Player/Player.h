@@ -129,6 +129,10 @@ private:
 	// Imguiの描画
 	void DrawImGui();
 
+	/// <summary>
+	/// 移動スピード激減
+	/// </summary>
+	void SpeedDown();
 
 private:
 
@@ -183,6 +187,13 @@ private:
 
 	//落下しているか
 	bool isDrop_ = false;
+
+	//移動スピードが減るかどうか
+	bool isSpeedDown_ = false;
+	//スピード倍率
+	float speedMagnification_ = 1.0f;
+	//減速中の時間
+	int speedDownTime_ = 0;
 
 	// キルストリーク
 	bool isKillStreak_ = false;

@@ -135,7 +135,7 @@ void GameScene::Update(GameManager* gameManager) {
 		collisionManager_->RegisterList(player_->GetPlayerAttack());
 	}
 	//本体
-	//collisionManager_->RegisterList(player_.get());
+	collisionManager_->RegisterList(player_.get());
 
 	/* ----- Input 入力関連処理 ----- */
 	FuncInput();
@@ -150,7 +150,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 		//攻撃
 		if (enemy->GetIsAttack() == true) {
-			//collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
+			collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
 		}
 		
 	}
