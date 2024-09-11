@@ -74,6 +74,10 @@ Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 
 
 
+	//インスタンス
+	particle3D->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Vector3));
+
+
 	return particle3D;
 
 }
@@ -294,9 +298,17 @@ void Particle3D::Draw(Camera& camera, Material& material, DirectionalLight& dire
 	
 	//更新
 	Update(camera);
+	ComPtr<ID3D12Resource>cameraResource_ = nullptr;
+	Vector3* cameraPositionData_ = {};
 
+	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPositionData_));
+	Vector3 cameraWorldPosition = {};
+	cameraWorldPosition.x = camera.worldMatrix_.m[3][0];
+	cameraWorldPosition.y = camera.worldMatrix_.m[3][1];
+	cameraWorldPosition.z = camera.worldMatrix_.m[3][2];
 
-
+	cameraPositionData_->worldPosition = cameraWorldPosition;
+	cameraResource_->Unmap(0, nullptr);
 
 
 	//コマンドを積む
