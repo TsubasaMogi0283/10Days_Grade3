@@ -9,6 +9,7 @@
 
 void LoseScene::Initialize(){
 
+
 }
 
 void LoseScene::Update(GameManager* gameManager){
