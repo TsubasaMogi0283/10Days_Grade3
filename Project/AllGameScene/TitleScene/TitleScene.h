@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "Sprite.h"
-
+#include "WorldTransform.h"
 #include "Model.h"
 #include "Camera.h"
 #include <BackText.h>
@@ -56,11 +56,12 @@ public:
 
 
 private:
-
+	ModelManager* modelManager_ = nullptr;
+	ModelManager* modelManager2_ = nullptr;
 	//カメラ
 	Camera camera_ = {};
 	Vector3 cameraPosition_ = {};
-
+	DirectionalLight directtionalLight_ = {};
 	//マテリアル
 	Material material_ = {};
 
@@ -68,6 +69,16 @@ private:
 	//今は使わない
 	std::unique_ptr<BackText> back_ = nullptr;
 
+	//タイトル
+	uint32_t modelHandle_ = 0;
+	std::unique_ptr<Model> titleModel_ = nullptr;
+	Material mtl_{};
+	WorldTransform transform_{};
+	//タイトル2
+	uint32_t modelHandle2_ = 0;
+	std::unique_ptr<Model> titleModel2_ = nullptr;
+	Material mtl2_{};
+	WorldTransform transform2_{};
 
 };
 
