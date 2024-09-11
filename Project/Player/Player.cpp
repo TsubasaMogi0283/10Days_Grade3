@@ -145,6 +145,9 @@ void Player::OnCollision(){
 	ImGui::End();
 #endif // _DEBUG
 
+
+	isSpeedDown_ = true;
+
 }
 
 
@@ -180,6 +183,25 @@ void Player::Move()
 
 		// 移動量を正規化し速さを乗算
 		velocity_ = VectorCalculation::Multiply(VectorCalculation::Normalize(velocity_), moveSpeed_);
+
+
+		if (speedDownTime_ > 180) {
+			isSpeedDown_ = false;
+		}
+
+		//スピードの制限を付ける
+		//敵の攻撃に衝突したらスピードが激減
+		if (isSpeedDown_ == true) {
+			speedMagnification_ = 0.1f;
+			//時間が増える
+			speedDownTime_ += 1;
+			
+		}
+		else {
+			speedDownTime_ = 0;
+			speedMagnification_ = 1.0f;
+		}
+		velocity_ = VectorCalculation::Multiply(velocity_, speedMagnification_);
 
 		// 移動
 		transform_.translate_ = VectorCalculation::Add(transform_.translate_, velocity_);
@@ -369,7 +391,20 @@ void Player::DrawImGui()
 		ImGui::DragFloat("s速度", &stompVel_, 0.0f);
 		ImGui::Text("");
 
+
+
+		ImGui::Text("減速関連数値");
+		ImGui::Checkbox("IsSpeedDown", &isSpeedDown_);
+		ImGui::InputFloat("倍率", &speedMagnification_);
+		ImGui::InputInt("減速時間", &speedDownTime_);
+		ImGui::Text("");
+
+
 		ImGui::TreePop();
 	}
+}
+
+void Player::SpeedDown(){
+
 }
 
