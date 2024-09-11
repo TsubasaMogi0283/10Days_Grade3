@@ -287,8 +287,8 @@ void FeEnemy::Killed() {
 void FeEnemy::ReleaseParticle() {
 
 	FeEnemyParticle* rockParticle = new FeEnemyParticle();
-	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
-	//uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/FeEnem","FeBreak.obj");
+	//uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
+	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/FeEnemy","FeBreak.obj");
 	Vector3 enemyPosition = GetWorldPosition();
 	rockParticle->Initialize(particleModelHandle, enemyPosition);
 	feParticles_.push_back(rockParticle);
