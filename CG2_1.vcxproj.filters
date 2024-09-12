@@ -302,6 +302,8 @@
     <ClCompile Include="Project\Player\PlayerAttack.cpp" />
     <ClCompile Include="Record.cpp" />
     <ClCompile Include="Project\Player\Effects\CrackEffect\CrackEffect.cpp" />
+    <ClCompile Include="Project\Player\Timer\pTimer.cpp" />
+    <ClCompile Include="Project\Ease\Ease.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -411,6 +413,8 @@
     <ClInclude Include="Project\Player\PlayerAttack.h" />
     <ClInclude Include="Record.h" />
     <ClInclude Include="Project\Player\Effects\CrackEffect\CrackEffect.h" />
+    <ClInclude Include="Project\Player\Timer\pTimer.h" />
+    <ClInclude Include="Project\Ease\Ease.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

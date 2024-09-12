@@ -1,11 +1,15 @@
 #pragma once
 
+#include <random>
+
 #include "Model.h"
 #include "WorldTransform.h"
 #include "Material.h"
 #include "VectorCalculation.h"
 #include "Matrix4x4Calculation.h"
 #include "../../Func/PlayerFunc.h"
+#include "../../Timer/pTimer.h"
+#include "../../Ease/Ease.h"
 
 
 /* プレイヤーのストンプの亀裂のエフェクト */
@@ -28,11 +32,25 @@ public:
 
 #pragma region Accessor アクセッサ
 
+	// アクティブ
+	bool IsActive() const { return this->isActive_; }
+
+	// スケール
+	void SetScale(Vector3 setScale) { this->transform_.scale_ = setScale; }
+
+	// Y軸姿勢
+	void SetYRotate(float setRotate) { this->transform_.rotate_.y = setRotate; }
+
+	// 座標
+	void SetPosition(Vector3 setPos) { this->transform_.translate_ = setPos; }
 
 #pragma endregion 
 
 
 private:
+
+	// alpha値を減らす処理
+	bool SubAlpha();
 
 	// Imguiの描画
 	void DrawImGui();
@@ -48,8 +66,13 @@ private:
 	// マテリアル
 	Material mtl_{};
 
-	// 出現させるか
+	// アクティブ
 	bool isActive_ = false;
 
+	// 寿命
+	pTimer timer_{};
+
+	// 乱数生成器
+	std::mt19937 randomEngine_;
 };
 

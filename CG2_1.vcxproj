@@ -188,6 +188,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\AllGameScene\ResultScene\ResultScene.cpp" />
     <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Project\Collider\CollisionManager.cpp" />
+    <ClCompile Include="Project\Ease\Ease.cpp" />
     <ClCompile Include="Project\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Project\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemy.cpp" />
@@ -201,6 +202,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Enemy\RockEnemy.cpp" />
     <ClCompile Include="Project\Enemy\EnemyAttackCollision.cpp" />
     <ClCompile Include="Project\Player\PlayerAttack.cpp" />
+    <ClCompile Include="Project\Player\Timer\pTimer.cpp" />
     <ClCompile Include="Project\StageObject\Ground\Groud.cpp" />
     <ClCompile Include="Record.cpp" />
   </ItemGroup>
@@ -467,6 +469,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Collider\Collider.h" />
     <ClInclude Include="Project\Collider\CollisionConfig.h" />
     <ClInclude Include="Project\Collider\CollisionManager.h" />
+    <ClInclude Include="Project\Ease\Ease.h" />
     <ClInclude Include="Project\Enemy\Enemy.h" />
     <ClInclude Include="Project\Enemy\EnemyManager.h" />
     <ClInclude Include="Project\FollowCamera\FollowCamera.h" />
@@ -482,6 +485,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Enemy\RockEnemy.h" />
     <ClInclude Include="Project\Enemy\EnemyAttackCollision.h" />
     <ClInclude Include="Project\Player\PlayerAttack.h" />
+    <ClInclude Include="Project\Player\Timer\pTimer.h" />
     <ClInclude Include="Project\StageObject\Ground\Groud.h" />
     <ClInclude Include="Record.h" />
   </ItemGroup>

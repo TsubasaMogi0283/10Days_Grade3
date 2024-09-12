@@ -25,6 +25,18 @@ void CrackEffect::Init()
 
 	// マテリアルの初期化
 	mtl_.Initialize();
+
+	// 乱数生成器の作成
+	// ランダムな回転値を生成するための乱数エンジン
+	std::random_device seedGenerator;
+	randomEngine_.seed(seedGenerator());
+
+	// アクティブする
+	isActive_ = true;
+
+	// タイマーの設定
+	timer_.Init(0.0f, 3.0f * 60.0f);
+	timer_.Start();
 }
 
 
@@ -35,13 +47,12 @@ void CrackEffect::Update()
 	transform_.Update();
 
 	// マテリアルの更新
-	mtl_.Update();
+	mtl_.Update(); 
 
-	// アクティブなら
-	if (isActive_) {
-
+	// alpha値を減らす処理
+	if (SubAlpha()) {
+		isActive_ = false;
 	}
- 
 
 #ifdef _DEBUG
 	// ImGuiの描画
@@ -55,6 +66,28 @@ void CrackEffect::Draw3D(Camera& camera, DirectionalLight& light)
 {
 	if (!isActive_) { return; }
 	model_->Draw(transform_, camera, mtl_, light);
+}
+
+
+// alpha値を減らす処理
+bool CrackEffect::SubAlpha()
+{
+	// タイマーの更新
+	timer_.Update();
+
+	// 変化率
+	float t = timer_.GetNowFrame() / timer_.GetEndFrame();
+
+	// イージング処理でalpha値を減らす
+	mtl_.color_.w =
+		1.0f + (0.0f - 1.0f) * Ease::InCubic(t);
+
+	// タイマーが終了したらtrueを返す
+	if (timer_.IsFinish()) {
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -75,3 +108,4 @@ void CrackEffect::DrawImGui()
 		ImGui::TreePop();
 	}
 }
+
