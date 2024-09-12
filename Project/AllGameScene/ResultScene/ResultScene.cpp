@@ -45,10 +45,19 @@ void ResultScene::Initialize(){
 	player_.reset(Sprite::Create(face_, {0.0f,0.0f,0.0f}));
 
 
+	lowestRank_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/character.png");
+	tonkachiRank_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/character1.png");
+	hummerRank_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/character2.png");
+	rankName_ = lowestRank_;
+	rank_.reset(Sprite::Create(rankName_, { 0.0f,0.0f,0.0f }));
+	
+
+
+	//スコア
 	scoreFromRecord_ = Record::GetInstance()->GetTotalScore();
 
 #ifdef _DEBUG
-	scoreFromRecord_ = 100;
+	scoreFromRecord_ = 1500;
 
 #endif // _DEBUG
 
@@ -78,7 +87,7 @@ void ResultScene::Update(GameManager* gameManager){
 	default:
 	case FadeInResult:
 		bNext_->SetInvisible(true);
-
+		rank_->SetInvisible(true);
 		
 		whiteAlpha_ -= 0.01f;
 
@@ -101,7 +110,7 @@ void ResultScene::Update(GameManager* gameManager){
 				roll_->PlayWave(rollHandle_, false);
 			}
 
-			upTime_+=1.0f/60.0f;
+			upTime_+=1.0f/100.0f;
 			if (upTime_ >= 0.0f && upTime_ <= 1.0f) {
 				resultScore_=SingleCalculation::Lerp(0, scoreFromRecord_, upTime_);
 
@@ -145,6 +154,7 @@ void ResultScene::Update(GameManager* gameManager){
 		displayTime_ += 1;
 
 
+		rank_->SetInvisible(false);
 
 		//何やってんだお前！
 		//エッチなものは禁止、焼却！！
@@ -152,6 +162,15 @@ void ResultScene::Update(GameManager* gameManager){
 			face_ = hFace_;
 		}
 
+		if (resultScore_ > 0 && resultScore_ <= 500) {
+			rankName_ = lowestRank_;
+		}
+		else if (resultScore_ > 500 && resultScore_ <= 900) {
+			rankName_ = tonkachiRank_;
+		}
+		else if (resultScore_ > 900 && resultScore_ <= 1500) {
+			rankName_ = hummerRank_;
+		}
 
 
 
@@ -171,6 +190,12 @@ void ResultScene::Update(GameManager* gameManager){
 
 				if (bTriggerTime_ == 1) {
 					condition_ = SelectNextScene;
+
+#ifdef _DEBUG
+					condition_ = ChangeNextSceneFromResult;
+#endif // _DEBUG
+
+
 				}
 
 
@@ -236,17 +261,22 @@ void ResultScene::Update(GameManager* gameManager){
 		if (whiteAlpha_ > 1.0f) {
 			whiteAlpha_ = 1.0f;
 
+#ifdef _DEBUG
+			gameManager->ChangeScene(new TitleScene());
+			return;
+#endif // _DEBUG
 
-			//タイトルへ
-			if (Record::GetInstance()->GetNextSceneFromResult() == ReturnToTitle) {
-				gameManager->ChangeScene(new TitleScene());
-				return;
-			}
-			//ゲームシーンへ
-			else if (Record::GetInstance()->GetNextSceneFromResult() == ReplayGame) {
-				gameManager->ChangeScene(new GameScene());
-				return;
-			}
+
+			////タイトルへ
+			//if (Record::GetInstance()->GetNextSceneFromResult() == ReturnToTitle) {
+			//	gameManager->ChangeScene(new TitleScene());
+			//	return;
+			//}
+			////ゲームシーンへ
+			//else if (Record::GetInstance()->GetNextSceneFromResult() == ReplayGame) {
+			//	gameManager->ChangeScene(new GameScene());
+			//	return;
+			//}
 
 		}
 
@@ -337,6 +367,8 @@ void ResultScene::DrawSprite(){
 		scoreSprites_[i]->Draw(numberQuantity[scorePlaces_[i]]);
 	}
 
+	//ランク
+	rank_->Draw(rankName_);
 
 	//Bボタン
 	bNext_->Draw();

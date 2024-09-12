@@ -153,7 +153,9 @@ private:
 	//ランク
 	std::unique_ptr<Sprite> rank_ = nullptr;
 	uint32_t rankName_ = 0u;
-
+	uint32_t lowestRank_ = 0u;
+	uint32_t tonkachiRank_ = 0u;
+	uint32_t hummerRank_ = 0u;
 
 private:
 	int32_t displayTime_ = 0;
