@@ -48,7 +48,8 @@ void TitleScene::Initialize(){
 	drill_.reset(Model::Create(drillHandle));
 	mtlD_.Initialize();
 	transformD_.Initialize();
-	transformD_.translate_ = { -3.5f,11,35 };
+	transformD_.translate_ = { -0.8f,3.0f,0 };
+	transformD_.scale_ = { 0.2f,0.2f,0.2f };
 	//
 	modelManagerDungeon_ = ModelManager::GetInstance();
 	modelHandleDungeon_ = modelManagerDungeon_->LoadModelFile("Resources/Title", "Dungeon.obj");
@@ -58,7 +59,7 @@ void TitleScene::Initialize(){
 	transformDungeon_.translate_ = { 0,-5,13 };
 	//
 	isPlayScene_ = false;
-	speed = 0.5f;
+	speed = 0.2f;
 }
 
 void TitleScene::Update(GameManager* gameManager){
@@ -113,8 +114,8 @@ void TitleScene::Update(GameManager* gameManager){
 	}
 	if(isPlayScene_ == true){
 		transformD_.translate_.y -= speed;
-		transformD_.rotate_.y -= 0.5f;
-		if (transformD_.translate_.y < 3) {
+		transformD_.rotate_.y -= 0.2f;
+		if (transformD_.translate_.y < 0.8) {
 			speed = 0;
 			transform2_.translate_.y -= 0.1f;
 			if (transform2_.translate_.y < -3) {
@@ -135,11 +136,11 @@ void TitleScene::DrawObject3D()
 	titleModel2_->Draw(transform2_, camera_, mtl2_, directtionalLight_);
 	titleModelB_->Draw(transformB_, camera_, mtlB_, directtionalLight_);
 	
-	
-	
-	titleModelDungeon_->Draw(transformDungeon_, camera_, mtlDungeon_, directtionalLight_);
 	model_->Draw(transformD_, camera_, mtlD_, directtionalLight_);
 	drill_->Draw(transformD_, camera_, mtlD_, directtionalLight_);
+	
+	titleModelDungeon_->Draw(transformDungeon_, camera_, mtlDungeon_, directtionalLight_);
+	
 }
 
 void TitleScene::PreDrawPostEffectFirst(){
