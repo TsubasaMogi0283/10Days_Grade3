@@ -28,9 +28,6 @@ void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle
 	
 }
 
-
-
-
 void EnemyManager::DeleteEnemy(){
 	//敵が生存していなかったら消す
 	enemyes_.remove_if([](Enemy* enemy) {
