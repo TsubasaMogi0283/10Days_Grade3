@@ -74,6 +74,14 @@ public:
 		this->isTimeStart_ = isStart;
 	}
 
+	/// <summary>
+	/// 時間が過ぎたか
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsTimeOver()const {
+		return isTimeOver_;
+	}
+
 
 private:
 	//スコア

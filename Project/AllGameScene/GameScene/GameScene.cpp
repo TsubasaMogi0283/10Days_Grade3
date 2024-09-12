@@ -93,8 +93,8 @@ void GameScene::Initialize() {
 	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
 	
 
-	gameScoreUI_ = std::make_unique<GameUI>();
-	gameScoreUI_->Initialize();
+	gameUI_ = std::make_unique<GameUI>();
+	gameUI_->Initialize();
 
 
 	//衝突判定管理クラスの初期化
@@ -134,6 +134,15 @@ void GameScene::Update(GameManager* gameManager) {
 		gameManager->ChangeScene(new ResultScene());
 		return;
 	}
+	//制限時間が過ぎたらResultへ
+	if (gameUI_->GetIsTimeOver() == true) {
+		gameManager->ChangeScene(new ResultScene());
+		return;
+	}
+
+	
+
+
 
 	/* ----- FollowCamera フォローカメラ ----- */
 	followCamera_->Update();
@@ -191,9 +200,9 @@ void GameScene::Update(GameManager* gameManager) {
 
 #pragma region UI
 	//スコアの設定
-	gameScoreUI_->SetScore(score);
+	gameUI_->SetScore(score);
 	//更新
-	gameScoreUI_->Update();
+	gameUI_->Update();
 #pragma endregion
 
 	//地面の更新
@@ -238,7 +247,7 @@ void GameScene::DrawPostEffect(){
 }
 
 void GameScene::DrawSprite() {
-	gameScoreUI_->Draw();
+	gameUI_->Draw();
 }
 
 GameScene::~GameScene(){
@@ -270,6 +279,6 @@ void GameScene::FuncInput()
 }
 
 void GameScene::PreLoad(){
-	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/FeEnemy", "FeBreak.obj");
-	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
+	ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/FeEnemy", "FeBreak.obj");
+	ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 }

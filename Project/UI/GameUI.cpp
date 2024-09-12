@@ -50,6 +50,7 @@ void GameUI::Update(){
 
 	if (time_ < 0) {
 		time_ = 0;
+		isTimeOver_ = true;
 	}
 
 

@@ -146,7 +146,7 @@ private:
 
 private:
 	//UI
-	std::unique_ptr<GameUI> gameScoreUI_ = nullptr;
+	std::unique_ptr<GameUI> gameUI_ = nullptr;
 	
 };
 
