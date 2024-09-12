@@ -71,6 +71,13 @@ void GameScene::Initialize() {
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(groundModelHandle);
 
+
+	//天球
+	uint32_t skydomeModelHandle = modelManager_->LoadModelFile("Resources/Game/Stage","Stage.obj");
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(skydomeModelHandle);
+
+
 	// Groundの四隅の座標をPlayerに渡す
 	player_->SetGroundCorners(
 		ground_->GetLeftBack(), ground_->GetRightBack(),
@@ -209,6 +216,8 @@ void GameScene::Update(GameManager* gameManager) {
 	//地面の更新
 	ground_->Update();
 
+	skydome_->Update();
+
 	//ライトの更新
 	directtionalLight_.Update();
 }
@@ -226,6 +235,9 @@ void GameScene::DrawObject3D() {
 
 	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
+
+
+	skydome_->Draw(camera_, directtionalLight_);
 
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);

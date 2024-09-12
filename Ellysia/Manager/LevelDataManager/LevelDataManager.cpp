@@ -62,18 +62,18 @@ void LevelDataManager::RecursiveLoad(nlohmann::json& objects) {
 
 
 
-			//コライダーの読み込み
-			nlohmann::json& collider = object["collider"];
-
-			objectData.colliderType = object["type"];
-			//中心座標
-			objectData.center.x = (float)collider["center"][1];
-			objectData.center.y = (float)collider["center"][2];
-			objectData.center.z = -(float)collider["center"][0];
-			//サイズ
-			objectData.size.x = (float)collider["size"][1];
-			objectData.size.y = (float)collider["size"][2];
-			objectData.size.z = (float)collider["size"][0];
+			////コライダーの読み込み
+			//nlohmann::json& collider = object["collider"];
+			//
+			//objectData.colliderType = object["type"];
+			////中心座標
+			//objectData.center.x = (float)collider["center"][1];
+			//objectData.center.y = (float)collider["center"][2];
+			//objectData.center.z = -(float)collider["center"][0];
+			////サイズ
+			//objectData.size.x = (float)collider["size"][1];
+			//objectData.size.y = (float)collider["size"][2];
+			//objectData.size.z = (float)collider["size"][0];
 
 
 			if (object.contains("children")) {

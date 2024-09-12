@@ -202,6 +202,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Enemy\RockEnemy.cpp" />
     <ClCompile Include="Project\Enemy\EnemyAttackCollision.cpp" />
     <ClCompile Include="Project\Player\PlayerAttack.cpp" />
+    <ClCompile Include="Project\StageObject\Skydome\Skydome.cpp" />
     <ClCompile Include="Project\UI\GameUI.cpp" />
     <ClCompile Include="Project\Player\Timer\pTimer.cpp" />
     <ClCompile Include="Project\StageObject\Ground\Groud.cpp" />
@@ -487,6 +488,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Enemy\RockEnemy.h" />
     <ClInclude Include="Project\Enemy\EnemyAttackCollision.h" />
     <ClInclude Include="Project\Player\PlayerAttack.h" />
+    <ClInclude Include="Project\StageObject\Skydome\Skydome.h" />
     <ClInclude Include="Project\UI\GameUI.h" />
     <ClInclude Include="Project\Player\Timer\pTimer.h" />
     <ClInclude Include="Project\Record\GameScoreUI\GameScoreUI.h" />
