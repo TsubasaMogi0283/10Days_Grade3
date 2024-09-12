@@ -72,7 +72,7 @@ private:
 	std::unique_ptr<BackText> back_ = nullptr;
 	///フラグ
 	bool isPlayScene_;
-
+	float speed;
 	//タイトル
 	uint32_t modelHandle_ = 0;
 	std::unique_ptr<Model> titleModel_ = nullptr;
@@ -91,6 +91,11 @@ private:
 	Material mtlB_{};
 	WorldTransform transformB_{};
 	ModelManager* modelManagerB_ = nullptr;
-
+	//
+	std::unique_ptr<Model> model_;
+	std::unique_ptr<Model>drill_ = nullptr;
+	Material mtlD_{};
+	WorldTransform transformD_{};
+	ModelManager* modelManagerD_ = nullptr;
 };
 
