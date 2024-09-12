@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "Sprite.h"
-
 #include "Model.h"
 #include "Camera.h"
 #include <BackText.h>
@@ -55,6 +54,26 @@ public:
 
 
 
+private:
+	enum NumberPlace {
+		//一
+		OnePlace,
+		//十
+		TenPlace,
+		//百
+		HundredPlace,
+		//千
+		ThousandPlace,
+		//万
+		TenThousandPlace,
+	};
+
+
+
+
+
+
+
 
 private:
 
@@ -63,34 +82,24 @@ private:
 	std::unique_ptr<BackText> back_ = nullptr;
 
 
-
-	std::unique_ptr<Sprite> failedTexture_ = nullptr;
-	std::unique_ptr<Sprite> text_ = nullptr;
-
-	std::unique_ptr<Sprite> black_ = nullptr;
-	float transparency_ = 0.0f;
-
-	//暗転している時間
-	uint32_t blackOutTime_ = 0;
-
-	//Bトリガー
-	uint32_t bTriggerTime_ = 0;
-	bool isBTrigger_ = false;
-	bool isReturnTitle = false;
+	//スコア
+	int32_t resultScore_ = 0;
+	int32_t scoreFromRecord_ = 0;
+	bool isSameScore_ = false;
 
 
+	//5桁が最大
+	static const uint32_t SCORE_DIGIT_ = 5u;
+	std::array<std::unique_ptr<Sprite>, SCORE_DIGIT_>scoreSprites_ = { nullptr };
 
+	
 
-	//点滅
-	bool isFlash_ = false;
-	uint32_t flashTime_ = 0;
-	const uint32_t FLASH_TIME_LIMIT_ = 30;
-	//高速点滅
-	bool isFastFlash_ = false;
-	const uint32_t FAST_FLASH_TIME_LIMIT_ = 60;
-	const uint32_t FAST_FLASH_TIME_INTERVAL_ = 3;
-	uint32_t textDisplayCount_ = 0;
-	uint32_t fastFlashTime_ = 0;
+	//位
+	int32_t scorePlaces_[SCORE_DIGIT_] = {};
+	static const uint32_t NUMBER_QUANTITY = 10;
+	//スプライト
+	uint32_t numberQuantity[NUMBER_QUANTITY] = {};
+
 
 };
 
