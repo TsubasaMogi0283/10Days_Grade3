@@ -11,7 +11,7 @@ void GameManager::Initialize() {
 
 	currentGamaScene_ = new TitleScene();
 #ifdef _DEBUG
-	currentGamaScene_ = new GameScene();
+	currentGamaScene_ = new ResultScene();
 
 #endif // _DEBUG
 

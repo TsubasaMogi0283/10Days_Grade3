@@ -20,6 +20,7 @@ void Player::Init()
 {
 	// モデルの初期化
 	model_.reset(Model::Create(handles_.player));
+	//uint32_t drillHandle=
 	//drill_.reset(Model::Create())
 	// トランスフォームの初期化
 	//drillTransform_.Initialize();

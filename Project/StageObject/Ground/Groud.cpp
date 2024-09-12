@@ -10,7 +10,7 @@ void Ground::Initialize(uint32_t modelhandle){
 	//初期化
 	worldTransform_.Initialize();
 	const float SIZE_ = 100.0f;
-	const float scele = 10.0f;
+	const float scele = 8.0f;
 	worldTransform_.scale_ = { .x = scele,.y = scele,.z = scele };
 	material_.Initialize();
 
