@@ -7,6 +7,8 @@
 #include "ModelManager.h"
 
 void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& speed){
+	record_ = Record::GetInstance();
+
 	//モデルの生成
 	model_.reset(Model::Create(modelHandle));
 
@@ -18,16 +20,13 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 
 
 	//半径
-	radius_ = 2.0f;
+	radius_ = 2.5f;
 	//生きているかどうか
 	isAlive_ = true;
 
 	//種類
 	collisionType_ = CollisionType::SphereType;
 
-
-
-	
 
 
 	//判定
@@ -274,10 +273,13 @@ void RockEnemy::Killed(){
 	if (isAlive_ == false) {
 		deleteTime_+=1;
 		if (deleteTime_==1) {
+			//パーティクルを生成
 			ReleaseParticle();
+			//加算
+			record_->AddRockScore();
+
 		}
-		//放出
-		
+		//表示
 		isDisplayParticle_ = true;
 		
 		
@@ -297,7 +299,6 @@ void RockEnemy::Killed(){
 void RockEnemy::ReleaseParticle(){
 
 	RockEnemyParticle* rockParticle = new RockEnemyParticle();
-	//uint32_t particleModelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle","SampleParticle.obj");
 	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 	Vector3 enemyPosition = GetWorldPosition();
 	rockParticle->Initialize(particleModelHandle, enemyPosition);

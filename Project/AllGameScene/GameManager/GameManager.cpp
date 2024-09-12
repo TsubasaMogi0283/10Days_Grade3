@@ -2,14 +2,17 @@
 
 #include "TitleScene/TitleScene.h"
 #include "GameScene/GameScene.h"
+#include "ResultScene/ResultScene.h"
 //シーンファクトリー作った方がよさそう
+
 
 void GameManager::Initialize() {
 	//シーンごとに動作確認したいときはここを変えてね
 
 	currentGamaScene_ = new TitleScene();
-#ifdef _DEBUG
-	//currentGamaScene_ = new GameScene();
+
+	currentGamaScene_ = new ResultScene();
+
 
 #endif // _DEBUG
 
