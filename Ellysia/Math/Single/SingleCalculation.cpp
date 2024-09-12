@@ -24,6 +24,10 @@ float SingleCalculation::Clamp(const float& min, const float& max, const float& 
 	
 }
 
+int32_t SingleCalculation::Lerp(const int32_t& start, const int32_t& end, const float& t) {
+	return static_cast<int32_t>((1.0f - t) * start + t * end);
+}
+
 float SingleCalculation::Lerp(const float& start, const float& end, const float& t){
 	return (1.0f - t) * start + t * end;
 }
