@@ -208,7 +208,7 @@ void GameScene::DrawSpriteBack(){
 void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
-	/* ----- FollowCamera フォローカメラ ----- *
+	//----- FollowCamera フォローカメラ ----- 
 	//followCamera_->Draw3D(camera_, directtionalLight_);
 
 	
@@ -219,7 +219,7 @@ void GameScene::DrawObject3D(){
 	enemyManager_->Draw(camera_, directtionalLight_);
 
 
-	/* ----- Player プレイヤー ----- */
+	//----- Player プレイヤー ----- //
 	player_->Draw3D(camera_, directtionalLight_);
 
 
