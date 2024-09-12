@@ -92,7 +92,7 @@ void Player::Update()
 
 #ifdef _DEBUG
 	// ImGuiの描画
-	DrawImGui();
+	//DrawImGui();
 #endif // _DEBUG
 
 

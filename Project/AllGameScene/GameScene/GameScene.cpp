@@ -115,87 +115,34 @@ void GameScene::Initialize() {
 	back_ = std::make_unique<BackText>();
 	back_->Initialize();
 
+
+
+	uint32_t whiteHandle= TextureManager::GetInstance()->LoadTexture("Resources/Back/White.png");
+	white_.reset(Sprite::Create(whiteHandle, { 0.0f,0.0f,0.0f }));
+
+	uint32_t startHandle = TextureManager::GetInstance()->LoadTexture("Resources/Game/Start.png");
+	startSprite_.reset(Sprite::Create(startHandle, { 0.0f,0.0f,0.0f }));
+
+	uint32_t endhandle = TextureManager::GetInstance()->LoadTexture("Resources/Game/End.png");
+
+	endSprite_.reset(Sprite::Create(endhandle, { 0.0f,0.0f,0.0f }));
+
+	condition_ = FadeIn;
 }
 
 
 void GameScene::Update(GameManager* gameManager) {
 
-	//衝突管理クラスのクリア
-	collisionManager_->ClearList();
-
-
-#ifdef _DEBUG
-
-
-
-	ImGui::Begin("ゲーム");
-	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, 3.0f, -3.0f);
-	ImGui::SliderFloat3("Position", &camera_.translate_.x, -10.0f, 10.0f);
-	ImGui::End();
-#endif // _DEBUG
-
-	//仮置き
-	//スペースキーで次のシーンへ
-	if (Input::GetInstance()->IsTriggerKey(DIK_L) == true) {
-		gameManager->ChangeScene(new ResultScene());
-		return;
-	}
-	//制限時間が過ぎたらResultへ
-	if (gameUI_->GetIsTimeOver() == true) {
-		gameManager->ChangeScene(new ResultScene());
-		return;
-	}
-
 	
+	std::list<Enemy*> enemyes = enemyManager_->GetEnemyList();
+
+	white_->SetTransparency(whiteAlpha_);
 
 
 
 	/* ----- FollowCamera フォローカメラ ----- */
 	followCamera_->Update();
 	camera_ = followCamera_->GetCameraData();
-
-	/* ----- Player プレイヤー ----- */
-	player_->Update();
-
-	//プレイヤーの攻撃
-	if (player_->IsStomping() == true) {
-		collisionManager_->RegisterList(player_->GetPlayerAttack());
-	}
-	//本体
-	collisionManager_->RegisterList(player_.get());
-
-	/* ----- Input 入力関連処理 ----- */
-	FuncInput();
-
-
-#pragma region 敵
-	//リストの取得
-	std::list<Enemy*> enemyes = enemyManager_->GetEnemyList();
-	for (Enemy* enemy : enemyes) {
-		//本体
-		collisionManager_->RegisterList(enemy);
-
-		//攻撃
-		if (enemy->GetIsAttack() == true) {
-			collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
-		}
-
-	}
-
-
-
-	//敵管理クラスの更新
-	Vector3 playerPosition = player_->GetWorldPosition();
-	enemyManager_->SetPlayerPosition(playerPosition);
-
-	enemyManager_->Update();
-	enemyManager_->DeleteEnemy();
-
-
-#pragma endregion
-
-	//衝突チェック
-	collisionManager_->CheckAllCollision();
 
 	//スコア
 	int32_t score = record_->GetTotalScore();
@@ -218,15 +165,145 @@ void GameScene::Update(GameManager* gameManager) {
 
 	//ライトの更新
 
-#ifdef _DEBUG
-	ImGui::Begin("Light");
-	ImGui::SliderFloat3("Directional", &directtionalLight_.direction_.x, -1.0f, 1.0f);
-	ImGui::End();
-#endif // _DEBUG
 
 
 
 	directtionalLight_.Update();
+
+
+	if (isFadeIn_ == true) {
+		whiteAlpha_ -= 0.01f;
+		if (whiteAlpha_ < 0.0f) {
+			whiteAlpha_ = 0.0f;
+
+
+			displayStartTime_ += 1;
+
+			if (displayStartTime_ > 180) {
+				isGamePlay_ = true;
+			}
+
+			
+		}
+	}
+
+	
+	
+	
+
+
+	if (isGamePlay_ == true) {
+		isFadeIn_ = false;
+		gameUI_->SetIsTimeStart(true);
+
+		//衝突管理クラスのクリア
+		collisionManager_->ClearList();
+
+
+
+		//プレイヤーの攻撃
+		if (player_->IsStomping() == true) {
+			collisionManager_->RegisterList(player_->GetPlayerAttack());
+		}
+		//本体
+		collisionManager_->RegisterList(player_.get());
+
+#pragma region 敵
+		//リストの取得
+
+		for (Enemy* enemy : enemyes) {
+			//本体
+			collisionManager_->RegisterList(enemy);
+
+			//攻撃
+			if (enemy->GetIsAttack() == true) {
+				collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
+			}
+
+		}
+
+
+
+		//敵管理クラスの更新
+		Vector3 playerPosition = player_->GetWorldPosition();
+		enemyManager_->SetPlayerPosition(playerPosition);
+
+		enemyManager_->Update();
+		enemyManager_->DeleteEnemy();
+
+
+#pragma endregion
+
+
+		//衝突チェック
+		collisionManager_->CheckAllCollision();
+
+	}
+
+
+
+
+
+
+
+
+	/* ----- Player プレイヤー ----- */
+	player_->Update();
+
+
+	/* ----- FollowCamera フォローカメラ ----- */
+	followCamera_->Update();
+	camera_ = followCamera_->GetCameraData();
+
+
+	
+	/* ----- Input 入力関連処理 ----- */
+	FuncInput();
+
+
+
+
+
+
+
+
+
+	
+
+
+	//制限時間が過ぎたらResultへ
+	if (gameUI_->GetIsTimeOver() == true) {
+		isGamePlay_ = false;
+		isFinishGame_ = true;;
+	}
+
+	if (isFinishGame_ == true) {
+
+		///表示
+		displayFinishTime_ += 1;
+		if (displayFinishTime_ > 180) {
+			isFadeOut = true;
+		}
+
+
+
+
+	}
+
+
+	if (isFadeOut == true) {
+		whiteAlpha_ += 0.01f;
+		if (whiteAlpha_ > 1.0f) {
+			whiteAlpha_ = 1.0f;
+			gameManager->ChangeScene(new ResultScene());
+			return;
+		}
+	}
+
+
+
+	
+	
 }
 
 void GameScene::DrawSpriteBack() {
@@ -264,7 +341,17 @@ void GameScene::DrawPostEffect() {
 }
 
 void GameScene::DrawSprite() {
+
+	if (isFadeIn_ == true&& (displayStartTime_>0&&displayStartTime_<=180)) {
+		startSprite_->Draw();
+	}
+
+	if (isFinishGame_ == true && displayFinishTime_ <= 180) {
+		endSprite_->Draw();
+	}
+
 	gameUI_->Draw();
+	white_->Draw();
 }
 
 GameScene::~GameScene() {
