@@ -227,11 +227,8 @@ void ResultScene::Update(GameManager* gameManager){
 				}
 
 				if (bTriggerTime_ == 1) {
-					condition_ = SelectNextScene;
 
-#ifdef _DEBUG
 					condition_ = ChangeNextSceneFromResult;
-#endif // _DEBUG
 
 
 				}
@@ -299,10 +296,8 @@ void ResultScene::Update(GameManager* gameManager){
 		if (whiteAlpha_ > 1.0f) {
 			whiteAlpha_ = 1.0f;
 
-#ifdef _DEBUG
 			gameManager->ChangeScene(new TitleScene());
 			return;
-#endif // _DEBUG
 
 
 		}
