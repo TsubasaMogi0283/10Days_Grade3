@@ -50,6 +50,13 @@ void TitleScene::Initialize(){
 	transformD_.Initialize();
 	transformD_.translate_ = { -3.5f,11,35 };
 	//
+	modelManagerDungeon_ = ModelManager::GetInstance();
+	modelHandleDungeon_ = modelManagerDungeon_->LoadModelFile("Resources/Title", "Dungeon.obj");
+	titleModelDungeon_.reset(Model::Create(modelHandleDungeon_));
+	mtlDungeon_.Initialize();
+	transformDungeon_.Initialize();
+	transformDungeon_.translate_ = { 0,-5,13 };
+	//
 	isPlayScene_ = false;
 	speed = 0.5f;
 }
@@ -59,12 +66,14 @@ void TitleScene::Update(GameManager* gameManager){
 	transform2_.Update();
 	transformB_.Update();
 	transformD_.Update();
+	transformDungeon_.Update();
 	directtionalLight_.Update();
 	camera_.Update();
 	mtl_.Update();
 	mtl2_.Update();
 	mtlB_.Update();
 	mtlD_.Update();
+	mtlDungeon_.Update();
 	XINPUT_STATE joyState{};
 	joyState;
 	////コントローラーのBを押すと高速点滅
@@ -125,7 +134,10 @@ void TitleScene::DrawObject3D()
 	titleModel_->Draw(transform_, camera_, mtl_, directtionalLight_);
 	titleModel2_->Draw(transform2_, camera_, mtl2_, directtionalLight_);
 	titleModelB_->Draw(transformB_, camera_, mtlB_, directtionalLight_);
-
+	
+	
+	
+	titleModelDungeon_->Draw(transformDungeon_, camera_, mtlDungeon_, directtionalLight_);
 	model_->Draw(transformD_, camera_, mtlD_, directtionalLight_);
 	drill_->Draw(transformD_, camera_, mtlD_, directtionalLight_);
 }
