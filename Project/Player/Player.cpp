@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "FollowCamera/FollowCamera.h"
 #include <algorithm>
+#include <Collider/CollisionConfig.h>
 
 
 // コピーコンストラクタ
@@ -20,7 +21,8 @@ void Player::Init()
 	// トランスフォームの初期化
 	transform_.Initialize();
 	transform_.translate_.y = 1.0f;
-
+	radius_ = 1.0f;
+	transform_.scale_ = { .x = radius_,.y = radius_,.z = radius_ };
 	// マテリアルの初期化
 	mtl_.Initialize();
 
@@ -32,6 +34,22 @@ void Player::Init()
 	stompSpeedEffect_->Init();
 
 #pragma endregion 
+	//種類
+	collisionType_ = CollisionType::SphereType;
+
+
+	//判定
+	//自分
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYER);
+	//敵の攻撃
+	SetCollisionMask(COLLISION_ATTRIBUTE_ENEMY_ATTACK);
+
+	
+
+	//攻撃
+	attack_ = std::make_unique<PlayerAttack>();
+	attack_->Initialize(transform_.translate_);
+
 }
 
 
@@ -57,6 +75,25 @@ void Player::Update()
 		StompFunc();
 	}
 
+	//上昇中
+	if (jumpVel_ >= 0.0f) {
+		isDrop_ = false;
+	}
+	//落下中
+	else {
+		isDrop_ = true;
+	}
+
+	//スピード管理
+	SpeedManagiment();
+
+
+	//色
+	Flashing();
+
+	Vector3 worldPosition = GetWorldPosition();
+	attack_->SetPlayerPosition(worldPosition);
+	attack_->Update();
 
 #ifdef _DEBUG
 	// ImGuiの描画
@@ -86,6 +123,15 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 	// プレイヤー
 	model_->Draw(transform_, camera, mtl_, light);
 
+	//攻撃
+#ifdef _DEBUG
+	if (isDrop_ ==true) {
+		attack_->Draw(camera, light);
+	}
+	
+#endif // _DEBUG
+
+	
 }
 
 
@@ -122,6 +168,17 @@ void Player::FuncStickFunc(XINPUT_STATE joyState)
 	BodyOrientation();
 }
 
+void Player::OnCollision(){
+#ifdef _DEBUG
+	ImGui::Begin("PlayerOnCollision");
+	ImGui::End();
+#endif // _DEBUG
+
+
+	isSpeedDown_ = true;
+
+}
+
 
 // 移動方向を求める
 void Player::CalcMoveDirection()
@@ -156,6 +213,11 @@ void Player::Move()
 		// 移動量を正規化し速さを乗算
 		velocity_ = VectorCalculation::Multiply(VectorCalculation::Normalize(velocity_), moveSpeed_);
 
+		
+		//制限をかける
+		velocity_ = VectorCalculation::Multiply(velocity_, speedMagnification_);
+
+		
 		// 移動
 		transform_.translate_ = VectorCalculation::Add(transform_.translate_, velocity_);
 
@@ -267,6 +329,9 @@ void Player::StompFunc()
 	// 重力をY軸速度に加える
 	stompVel_ -= stompGravoty_ * stompDeltaTime_;
 
+	
+
+
 	// 最大落下速度を制限する
 	const float maxFallSpeed = -30.0f;  // 例: 最大速度
 	if (stompVel_ < maxFallSpeed) {
@@ -296,6 +361,46 @@ void Player::StompExsit()
 	stompVel_ = 0.0f; // Y軸速度をリセット
 }
 
+void Player::SpeedManagiment() {
+	//設定した時間になったら元に戻る
+	//ネストを増やしたくないから外に出す
+	if (speedDownTime_ > 200) {
+		isSpeedDown_ = false;
+	}
+
+	//スピードの制限を付ける
+	//敵の攻撃に衝突したらスピードが激減
+	if (isSpeedDown_ == true) {
+		speedMagnification_ = 0.1f;
+		//時間が増える
+		speedDownTime_ += 1;
+
+	}
+	//通常
+	else {
+		speedDownTime_ = 0;
+		speedMagnification_ = 1.0f;
+	}
+
+	
+
+	
+}
+
+void Player::Flashing(){
+	if ((speedDownTime_ / 12) % 2 == 0) {
+		mtl_.color_.x = 1.0f;
+		mtl_.color_.y = 1.0f;
+		mtl_.color_.z = 1.0f;
+		mtl_.color_.w = 1.0f;
+	}
+	if ((speedDownTime_ / 12) % 2 == 1) {
+		mtl_.color_.x = 0.0f;
+		mtl_.color_.y = 0.0f;
+		mtl_.color_.z = 0.0f;
+		mtl_.color_.w = 0.0f;
+	}
+}
 
 // Imguiの描画
 void Player::DrawImGui()
@@ -337,10 +442,22 @@ void Player::DrawImGui()
 		ImGui::DragFloat("s重力", &stompGravoty_, 0.01f);
 		ImGui::DragFloat("sデルタタイム", &stompDeltaTime_, 0.001f);
 		ImGui::Checkbox("Is_Stomp", &isStomping_);
+		ImGui::Checkbox("Is_Drop", &isDrop_);
 		ImGui::DragFloat("s速度", &stompVel_, 0.0f);
 		ImGui::Text("");
+
+
+
+		ImGui::Text("減速関連数値");
+		ImGui::Checkbox("IsSpeedDown", &isSpeedDown_);
+		ImGui::InputFloat("倍率", &speedMagnification_);
+		ImGui::InputInt("減速時間", &speedDownTime_);
+		ImGui::Text("");
+
 
 		ImGui::TreePop();
 	}
 }
+
+
 

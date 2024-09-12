@@ -8,20 +8,18 @@
 #include <TextureManager.h>
 #include <PipelineManager.h>
 #include "DirectXSetup.h"
-
 #include "Material.h"
 #include "DirectionalLight.h"
 
 #include <VectorCalculation.h>
-
-
 #include <Collision.h>
 #include "SrvManager.h"
+
+
 Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 	Particle3D* particle3D = new Particle3D();
 
-	//Addでやるべきとのこと
-	PipelineManager::GetInstance()->GenerateParticle3DPSO();
+	
 
 #pragma region デフォルトの設定 
 	particle3D->emitter_.count = 100;
@@ -76,6 +74,10 @@ Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 
 
 
+	//カメラ
+	particle3D->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Vector3));
+
+
 	return particle3D;
 
 }
@@ -106,8 +108,8 @@ Particle Particle3D::MakeNewParticle(std::mt19937& randomEngine) {
 
 
 	//Color
-	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
-	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	//std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	particle.color = {1.0f,1.0f,1.0f,1.0f};
 	
 
 
@@ -296,9 +298,16 @@ void Particle3D::Draw(Camera& camera, Material& material, DirectionalLight& dire
 	
 	//更新
 	Update(camera);
+	
+	//PS用のカメラ
+	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPositionData_));
+	Vector3 cameraWorldPosition = {};
+	cameraWorldPosition.x = camera.worldMatrix_.m[3][0];
+	cameraWorldPosition.y = camera.worldMatrix_.m[3][1];
+	cameraWorldPosition.z = camera.worldMatrix_.m[3][2];
 
-
-
+	*cameraPositionData_ = cameraWorldPosition;
+	cameraResource_->Unmap(0, nullptr);
 
 
 	//コマンドを積む
@@ -332,6 +341,10 @@ void Particle3D::Draw(Camera& camera, Material& material, DirectionalLight& dire
 
 	//DirectionalLight
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, directionalLight.bufferResource_->GetGPUVirtualAddress());
+
+
+	//PS用のカメラ
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraResource_->GetGPUVirtualAddress());
 
 
 	//DrawCall

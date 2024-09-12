@@ -22,3 +22,6 @@ const uint32_t COLLISION_ATTRIBUTE_ENEMY = 0b1 << 1;
 const uint32_t COLLISION_ATTRIBUTE_ENEMY_ATTACK = 0b1 << 2;
 
 
+//プレイヤーの攻撃
+const uint32_t COLLISION_ATTRIBUTE_PLAYER_ATTACK = 0b1<<3;
+

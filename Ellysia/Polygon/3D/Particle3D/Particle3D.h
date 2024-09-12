@@ -168,7 +168,7 @@ private:
 	int32_t instanceCount_ = 1;
 
 
-
+	//インスタンス
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
 	//最大数
@@ -201,4 +201,9 @@ private:
 	float velocityY_ = 1.2f;
 
 
+
+	//インスタンス
+	ComPtr<ID3D12Resource>cameraResource_ = nullptr;
+	Vector3* cameraPositionData_ = {};
+	Vector3 cameraPosition_ = {};
 };

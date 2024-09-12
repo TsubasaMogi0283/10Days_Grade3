@@ -15,7 +15,7 @@ void ResultScene::Update(GameManager* gameManager){
 
 
 #ifdef _DEBUG
-	ImGui::Begin("負け");
+	ImGui::Begin("結果");
 	ImGui::End();
 #endif // _DEBUG
 
@@ -36,12 +36,12 @@ void ResultScene::DrawObject3D()
 {
 }
 
-void ResultScene::PreDrawPostEffectFirst()
-{
+void ResultScene::PreDrawPostEffectFirst(){
+	back_->PreDraw();
 }
 
-void ResultScene::DrawPostEffect()
-{
+void ResultScene::DrawPostEffect(){
+	back_->Draw();
 }
 
 void ResultScene::DrawSprite(){

@@ -122,7 +122,7 @@ void FollowCamera::FollowFunc()
 	offset_ = VectorCalculation::TransformCalculation(offset_, rotateMat);
 
 	// プレイヤーの位置にオフセットを加えてカメラの位置を更新
-	camera_.translate_ = VectorCalculation::Add(player_->GetWorldPos(), offset_);
+	camera_.translate_ = VectorCalculation::Add(player_->GetWorldPosition(), offset_);
 
 	// Yの位置だけ固定
 	camera_.translate_.y = constOffset_.y;

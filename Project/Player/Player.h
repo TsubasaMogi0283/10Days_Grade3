@@ -9,6 +9,8 @@
 #include "Func/PlayerFunc.h"
 #include "Effects/StompSpeed/StompSpeed.h"
 
+#include "PlayerAttack.h"
+#include "Collider/Collider.h"
 
 // 前方宣言
 struct Camera;
@@ -23,7 +25,7 @@ struct PlayerAssetsHandle {
 
 
 /* Playerクラス */
-class Player {
+class Player :public Collider{
 
 public:
 
@@ -45,14 +47,19 @@ public:
 	// stick入力時の処理
 	void FuncStickFunc(XINPUT_STATE joyState);
 
+	/// <summary>
+	/// 衝突
+	/// </summary>
+	void OnCollision()override;
 
 #pragma region Accessor アクセッサ
 
 	// ワールド座標の取得
-	Vector3 GetWorldPos() const {
+	Vector3 GetWorldPosition() override {
 		return { transform_.worldMatrix_.m[3][0], transform_.worldMatrix_.m[3][1], transform_.worldMatrix_.m[3][2] };
 	}
-	
+
+
 	// Groundの四隅
 	void SetGroundCorners(Vector3 LB, Vector3 RB, Vector3 LF, Vector3 RF) {
 		groundCorners_.push_back(LB);
@@ -72,6 +79,22 @@ public:
 
 	// ストンプ中か
 	bool IsStomping() const { return this->isStomping_; }
+
+	/// <summary>
+	/// 攻撃の当たり判定を取得
+	/// </summary>
+	/// <returns></returns>
+	PlayerAttack* GetPlayerAttack() const{
+		return attack_.get();
+	}
+
+	/// <summary>
+	/// 落下中かどうか
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsDrop()const {
+		return isDrop_;
+	}
 
 #pragma endregion 
 
@@ -114,6 +137,15 @@ private:
 	// Imguiの描画
 	void DrawImGui();
 
+	/// <summary>
+	/// スピード管理
+	/// </summary>
+	void SpeedManagiment();
+
+	/// <summary>
+	/// 点滅
+	/// </summary>
+	void Flashing();
 
 private:
 
@@ -168,10 +200,25 @@ private:
 	// Groundの四隅座標
 	std::vector<Vector3> groundCorners_{};
 
+	//落下しているか
+	bool isDrop_ = false;
+
+	//移動スピードが減るかどうか
+	bool isSpeedDown_ = false;
+	//スピード倍率
+	float speedMagnification_ = 1.0f;
+	//減速中の時間
+	int speedDownTime_ = 0;
+
 	// キルストリーク
 	bool isKillStreak_ = false;
 	int killStrealCount_ = 0;
 	
+
+	//当たり判定
+	std::unique_ptr<PlayerAttack>attack_ = nullptr;
+
+
 
 #pragma region System システム
 

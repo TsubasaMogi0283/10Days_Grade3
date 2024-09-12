@@ -140,6 +140,13 @@ public:
 		return attackCollision_;
 	}
 
+	/// <summary>
+	/// 攻撃しているかどうか
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsAttack()const {
+		return isAttack_;
+	}
 
 protected:
 	//モデル

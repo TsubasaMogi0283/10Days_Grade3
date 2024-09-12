@@ -748,6 +748,10 @@ void PipelineManager::GenerateModelPSO() {
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
+
+
+
+
 	//ブレンドモードの選択
 	//switchでやった方が楽でしょう
 	switch (PipelineManager::GetInstance()->selectModelBlendMode_) {
@@ -837,7 +841,7 @@ void PipelineManager::GenerateModelPSO() {
 	//RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	//裏面(時計回り)を表示しない
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	//三角形の中を塗りつぶす
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
@@ -1334,7 +1338,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	D3D12_ROOT_PARAMETER rootParameters[6] = {};
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -1412,6 +1416,14 @@ void PipelineManager::GenerateParticle3DPSO() {
 	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	//レジスタ番号1を使う
 	rootParameters[4].Descriptor.ShaderRegister = 1;
+	
+	//PS用のカメラ
+	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//PixelShaderで使う
+	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号1を使う
+	rootParameters[5].Descriptor.ShaderRegister = 2;
+
 
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};

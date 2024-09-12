@@ -20,7 +20,7 @@ Ellysia* Ellysia::GetInstance() {
 
 void Ellysia::Initialize(){
 	//ここでタイトルバーの名前を決めてね
-	const wchar_t* titleBarName = L"静寂の霊園";
+	const wchar_t* titleBarName = L"3025_脳天一撃";
 	//ウィンドウのサイズを決める
 	const int WINDOW_SIZE_WIDTH_ = 1280;
 	const int WINDOW_SIZE_HEIGHT_ = 720;
@@ -57,6 +57,13 @@ void Ellysia::Initialize(){
 	ImGuiManager::GetInstance()->Initialize();
 	
 #endif
+
+	//いずれSetModeBlendをなくしてGenerateModelPSOの所で指定できるようにしたい
+	PipelineManager::GetInstance()->SetModelBlendMode(1);
+	PipelineManager::GetInstance()->GenerateModelPSO();
+
+	//Addでやるべきとのこと
+	PipelineManager::GetInstance()->GenerateParticle3DPSO();
 
 	//Input
 	Input::GetInstance()->Initialize();
