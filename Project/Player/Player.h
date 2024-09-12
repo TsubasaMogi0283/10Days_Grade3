@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "Model.h"
 #include "WorldTransform.h"
 #include "Material.h"
@@ -8,10 +10,12 @@
 #include "Matrix4x4Calculation.h"
 #include "Func/PlayerFunc.h"
 #include "Effects/StompSpeed/StompSpeed.h"
+#include "Effects/CrackEffect/CrackEffect.h"
 
 #include "PlayerAttack.h"
 #include "Collider/Collider.h"
 #include "Record/Record.h"
+
 
 // 前方宣言
 struct Camera;
@@ -22,6 +26,7 @@ class FollowCamera;
 struct PlayerAssetsHandle {
 	uint32_t player;
 	uint32_t stompSpeed;
+	uint32_t crack;
 };
 
 
@@ -135,6 +140,12 @@ private:
 	// ストンプ終了処理
 	void StompExsit();
 
+	// 亀裂インスタンスの作成&配列追加
+	void AddNewCrack();
+
+	// レベルに応じた亀裂のスケールの計算
+	float CalcCrackScaleForLevel(int level) const;
+
 	// Imguiの描画
 	void DrawImGui();
 
@@ -229,13 +240,23 @@ private:
 	// デッドゾーン
 	const float DZone_ = 0.2f;
 
+	// 乱数生成器
+	std::mt19937 randomEngine_;
+
 #pragma endregion 
 
 
 private: // エフェクト
 
-	// StompSpeedEffect
-	std::unique_ptr<pEffect::StompSpeed> stompSpeedEffect_;
+	// 亀裂エフェクト
+	//std::unique_ptr<CrackEffect> crackEffect_;
+	// 亀裂エフェクト配列
+	std::list<std::shared_ptr<CrackEffect>> cracks_;
+
+	// 亀裂基本スケール
+	float baseCrackScale_ = 5.0f;
+	// 成長率
+	float crackScaleGrowScale_ = 1.2f;
 
 
 private: // フォローカメラ

@@ -48,6 +48,7 @@ void GameScene::Initialize() {
 	PlayerAssetsHandle handles = {
 		.player = modelManager_->LoadModelFile("Resources/Player", "Player.obj"),
 		.stompSpeed = modelManager_->LoadModelFile("Resources/Player/Effects/StompSpeedEffect", "StompSpeedEffect.obj"),
+		.crack = modelManager_->LoadModelFile("Resources/Player/Effects/CrackEffect", "CrackEffect.obj"),
 	};
 	player_ = std::make_unique<Player>(handles);
 	player_->Init();
@@ -60,7 +61,7 @@ void GameScene::Initialize() {
 	//平行光源
 	directtionalLight_.Initialize();
 	directtionalLight_.direction_ = { .x = 0.0f,.y = -1.0f,.z = 0.0f };
-	
+
 
 
 
@@ -72,12 +73,12 @@ void GameScene::Initialize() {
 
 	// Groundの四隅の座標をPlayerに渡す
 	player_->SetGroundCorners(
-		ground_->GetLeftBack(), ground_->GetRightBack(), 
+		ground_->GetLeftBack(), ground_->GetRightBack(),
 		ground_->GetLeftFront(), ground_->GetRightFront());
 
 	//敵
-	uint32_t rockEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/RockEnemy","Rock.obj");
-	uint32_t feEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/FeEnemy","Fe.obj");
+	uint32_t rockEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/RockEnemy", "Rock.obj");
+	uint32_t feEnemyModelhandle = modelManager_->LoadModelFile("Resources/Game/Enemy/FeEnemy", "Fe.obj");
 
 	//ステージの座標を取得
 	Vector3 stageLeftBack = ground_->GetLeftBack();
@@ -91,7 +92,7 @@ void GameScene::Initialize() {
 	enemyManager_->SetStageRectPosition(stageLeftBack, stageRightBack, stageLeftFront, stageRightFront);
 
 	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
-	
+
 
 	gameUI_ = std::make_unique<GameUI>();
 	gameUI_->Initialize();
@@ -99,7 +100,7 @@ void GameScene::Initialize() {
 
 	//衝突判定管理クラスの初期化
 	collisionManager_ = std::make_unique<CollisionManager>();
-	
+
 
 	//平行光源
 	directtionalLight_.Initialize();
@@ -147,7 +148,7 @@ void GameScene::Update(GameManager* gameManager) {
 	/* ----- FollowCamera フォローカメラ ----- */
 	followCamera_->Update();
 	camera_ = followCamera_->GetCameraData();
-	
+
 	/* ----- Player プレイヤー ----- */
 	player_->Update();
 
@@ -162,7 +163,7 @@ void GameScene::Update(GameManager* gameManager) {
 	FuncInput();
 
 
-	#pragma region 敵
+#pragma region 敵
 	//リストの取得
 	std::list<Enemy*> enemyes = enemyManager_->GetEnemyList();
 	for (Enemy* enemy : enemyes) {
@@ -173,9 +174,9 @@ void GameScene::Update(GameManager* gameManager) {
 		if (enemy->GetIsAttack() == true) {
 			collisionManager_->RegisterList(enemy->GetEnemyAttackCollision());
 		}
-		
+
 	}
-	
+
 
 
 	//敵管理クラスの更新
@@ -184,7 +185,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 	enemyManager_->Update();
 	enemyManager_->DeleteEnemy();
-	
+
 
 #pragma endregion
 
@@ -212,37 +213,35 @@ void GameScene::Update(GameManager* gameManager) {
 	directtionalLight_.Update();
 }
 
-void GameScene::DrawSpriteBack(){
+void GameScene::DrawSpriteBack() {
 
 }
 
-void GameScene::DrawObject3D(){
+void GameScene::DrawObject3D() {
 	//skydome_->Draw(camera_);
 
-	//* ----- FollowCamera フォローカメラ ----- *
+	//----- FollowCamera フォローカメラ ----- 
 	//followCamera_->Draw3D(camera_, directtionalLight_);
 
-	
+
 	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
-	
+
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);
 
 
-	// ----- Player プレイヤー ----- 
+	//----- Player プレイヤー ----- //
 	player_->Draw3D(camera_, directtionalLight_);
 
 
-	
-
 }
 
-void GameScene::PreDrawPostEffectFirst(){
+void GameScene::PreDrawPostEffectFirst() {
 	back_->PreDraw();
 }
 
-void GameScene::DrawPostEffect(){
+void GameScene::DrawPostEffect() {
 	back_->Draw();
 }
 
@@ -250,7 +249,7 @@ void GameScene::DrawSprite() {
 	gameUI_->Draw();
 }
 
-GameScene::~GameScene(){
+GameScene::~GameScene() {
 
 }
 
