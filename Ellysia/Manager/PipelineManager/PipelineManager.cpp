@@ -755,7 +755,6 @@ void PipelineManager::GenerateModelPSO() {
 	//ブレンドモードの選択
 	//switchでやった方が楽でしょう
 	switch (PipelineManager::GetInstance()->selectModelBlendMode_) {
-
 	case BlendModeNone:
 		//ブレンド無し
 		blendDesc.RenderTarget[0].BlendEnable = false;
@@ -769,9 +768,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 
-
-
-
 		break;
 
 
@@ -781,11 +777,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-
-
-
-
-
 
 		break;
 
@@ -817,10 +808,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-
-
-
-
 
 		break;
 
@@ -865,9 +852,7 @@ void PipelineManager::GenerateModelPSO() {
 	graphicsPipelineStateDesc.pRootSignature = PipelineManager::GetInstance()->modelPSO_.rootSignature_.Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { PipelineManager::GetInstance()->modelPSO_.vertexShaderBlob_->GetBufferPointer(),PipelineManager::GetInstance()->modelPSO_.vertexShaderBlob_->GetBufferSize() };
-	//vertexShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.PS = { PipelineManager::GetInstance()->modelPSO_.pixelShaderBlob_->GetBufferPointer(),PipelineManager::GetInstance()->modelPSO_.pixelShaderBlob_->GetBufferSize() };
-	//pixelShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.BlendState = blendDesc;
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
 
@@ -1532,7 +1517,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	//今回はカリングをオフにする
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	//三角形の中を塗りつぶす
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
@@ -1598,9 +1583,6 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 void PipelineManager::GenarateFullScreenPSO() {
 
-	//////////PSO
-	// 
-	// 
 	////RootSignatureを作成
 	//RootSignature・・ShaderとResourceをどのように関連づけるかを示したオブジェクトである
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
@@ -1631,10 +1613,6 @@ void PipelineManager::GenarateFullScreenPSO() {
 	rootParameters[1].Descriptor.ShaderRegister = 1;
 
 
-
-	//応急処置でTextureを無理矢理2番目になるようにする
-	//そろわなくなってしまう
-	//いつか直す
 
 	//Texture
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
