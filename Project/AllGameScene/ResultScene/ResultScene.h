@@ -155,7 +155,20 @@ private:
 	uint32_t rankName_ = 0u;
 	uint32_t lowestRank_ = 0u;
 	uint32_t tonkachiRank_ = 0u;
+	uint32_t drillRank_ = 0u;
 	uint32_t hummerRank_ = 0u;
+	uint32_t pbRank_ = 0u;
+
+	//コメント
+	std::unique_ptr<Sprite> speech_= nullptr;
+	std::unique_ptr<Sprite> comment_ = nullptr;
+
+	uint32_t commentHandle_ = 0u;
+	uint32_t deadComment_ = 0u;
+	uint32_t tonkachiComment_ = 0u;
+	uint32_t hummerComment_ = 0u;
+	uint32_t drillComment_ = 0u;
+	uint32_t pbComment_ = 0u;
 
 private:
 	int32_t displayTime_ = 0;

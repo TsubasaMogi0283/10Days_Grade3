@@ -49,16 +49,38 @@ void ResultScene::Initialize(){
 	lowestRank_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/character.png");
 	tonkachiRank_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/character1.png");
 	hummerRank_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/character2.png");
+	drillRank_= TextureManager::GetInstance()->LoadTexture("Resources/Result/character3.png");
+	pbRank_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/character4.png");
 	rankName_ = lowestRank_;
 	rank_.reset(Sprite::Create(rankName_, { 0.0f,0.0f,0.0f }));
 	
 
+	
+	
+
+	uint32_t speechHandle= TextureManager::GetInstance()->LoadTexture("Resources/Result/Chara/comment.png");
+	//吹き出し
+	speech_.reset(Sprite::Create(speechHandle, { 0.0f,0.0f,0.0f }));
+	
+
+
+	//コメント
+
+	deadComment_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/Chara/comment1.png");
+	tonkachiComment_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/Chara/comment2.png");
+	hummerComment_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/Chara/comment3.png");
+	drillComment_= TextureManager::GetInstance()->LoadTexture("Resources/Result/Chara/comment4.png");
+	pbComment_ = TextureManager::GetInstance()->LoadTexture("Resources/Result/Chara/comment5.png");
+
+	commentHandle_ = deadComment_;
+	comment_.reset(Sprite::Create(commentHandle_, { 0.0f,0.0f,0.0f }));
+	comment_->SetInvisible(true);
 
 	//スコア
 	scoreFromRecord_ = Record::GetInstance()->GetTotalScore();
 
 #ifdef _DEBUG
-	scoreFromRecord_ = 1500;
+	scoreFromRecord_ = 5000;
 
 #endif // _DEBUG
 
@@ -157,23 +179,37 @@ void ResultScene::Update(GameManager* gameManager){
 
 
 		rank_->SetInvisible(false);
+		comment_->SetInvisible(false);
 
 		//何やってんだお前！
 		//エッチなものは禁止、焼却！！
+		//岩くず
 		if (resultScore_ == 0) {
 			face_ = hFace_;
-		}
-
-		if (resultScore_ > 0 && resultScore_ <= 500) {
 			rankName_ = lowestRank_;
-		}
-		else if (resultScore_ > 500 && resultScore_ <= 900) {
-			rankName_ = tonkachiRank_;
-		}
-		else if (resultScore_ > 900 && resultScore_ <= 1500) {
-			rankName_ = hummerRank_;
+			commentHandle_ = deadComment_;
 		}
 
+
+		//トンカチ
+		else if (resultScore_ > 0 && resultScore_ <= 1500) {
+			rankName_ = tonkachiRank_;
+			commentHandle_ = tonkachiComment_;
+		}
+		//ハンマー
+		else if (resultScore_ > 1500 && resultScore_ <= 2500) {
+			rankName_ = hummerRank_;
+			commentHandle_ = hummerComment_;
+		}
+		//ドリル
+		else if (resultScore_ > 2500 && resultScore_ <= 4000) {
+			rankName_ = drillRank_;
+			commentHandle_ = drillComment_;
+		}
+		else if (resultScore_ > 4000 ) {
+			rankName_ = pbRank_;
+			commentHandle_ = pbComment_;
+		}
 
 
 		//次へ進む
@@ -269,17 +305,6 @@ void ResultScene::Update(GameManager* gameManager){
 #endif // _DEBUG
 
 
-			////タイトルへ
-			//if (Record::GetInstance()->GetNextSceneFromResult() == ReturnToTitle) {
-			//	gameManager->ChangeScene(new TitleScene());
-			//	return;
-			//}
-			////ゲームシーンへ
-			//else if (Record::GetInstance()->GetNextSceneFromResult() == ReplayGame) {
-			//	gameManager->ChangeScene(new GameScene());
-			//	return;
-			//}
-
 		}
 
 
@@ -372,6 +397,11 @@ void ResultScene::DrawSprite(){
 	//ランク
 	rank_->Draw(rankName_);
 
+	speech_->Draw();
+
+
+
+	comment_->Draw(commentHandle_);
 	//Bボタン
 	bNext_->Draw();
 

@@ -46,7 +46,7 @@ void GameScene::Initialize() {
 
 	/* ----- Player プレイヤー ----- */
 	PlayerAssetsHandle handles = {
-		.player = modelManager_->LoadModelFile("Resources/Player", "Player.obj"),
+		.player = modelManager_->LoadModelFile("Resources/Game/Player/Head","Head.obj"),
 		.stompSpeed = modelManager_->LoadModelFile("Resources/Player/Effects/StompSpeedEffect", "StompSpeedEffect.obj"),
 		.crack = modelManager_->LoadModelFile("Resources/Player/Effects/CrackEffect", "CrackEffect.obj"),
 	};
@@ -62,14 +62,21 @@ void GameScene::Initialize() {
 	directtionalLight_.Initialize();
 	directtionalLight_.direction_ = { .x = 0.0f,.y = -1.0f,.z = 0.0f };
 
-
+	
 
 
 
 	//地面
-	uint32_t groundModelHandle = modelManager_->LoadModelFile("Resources/Sample/Ground", "Ground.obj");
+	uint32_t groundModelHandle = modelManager_->LoadModelFile("Resources/Game/Stage","Ground.obj");
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(groundModelHandle);
+
+
+	//天球
+	uint32_t skydomeModelHandle = modelManager_->LoadModelFile("Resources/Game/Stage","Stage.obj");
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(skydomeModelHandle);
+
 
 	// Groundの四隅の座標をPlayerに渡す
 	player_->SetGroundCorners(
@@ -104,8 +111,6 @@ void GameScene::Initialize() {
 
 	//平行光源
 	directtionalLight_.Initialize();
-	directtionalLight_.direction_ = { .x = 0.0f,.y = -1.0f,.z = 0.0f };
-
 	///ポストエフェクト
 	back_ = std::make_unique<BackText>();
 	back_->Initialize();
@@ -209,7 +214,18 @@ void GameScene::Update(GameManager* gameManager) {
 	//地面の更新
 	ground_->Update();
 
+	skydome_->Update();
+
 	//ライトの更新
+
+#ifdef _DEBUG
+	ImGui::Begin("Light");
+	ImGui::SliderFloat3("Directional", &directtionalLight_.direction_.x, -1.0f, 1.0f);
+	ImGui::End();
+#endif // _DEBUG
+
+
+
 	directtionalLight_.Update();
 }
 
@@ -218,15 +234,17 @@ void GameScene::DrawSpriteBack() {
 }
 
 void GameScene::DrawObject3D() {
-	//skydome_->Draw(camera_);
 
 	//----- FollowCamera フォローカメラ ----- 
 	//followCamera_->Draw3D(camera_, directtionalLight_);
 
+	skydome_->Draw(camera_, directtionalLight_);
 
 	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
 
+
+	
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);
 

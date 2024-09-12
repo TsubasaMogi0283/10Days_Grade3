@@ -23,6 +23,7 @@
 #include <Enemy/EnemyManager.h>
 #include <Collider/CollisionManager.h>
 #include "UI/GameUI.h"
+#include <StageObject/Skydome/Skydome.h>
 
 
 
@@ -143,11 +144,34 @@ private:
 	std::unique_ptr<Ground>ground_ = nullptr;
 
 
+	std::unique_ptr<Skydome>skydome_ = nullptr;
+
+
 
 private:
 	//UI
 	std::unique_ptr<GameUI> gameUI_ = nullptr;
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 
