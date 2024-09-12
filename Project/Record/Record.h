@@ -29,6 +29,12 @@ public:
 public:
 
 	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+
+
+	/// <summary>
 	/// スコアをリセット
 	/// </summary>
 	void ResetScore();
@@ -56,6 +62,38 @@ public:
 		return totalScore_;
 	}
 
+
+
+
+public:
+
+	/// <summary>
+	/// 一増やす
+	/// </summary>
+	void AddOnePlace();
+
+	/// <summary>
+	/// 十増やす
+	/// </summary>
+	void AddTenPlace();
+
+	/// <summary>
+	/// 百増やす
+	/// </summary>
+	void AddHundredPlace();
+
+	/// <summary>
+	/// 千増やす
+	/// </summary>
+	void AddThousandPlace();
+
+	/// <summary>
+	/// 万増やす
+	/// </summary>
+	void AddTenThousandPlace();
+
+
+
 private:
 	//合計スコア
 	int32_t totalScore_ = 0;
@@ -65,9 +103,7 @@ private:
 	//鉄のスコア
 	const int32_t FE_POINT_ = 200;
 	//減点
-	const int32_t DEDUCATION_POINT_ = -100;
-
-
+	const int32_t DEDUCATION_POINT_ = -50;
 
 
 };

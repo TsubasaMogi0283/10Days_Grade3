@@ -61,7 +61,8 @@ void Ellysia::Initialize(){
 	PipelineManager::GetInstance()->SetModelBlendMode(1);
 	PipelineManager::GetInstance()->GenerateModelPSO();
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
-
+	PipelineManager::GetInstance()->SetSpriteBlendMode(1);
+	PipelineManager::GetInstance()->GenerateSpritePSO();
 	//Input
 	Input::GetInstance()->Initialize();
 	

@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <array>
+#include <memory>
+
 #include "Sprite.h"
 
 
@@ -63,7 +66,27 @@ private:
 	//表示させるかどうか
 	bool isDisplay_ = false;
 
+	//5桁が最大
+	static const uint32_t DIGIT_ = 5u;
+	std::array<std::unique_ptr<Sprite>, DIGIT_>sprites_ = {nullptr};
 
+	enum NumberPlace {
+		//一
+		OnePlace,
+		//十
+		TenPlace,
+		//百
+		HundredPlace,
+		//千
+		ThousandPlace,
+		//万
+		TenThousandPlace,
+	};
+
+	//位
+	int32_t places_[DIGIT_] = {};
+	static const uint32_t NUMBER_QUANTITY = 10;
+	uint32_t numberQuantity[NUMBER_QUANTITY] = {};
 
 };
 

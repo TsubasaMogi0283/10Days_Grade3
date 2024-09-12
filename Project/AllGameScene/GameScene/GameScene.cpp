@@ -25,7 +25,7 @@ GameScene::GameScene()
 	tInput_ = TInput::GetInstance();
 
 	//記録
-	record_ = Record::GetInstance();;
+	record_ = Record::GetInstance();
 
 #pragma endregion 
 }
@@ -88,7 +88,8 @@ void GameScene::Initialize() {
 	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
 	
 
-
+	gameScoreUI_ = std::make_unique<GameScoreUI>();
+	gameScoreUI_->Initialize();
 
 
 	//衝突判定管理クラスの初期化
@@ -176,17 +177,19 @@ void GameScene::Update(GameManager* gameManager) {
 	//衝突チェック
 	collisionManager_->CheckAllCollision();
 
-
 	//スコア
 	int32_t score = record_->GetTotalScore();
 
-#ifdef _DEBUG
-	ImGui::Begin("Score"); 
-	ImGui::InputInt("Value", &score);
-	ImGui::End();
-#endif // _DEBUG
 
 
+	record_->Update();
+
+#pragma region UI
+	//スコアの設定
+	gameScoreUI_->SetScore(score);
+	//更新
+	gameScoreUI_->Update();
+#pragma endregion
 
 	//地面の更新
 	ground_->Update();
@@ -230,7 +233,7 @@ void GameScene::DrawPostEffect(){
 }
 
 void GameScene::DrawSprite() {
-
+	gameScoreUI_->Draw();
 }
 
 GameScene::~GameScene(){
