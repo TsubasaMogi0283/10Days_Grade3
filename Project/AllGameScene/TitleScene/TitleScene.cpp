@@ -41,6 +41,14 @@ void TitleScene::Initialize(){
 	mtlB_.Initialize();
 	transformB_.Initialize();
 	transformB_.translate_ = { 0,-2,0 };
+	///ダンジョン
+	modelManagerDungeon_ = ModelManager::GetInstance();
+	modelHandleDungeon_ = modelManagerDungeon_->LoadModelFile("Resources/Title", "Dungeon.obj");
+	titleModelDungeon_.reset(Model::Create(modelHandleDungeon_));
+	mtlDungeon_.Initialize();
+	transformDungeon_.Initialize();
+	transformDungeon_.translate_ = { 0,-5,13 };
+
 	isPlayScene_ = false;
 }
 
@@ -48,11 +56,13 @@ void TitleScene::Update(GameManager* gameManager){
 	transform_.Update();
 	transform2_.Update();
 	transformB_.Update();
+	transformDungeon_.Update();
 	directtionalLight_.Update();
 	camera_.Update();
 	mtl_.Update();
 	mtl2_.Update();
 	mtlB_.Update();
+	mtlDungeon_.Update();
 	XINPUT_STATE joyState{};
 	joyState;
 	////コントローラーのBを押すと高速点滅
@@ -77,7 +87,7 @@ void TitleScene::Update(GameManager* gameManager){
 
 #ifdef _DEBUG
 	ImGui::Begin("タイトル"); 
-	ImGui::SliderFloat3("Position", &transform2_.translate_.y, -10.0f, 10.0f);
+	ImGui::SliderFloat3("Position", &transformDungeon_.translate_.x, -100.0f, 100.0f);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -92,7 +102,9 @@ void TitleScene::Update(GameManager* gameManager){
 	}
 	if(isPlayScene_ == true){
 		transform2_.translate_.y -= 0.1f;
-		if (transform2_.translate_.y < -3) {
+
+		if (transform2_.translate_.y < -4) {
+
 			gameManager->ChangeScene(new GameScene());
 		}
 	}
@@ -108,6 +120,7 @@ void TitleScene::DrawObject3D()
 	titleModel_->Draw(transform_, camera_, mtl_, directtionalLight_);
 	titleModel2_->Draw(transform2_, camera_, mtl2_, directtionalLight_);
 	titleModelB_->Draw(transformB_, camera_, mtlB_, directtionalLight_);
+	titleModelDungeon_->Draw(transformDungeon_, camera_, mtlDungeon_, directtionalLight_);
 }
 
 void TitleScene::PreDrawPostEffectFirst(){

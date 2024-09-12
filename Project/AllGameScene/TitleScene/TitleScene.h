@@ -91,6 +91,12 @@ private:
 	Material mtlB_{};
 	WorldTransform transformB_{};
 	ModelManager* modelManagerB_ = nullptr;
+	///ダンジョン
+	uint32_t modelHandleDungeon_ = 0;
+	std::unique_ptr<Model> titleModelDungeon_ = nullptr;
+	Material mtlDungeon_{};
+	WorldTransform transformDungeon_{};
+	ModelManager* modelManagerDungeon_ = nullptr;
 
 };
 
