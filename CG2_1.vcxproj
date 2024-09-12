@@ -203,6 +203,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Record\GameScoreUI\GameScoreUI.cpp" />
     <ClCompile Include="Project\StageObject\Ground\Groud.cpp" />
     <ClCompile Include="Project\Record\Record.cpp" />
+    <ClCompile Include="Project\TextureLoader\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\AnimationObject3D\AnimationObject3D.PS.hlsl">
@@ -484,6 +485,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Record\GameScoreUI\GameScoreUI.h" />
     <ClInclude Include="Project\StageObject\Ground\Groud.h" />
     <ClInclude Include="Project\Record\Record.h" />
+    <ClInclude Include="Project\TextureLoader\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
