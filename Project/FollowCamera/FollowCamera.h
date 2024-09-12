@@ -7,6 +7,9 @@
 #include "VectorCalculation.h"
 #include "Matrix4x4Calculation.h"
 #include "Camera.h"
+#include "../Player/Timer/pTimer.h"
+
+#include <random>
 
 
 // 前方宣言
@@ -34,6 +37,9 @@ public:
 
 	// stick入力時の処理
 	void FuncStickFunc(XINPUT_STATE joyState);
+
+	// シェイクの処理
+	void IsShake(uint32_t count);
 
 
 #pragma region Accessor アクセッサ
@@ -66,6 +72,18 @@ private:
 
 	// 右方ベクトルを求める
 	void CalcRightVec();
+
+	// シェイクのエンター処理
+	void EnterShakeFunc();
+
+	// シェイク処理
+	void ShakeFunc();
+
+	// シェイクの終了処理
+	void ExsitShakeFunc();
+
+	// レベルに応じてシェイクの強さの計算
+	float CalcShakeIntensityForLevel(int level) const;
 
 	// ImGuiの描画
 	void DrawImGui();
@@ -105,7 +123,19 @@ private:
 	// 右方ベクトル
 	Vector3 rightVec_{};
 
+	// シェイクしているか
+	bool isShake_ = false;
 
+	// シェイクの基本の強さ
+	float baseShakeIntensity_ = 1.0f;
+	// シェイクの成長率
+	float shakeGrowthRate_ = 1.2f;
+	// シェイクの強さ
+	float shakeIntensity_ = 0.0f;
+	// シェイクの頻度
+	float shakeFrequency_ = 0.0f;
+	// シェイクの時間
+	pTimer shakeTimer_{};
 
 
 #pragma region System システム
@@ -115,6 +145,9 @@ private:
 
 	// デッドゾーン
 	const float DZone_ = 0.2f;
+
+	// 乱数生成器
+	std::mt19937 randomEngine_;
 
 #pragma endregion 
 

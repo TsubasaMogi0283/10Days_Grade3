@@ -209,10 +209,6 @@ void GameScene::DrawSpriteBack() {
 void GameScene::DrawObject3D() {
 	//skydome_->Draw(camera_);
 
-	/* ----- FollowCamera フォローカメラ ----- */
-	//----- FollowCamera フォローカメラ ----- 
-	//followCamera_->Draw3D(camera_, directtionalLight_);
-
 
 	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
