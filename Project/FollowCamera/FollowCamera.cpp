@@ -23,6 +23,7 @@ void FollowCamera::Init()
 	camera_.Initialize();
 	camera_.rotate_ = initRotate_;
 	camera_.translate_ = initTranslate_;
+	camera_.Update();
 
 	// トランスフォームの初期化
 	transform_.Initialize();

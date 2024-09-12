@@ -37,8 +37,11 @@ void GameScene::Initialize() {
 	camera_ = followCamera_->GetCameraData();
 
 	/* ----- Player プレイヤー ----- */
-	uint32_t playerModelHD = modelManager_->LoadModelFile("Resources/Player", "Player.obj");
-	player_ = std::make_unique<Player>(playerModelHD);
+	PlayerAssetsHandle handles = {
+		.player = modelManager_->LoadModelFile("Resources/Player", "Player.obj"),
+		.stompSpeed = modelManager_->LoadModelFile("Resources/Player/Effects/StompSpeedEffect", "StompSpeedEffect.obj"),
+	};
+	player_ = std::make_unique<Player>(handles);
 	player_->Init();
 	// PlayerにFollowCameraを渡す
 	player_->SetFollowCamera(followCamera_.get());
@@ -185,7 +188,7 @@ void GameScene::DrawSpriteBack(){
 void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
-	/* ----- FollowCamera フォローカメラ ----- */
+	/* ----- FollowCamera フォローカメラ ----- *
 	//followCamera_->Draw3D(camera_, directtionalLight_);
 
 	
