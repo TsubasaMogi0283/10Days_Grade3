@@ -9,8 +9,9 @@ void Ground::Initialize(uint32_t modelhandle){
 
 	//初期化
 	worldTransform_.Initialize();
-	const float SIZE = 100.0f;
-	worldTransform_.scale_ = { .x = SIZE,.y = SIZE,.z = SIZE };
+	const float SIZE_ = 100.0f;
+	const float scele = 10.0f;
+	worldTransform_.scale_ = { .x = scele,.y = scele,.z = scele };
 	material_.Initialize();
 
 
@@ -18,13 +19,13 @@ void Ground::Initialize(uint32_t modelhandle){
 
 
 	//左奥
-	leftBack_ = {.x= -SIZE,.y=0.0f,.z= SIZE };
+	leftBack_ = {.x= -SIZE_,.y=0.0f,.z= SIZE_ };
 	//右奥
-	rightBack_ = { .x = SIZE,.y = 0.0f,.z = SIZE };
+	rightBack_ = { .x = SIZE_,.y = 0.0f,.z = SIZE_ };
 	//左前
-	leftFront_ = { .x = -SIZE,.y = 0.0f,.z = -SIZE };
+	leftFront_ = { .x = -SIZE_,.y = 0.0f,.z = -SIZE_ };
 	//右前
-	rightFront_ = { .x = SIZE,.y = 0.0f,.z = -SIZE };
+	rightFront_ = { .x = SIZE_,.y = 0.0f,.z = -SIZE_ };
 
 
 }
