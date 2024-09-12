@@ -6,14 +6,12 @@
 
 
 // コピーコンストラクタ
-Player::Player(uint32_t modelHandle)
+Player::Player(PlayerAssetsHandle handles)
 {
-	// モデルハンドの設定
-	this->modelHandle_ = modelHandle;
-
 	//記録
 	record_ = Record::GetInstance();
 
+	this->handles_ = handles;
 }
 
 
@@ -21,7 +19,7 @@ Player::Player(uint32_t modelHandle)
 void Player::Init()
 {
 	// モデルの初期化
-	model_.reset(Model::Create(modelHandle_));
+	model_.reset(Model::Create(handles_.player));
 
 	// トランスフォームの初期化
 	transform_.Initialize();
@@ -32,6 +30,13 @@ void Player::Init()
 	mtl_.Initialize();
 
 
+#pragma region Effect エフェクト
+
+	// StompSpeed
+	stompSpeedEffect_ = std::make_unique<pEffect::StompSpeed>(handles_.stompSpeed);
+	stompSpeedEffect_->Init();
+
+#pragma endregion 
 	//種類
 	collisionType_ = CollisionType::SphereType;
 
@@ -97,12 +102,28 @@ void Player::Update()
 	// ImGuiの描画
 	DrawImGui();
 #endif // _DEBUG
+
+
+#pragma region Effect エフェクト
+
+	// StompSpeed
+	stompSpeedEffect_->Update();
+
+#pragma endregion 
 }
 
 
 // 描画処理
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
+#pragma region Effect エフェクト
+
+	// StompSpeed
+	stompSpeedEffect_->Draw3D(camera, light);
+
+#pragma endregion 
+
+	// プレイヤー
 	model_->Draw(transform_, camera, mtl_, light);
 
 	//攻撃

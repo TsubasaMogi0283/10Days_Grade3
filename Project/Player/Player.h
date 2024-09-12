@@ -7,6 +7,8 @@
 #include "VectorCalculation.h"
 #include "Matrix4x4Calculation.h"
 #include "Func/PlayerFunc.h"
+#include "Effects/StompSpeed/StompSpeed.h"
+
 #include "PlayerAttack.h"
 #include "Collider/Collider.h"
 #include "Record/Record.h"
@@ -15,6 +17,12 @@
 struct Camera;
 struct DirectionalLight;
 class FollowCamera;
+
+// プレイヤー関連のモデルハンドル
+struct PlayerAssetsHandle {
+	uint32_t player;
+	uint32_t stompSpeed;
+};
 
 
 /* Playerクラス */
@@ -27,7 +35,7 @@ public:
 	~Player() = default;
 
 	// コピーコンストラクタ
-	Player(uint32_t modelHandle);
+	Player(PlayerAssetsHandle handles);
 
 	// 初期化、更新、描画
 	void Init();
@@ -142,8 +150,10 @@ private:
 
 private:
 
+	// プレイヤー関連のモデルハンドル
+	PlayerAssetsHandle handles_{};
+
 	// モデル
-	uint32_t modelHandle_ = 0;
 	std::unique_ptr<Model> model_;
 	// トランスフォーム
 	WorldTransform transform_{};
@@ -220,6 +230,12 @@ private:
 	const float DZone_ = 0.2f;
 
 #pragma endregion 
+
+
+private: // エフェクト
+
+	// StompSpeedEffect
+	std::unique_ptr<pEffect::StompSpeed> stompSpeedEffect_;
 
 
 private: // フォローカメラ

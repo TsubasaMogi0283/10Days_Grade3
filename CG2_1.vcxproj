@@ -193,6 +193,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Enemy\FeEnemy.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemyParticle.cpp" />
     <ClCompile Include="Project\Enemy\RockEnemyParticle.cpp" />
+    <ClCompile Include="Project\Player\Effects\StompSpeed\StompSpeed.cpp" />
     <ClCompile Include="Project\Player\Func\PlayerFunc.cpp" />
     <ClCompile Include="Project\Player\Player.cpp" />
     <ClCompile Include="Project\DraftPlayer\DraftPlayer.cpp" />
@@ -473,6 +474,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Enemy\FeEnemy.h" />
     <ClInclude Include="Project\Enemy\FeEnemyParticle.h" />
     <ClInclude Include="Project\Enemy\RockEnemyParticle.h" />
+    <ClInclude Include="Project\Player\Effects\StompSpeed\StompSpeed.h" />
     <ClInclude Include="Project\Player\Func\PlayerFunc.h" />
     <ClInclude Include="Project\Player\Player.h" />
     <ClInclude Include="Project\DraftPlayer\DraftPlayer.h" />
