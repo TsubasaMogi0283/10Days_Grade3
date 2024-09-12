@@ -33,7 +33,9 @@ GameScene::GameScene()
 
 void GameScene::Initialize() {
 
-	
+	//あらかじめ読み込んでおく
+	PreLoad();
+
 
 	/* ----- FollowCamera フォローカメラ ----- */
 	uint32_t followCameraModelHD = modelManager_->LoadModelFile("Resources/FollowCamera", "FollowCamera.obj");
@@ -91,7 +93,7 @@ void GameScene::Initialize() {
 	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
 	
 
-	gameScoreUI_ = std::make_unique<GameScoreUI>();
+	gameScoreUI_ = std::make_unique<GameUI>();
 	gameScoreUI_->Initialize();
 
 
@@ -208,7 +210,7 @@ void GameScene::DrawSpriteBack(){
 void GameScene::DrawObject3D(){
 	//skydome_->Draw(camera_);
 
-	/* ----- FollowCamera フォローカメラ ----- *
+	//* ----- FollowCamera フォローカメラ ----- *
 	//followCamera_->Draw3D(camera_, directtionalLight_);
 
 	
@@ -219,7 +221,7 @@ void GameScene::DrawObject3D(){
 	enemyManager_->Draw(camera_, directtionalLight_);
 
 
-	/* ----- Player プレイヤー ----- */
+	// ----- Player プレイヤー ----- 
 	player_->Draw3D(camera_, directtionalLight_);
 
 
@@ -265,4 +267,9 @@ void GameScene::FuncInput()
 		// Aボタンが押された時の処理
 		player_->FuncAButton();
 	}
+}
+
+void GameScene::PreLoad(){
+	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/FeEnemy", "FeBreak.obj");
+	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 }

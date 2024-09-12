@@ -16,6 +16,10 @@
 #include "SrvManager.h"
 
 
+Particle3D::Particle3D(){
+	modelManager_ = ModelManager::GetInstance();
+}
+
 Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 	Particle3D* particle3D = new Particle3D();
 
@@ -24,7 +28,7 @@ Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 #pragma region デフォルトの設定 
 	particle3D->emitter_.count = 100;
 	//0.5秒ごとに発生
-	particle3D->emitter_.frequency = 0.5f;
+	particle3D->emitter_.frequency = 0.0f;
 	//発生頻度用の時刻。0.0で初期化
 	particle3D->emitter_.frequencyTime = 0.0f;
 	//SRT
@@ -35,7 +39,11 @@ Particle3D* Particle3D::Create(uint32_t& modelHandle, uint32_t moveType) {
 #pragma endregion
 	
 	//テクスチャの読み込み
-	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(modelHandle).textureFilePath);
+	ModelData modelkkk = ModelManager::GetInstance()->GetModelData(modelHandle);
+
+	std::string a = modelkkk.textureFilePath;
+
+	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelkkk.textureFilePath);
 
 	//動きの種類
 	particle3D->moveType_ = moveType;
