@@ -34,9 +34,11 @@ void pEffect::StompSpeed::Update()
 	mtl_.Update();
 
 	// アクティブなら
-	if (isActive_)
+	if (isActive_) 
+	{
 		// 乱数回転処理
-		RandOrientation();
+		//RandOrientation();
+	}
 
 
 #ifdef _DEBUG

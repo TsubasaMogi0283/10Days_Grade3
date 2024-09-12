@@ -76,15 +76,15 @@ void Player::Update()
 // 描画処理
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
-	model_->Draw(transform_, camera, mtl_, light);
-
-
 #pragma region Effect エフェクト
 
 	// StompSpeed
 	stompSpeedEffect_->Draw3D(camera, light);
 
 #pragma endregion 
+
+	// プレイヤー
+	model_->Draw(transform_, camera, mtl_, light);
 
 }
 
