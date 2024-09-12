@@ -11,6 +11,7 @@
 
 #include "PlayerAttack.h"
 #include "Collider/Collider.h"
+#include "Record/Record.h"
 
 // 前方宣言
 struct Camera;
@@ -240,6 +241,11 @@ private: // エフェクト
 private: // フォローカメラ
 
 	FollowCamera* followCamera_ = nullptr;
+
+
+private:
+	Record* record_ = nullptr;
+
 
 };
 

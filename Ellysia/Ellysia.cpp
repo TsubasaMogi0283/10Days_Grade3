@@ -57,14 +57,12 @@ void Ellysia::Initialize(){
 	ImGuiManager::GetInstance()->Initialize();
 	
 #endif
-
-	//いずれSetModeBlendをなくしてGenerateModelPSOの所で指定できるようにしたい
+	//パイプライン
 	PipelineManager::GetInstance()->SetModelBlendMode(1);
 	PipelineManager::GetInstance()->GenerateModelPSO();
-
-	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
-
+	PipelineManager::GetInstance()->SetSpriteBlendMode(1);
+	PipelineManager::GetInstance()->GenerateSpritePSO();
 	//Input
 	Input::GetInstance()->Initialize();
 	

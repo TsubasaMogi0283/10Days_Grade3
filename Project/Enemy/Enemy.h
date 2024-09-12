@@ -8,7 +8,7 @@
 #include <AABB.h>
 #include "EnemyAttackCollision.h"
 #include "Collider/Collider.h"
-
+#include "Record/Record.h"
 
 
 
@@ -33,8 +33,6 @@ enum EnemyCondition {
 
 
 };
-
-
 
 
 //基底クラス
@@ -114,6 +112,7 @@ public:
 
 
 
+
 	//半径の取得
 	float GetRadius()const {
 		return radius_;
@@ -161,7 +160,7 @@ protected:
 	//向き
 	Vector3 direction_ = {};
 
-
+	Record* record_ = nullptr;
 
 
 protected:
@@ -201,8 +200,6 @@ protected:
 	//状態
 	uint32_t preCondition_ = EnemyCondition::NoneMove;
 	uint32_t condition_ = EnemyCondition::Move;
-
-
 
 
 };
