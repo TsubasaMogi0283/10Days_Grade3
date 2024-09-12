@@ -8,6 +8,8 @@
 #include "ModelManager.h"
 
 void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& speed) {
+	record_ = Record::GetInstance();
+
 	//モデルの生成
 	model_.reset(Model::Create(modelHandle));
 
@@ -26,8 +28,6 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& spee
 
 	//種類
 	collisionType_ = CollisionType::SphereType;
-
-
 
 
 
@@ -254,9 +254,6 @@ void FeEnemy::OnCollision() {
 	ImGui::Begin("FeEnemyOnCollision");
 	ImGui::End();
 #endif // _DEBUG
-
-
-
 }
 
 void FeEnemy::Killed() {
@@ -265,9 +262,13 @@ void FeEnemy::Killed() {
 		deleteTime_ += 1;
 		//放出
 		if (deleteTime_ == 1) {
+			//パーティクルを生成
 			ReleaseParticle();
+			//点数を加算
+			record_->AddFeScore();
 		}
 		
+		//表示
 		isDisplayParticle_ = true;
 
 

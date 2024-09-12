@@ -10,6 +10,7 @@
 
 void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle){
 
+
 	//モデルデータを保存
 	//岩
 	rockEnemyModelHandle_ = rockModelhandle;

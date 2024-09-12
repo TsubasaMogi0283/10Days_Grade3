@@ -9,6 +9,7 @@
 #include <numbers>
 #include <VectorCalculation.h>
 #include "../External/TsumiInput/TInput.h"
+#include <Record/Record.h>
 
 
 //コンストラクタ
@@ -23,11 +24,16 @@ GameScene::GameScene()
 	input_ = Input::GetInstance();
 	tInput_ = TInput::GetInstance();
 
+	//記録
+	record_ = Record::GetInstance();
+
 #pragma endregion 
 }
 
 
 void GameScene::Initialize() {
+
+	
 
 	/* ----- FollowCamera フォローカメラ ----- */
 	uint32_t followCameraModelHD = modelManager_->LoadModelFile("Resources/FollowCamera", "FollowCamera.obj");
@@ -86,7 +92,8 @@ void GameScene::Initialize() {
 	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
 
 
-
+	gameScoreUI_ = std::make_unique<GameScoreUI>();
+	gameScoreUI_->Initialize();
 
 
 	//衝突判定管理クラスの初期化
@@ -174,6 +181,19 @@ void GameScene::Update(GameManager* gameManager) {
 	//衝突チェック
 	collisionManager_->CheckAllCollision();
 
+	//スコア
+	int32_t score = record_->GetTotalScore();
+
+
+
+	record_->Update();
+
+#pragma region UI
+	//スコアの設定
+	gameScoreUI_->SetScore(score);
+	//更新
+	gameScoreUI_->Update();
+#pragma endregion
 
 	//地面の更新
 	ground_->Update();
@@ -190,6 +210,7 @@ void GameScene::DrawObject3D() {
 	//skydome_->Draw(camera_);
 
 	/* ----- FollowCamera フォローカメラ ----- */
+	//----- FollowCamera フォローカメラ ----- 
 	//followCamera_->Draw3D(camera_, directtionalLight_);
 
 
@@ -200,7 +221,7 @@ void GameScene::DrawObject3D() {
 	enemyManager_->Draw(camera_, directtionalLight_);
 
 
-	/* ----- Player プレイヤー ----- */
+	//----- Player プレイヤー ----- //
 	player_->Draw3D(camera_, directtionalLight_);
 
 
@@ -215,7 +236,7 @@ void GameScene::DrawPostEffect() {
 }
 
 void GameScene::DrawSprite() {
-
+	gameScoreUI_->Draw();
 }
 
 GameScene::~GameScene() {

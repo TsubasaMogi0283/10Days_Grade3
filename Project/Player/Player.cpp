@@ -8,6 +8,9 @@
 // コピーコンストラクタ
 Player::Player(PlayerAssetsHandle handles)
 {
+	//記録
+	record_ = Record::GetInstance();
+
 	this->handles_ = handles;
 }
 
@@ -398,6 +401,16 @@ void Player::SpeedManagiment() {
 	//ネストを増やしたくないから外に出す
 	if (speedDownTime_ > 200) {
 		isSpeedDown_ = false;
+	}
+
+	//一瞬当たったら減点
+	if (speedDownTime_ == 1) {
+
+		//0点より大きい時だけ減点させる
+		if (record_->GetTotalScore() > 0) {
+			record_->DeductionScore();
+		}
+		
 	}
 
 	//スピードの制限を付ける

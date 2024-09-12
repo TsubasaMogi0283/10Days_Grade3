@@ -16,12 +16,13 @@
 #include "SpotLight.h"
 #include <StageObject/Ground/Groud.h>
 #include "Enemy/RockEnemy.h"
-
+#include "Record/Record.h"
 
 #include "FollowCamera/FollowCamera.h"
 #include "Player/Player.h"
 #include <Enemy/EnemyManager.h>
 #include <Collider/CollisionManager.h>
+#include <Record/GameScoreUI/GameScoreUI.h>
 
 
 
@@ -123,6 +124,8 @@ private:
 	//コマンドパターンですっきりさせても良さそう
 	XINPUT_STATE joyState_{};
 
+	//記録
+	Record* record_ = nullptr;
 
 #pragma endregion 
 
@@ -138,6 +141,11 @@ private:
 	std::unique_ptr<Ground>ground_ = nullptr;
 
 
+
+private:
+	//UI
+	std::unique_ptr<GameScoreUI> gameScoreUI_ = nullptr;
+	
 };
 
 
