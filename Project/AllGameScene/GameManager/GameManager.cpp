@@ -4,6 +4,7 @@
 #include "GameScene/GameScene.h"
 //シーンファクトリー作った方がよさそう
 
+
 void GameManager::Initialize() {
 	//シーンごとに動作確認したいときはここを変えてね
 

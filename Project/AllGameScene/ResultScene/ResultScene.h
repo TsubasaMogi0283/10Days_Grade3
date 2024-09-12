@@ -7,6 +7,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include <BackText.h>
+#include "Input.h"
 
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
@@ -72,6 +73,34 @@ private:
 
 
 
+	enum ResultCondition {
+		//スコアアップ
+		ScoreUp,
+		//表示
+		DisaplayScore,
+		//選択
+		SelectNextScene,
+		//
+
+
+
+	};
+
+
+
+	
+
+private:
+	Input* input_ = nullptr;
+	XINPUT_STATE joyState_{};
+
+
+
+
+
+
+
+	int32_t bTriggerTime_ = 0;
 
 
 
@@ -101,5 +130,16 @@ private:
 	uint32_t numberQuantity[NUMBER_QUANTITY] = {};
 
 
+
+private:
+	int32_t displayTime_ = 0;
+
+
+
+
+
+	//状態
+	int32_t condition_ = -1;
+	int32_t nextScene_ = -1;
 };
 

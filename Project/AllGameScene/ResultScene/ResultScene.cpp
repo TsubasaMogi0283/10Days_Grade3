@@ -35,15 +35,124 @@ void ResultScene::Initialize(){
 
 void ResultScene::Update(GameManager* gameManager){
 
-	//増えている時
-	if (isSameScore_ == false) {
-		resultScore_ += 9;
+
+
+	switch (condition_) {
+	case ScoreUp:
+
+
+		//増えている時
+		if (isSameScore_ == false) {
+			resultScore_ += 9;
+
+			//スキップ
+			if (Input::GetInstance()->GetJoystickState(joyState_) == true) {
+
+				//Bボタンを押したとき
+				if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+					bTriggerTime_ += 1;
+
+				}
+				if ((joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) == 0) {
+					bTriggerTime_ = 0;
+				}
+
+				if (bTriggerTime_ == 1) {
+					resultScore_ = scoreFromRecord_;
+					isSameScore_ = true;
+				}
+
+			}
+
+		}
+		//大きくなったら増やすのをやめる
+		if (resultScore_ > scoreFromRecord_) {
+			resultScore_ = scoreFromRecord_;
+			isSameScore_ = true;
+			//DisaplayScoreへ
+			condition_ = DisaplayScore;
+		}
+
+
+		break;
+
+
+	case DisaplayScore:
+
+
+		displayTime_ += 1;
+
+
+		//次へ進む
+		if (displayTime_ > 180) {
+			//
+			if (Input::GetInstance()->GetJoystickState(joyState_) == true) {
+
+				//Bボタンを押したとき
+				if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+					bTriggerTime_ += 1;
+
+				}
+				if ((joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) == 0) {
+					bTriggerTime_ = 0;
+				}
+
+				if (bTriggerTime_ == 1) {
+					condition_ = DisaplayScore;
+				}
+
+
+			}
+
+		}
+
+		
+
+
+		break;
+
+
+
+	case SelectNextScene:
+
+		//次にどのシーンへ行くかを選択する
+
+
+
+		if (Input::GetInstance()->GetJoystickState(joyState_) == true) {
+
+			//Bボタンを押したとき
+			if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+				bTriggerTime_ += 1;
+
+			}
+			if ((joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) == 0) {
+				bTriggerTime_ = 0;
+			}
+
+			if (bTriggerTime_ == 1) {
+				condition_ = DisaplayScore;
+			}
+
+
+		}
+
+		//リプレイ
+		GameManager::nextSceneFromResultScene_ = ReplayGame;
+		
+		//タイトルへ
+		GameManager::nextSceneFromResultScene_ = ReturnToTitle;
+
+		break;
 
 	}
-	if (resultScore_ > scoreFromRecord_) {
-		resultScore_ = scoreFromRecord_;
-		isSameScore_ = true;
-	}
+
+	
+
+
+
+	
+
 	
 
 	//一の位
@@ -60,7 +169,6 @@ void ResultScene::Update(GameManager* gameManager){
 
 	//万の位
 	scorePlaces_[TenThousandPlace] = resultScore_ / 10000;
-
 
 
 
@@ -88,10 +196,6 @@ void ResultScene::Update(GameManager* gameManager){
 #endif // _DEBUG
 
 
-#ifdef _DEBUG
-	ImGui::Begin("結果");
-	ImGui::End();
-#endif // _DEBUG
 
 	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
 		gameManager->ChangeScene(new TitleScene());
