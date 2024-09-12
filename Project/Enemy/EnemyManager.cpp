@@ -1,71 +1,39 @@
 #include "EnemyManager.h"
-#include <Input.h>
-#include <cassert>
-
-#include "Player/Player.h"
-#include "Stage/ObjectManager/ObjectManager.h"
 #include <VectorCalculation.h>
 #include <SingleCalculation.h>
+
+#include "ModelManager.h"
+
+#include "RockEnemy.h"
+#include "FeEnemy.h"
 #include <random>
 
-void EnemyManager::Initialize(uint32_t modelhandle){
+void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle){
+
+	//モデルデータを保存
+	//岩
+	rockEnemyModelHandle_ = rockModelhandle;
+	//鉄
+	feEnemyModelHandle_ = feModelHandle;
+
+	//生成
+	for (int i = 0; i < 1; ++i) {
+		//岩
+		GenarateRockEnemy(rockModelhandle);
+		//鉄
+		GenarateFeEnemy(feModelHandle);
+
+	}
 	
-	//空だったら引っかかるようにしている
-	assert(player_!=nullptr);
-	assert(objectManager_ != nullptr);
-
-	//Stageの四隅が一つでも同じだったら引っかかるようにしている
-	//X軸
-	assert((stageRect_.leftBack.x != stageRect_.leftFront.x)||
-		(stageRect_.leftBack.x != stageRect_.rightBack.x)||
-		(stageRect_.leftBack.x != stageRect_.rightFront.x));
-
-	//Z軸
-	assert((stageRect_.leftBack.z != stageRect_.leftFront.z) ||
-		(stageRect_.leftBack.z != stageRect_.rightBack.z) ||
-		(stageRect_.leftBack.z != stageRect_.rightFront.z));
-
-
-	//モデルを代入
-	modelHandle_ = modelhandle;
-	assert(modelHandle_ != 0);
-
-	//TLのレベルエディターでやってもいいかも！
-	Enemy* enemy1 = new Enemy();
-	Vector3 position1 = { 0.0f,0.0f,7.0f };
-	enemy1->SetRadius_(ENEMY_SCALE_SIZE_);
-	enemy1->Initialize(modelHandle_, position1, { -0.0f,0.0f,-0.01f });
-	enemyes_.push_back(enemy1);
-
-		
-	Enemy* enemy2 = new Enemy();
-	Vector3 position2 = { 10.0f,0.0f,18.0f };
-	enemy2->SetRadius_(ENEMY_SCALE_SIZE_);
-	enemy2->Initialize(modelHandle_, position2, { -0.02f,0.0f,0.0f });
-	enemyes_.push_back(enemy2);
-	
-	Enemy* enemy3 = new Enemy();
-	Vector3 position3 = { -10.0f,0.0f,4.0f };
-	enemy3->Initialize(modelHandle_, position3, { 0.01f,0.0f,0.01f });
-	uint32_t condition = EnemyCondition::Move;
-	enemy3->SetCondition(condition);
-	enemy3->SetRadius_(player_->GetRadius());
-	enemyes_.push_back(enemy3);
-	//"C:\Lesson\CG\CGGrade3\Ellysia_3.0\Resources\Sample\TD2_Enemy\TD2_Enemy.obj"
-
-	
-
-	material_.Initialize();
-	material_.lightingKinds_ = Spot;
-
 }
+
 
 
 
 void EnemyManager::DeleteEnemy(){
 	//敵が生存していなかったら消す
 	enemyes_.remove_if([](Enemy* enemy) {
-		if (enemy->GetIsAlive() == false) {
+		if (enemy->GetIsKilled() == true) {
 			delete enemy;
 			return true;
 		}
@@ -73,438 +41,234 @@ void EnemyManager::DeleteEnemy(){
 	});
 }
 
-void EnemyManager::GenarateEnemy() {
-	Enemy* enemy = new Enemy();
+void EnemyManager::GenarateRockEnemy(uint32_t& rockModelhandle){
+	Enemy* rockEnemy1 = new RockEnemy();
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
-	std::uniform_real_distribution<float> distribute(-30.0f, 30.0f);
-	Vector3 position1 = { distribute(randomEngine),0.0f,distribute(randomEngine) };
-	enemy->Initialize(modelHandle_, position1, { 0.0f,0.0f,0.0f });
-	enemy->SetRadius_(player_->GetRadius());
-	enemyes_.push_back(enemy);
+	
+	//ランダムの値
+	//位置
+	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
+	std::uniform_real_distribution<float> distributeZ(stageLeftFrontPosition.z, stageLeftBackPosition.z);
+	Vector3 randomPosition = { .x = distributeX(randomEngine),.y = 0.0f,.z = distributeZ(randomEngine) };
+
+	//スピード
+	std::uniform_real_distribution<float> distributeSpeedX(-0.1f, 0.1f);
+	std::uniform_real_distribution<float> distributeSpeedZ(-0.1f, 0.1f);
+	Vector3 randomSpeed = { .x = distributeSpeedX(randomEngine),.y = 0.0f, .z = distributeSpeedZ(randomEngine) };
+
+	rockEnemy1->Initialize(rockModelhandle, randomPosition, randomSpeed);
+	enemyes_.push_back(rockEnemy1);
+
+
 }
 
+void EnemyManager::GenarateFeEnemy(uint32_t& feModelHandle){
+	Enemy* feEnemy2 = new FeEnemy();
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
 
-void EnemyManager::Update(){
-#ifdef _DEBUG
-	//Gキーで出す
-	if (Input::GetInstance()->IsTriggerKey(DIK_G) == true) {
-		GenarateEnemy();
-	}
+	
+	//ランダムの値
+	//位置
+	std::uniform_real_distribution<float> distributeX(stageLeftBackPosition.x, stageRightBackPosition.x);
+	std::uniform_real_distribution<float> distributeZ(stageLeftFrontPosition.z, stageLeftBackPosition.z);
+	Vector3 randomPosition = { .x = distributeX(randomEngine),.y = 0.0f,.z = distributeZ(randomEngine) };
+	
+	//スピード
+	std::uniform_real_distribution<float> distributeSpeedX(-0.1f, 0.1f);
+	std::uniform_real_distribution<float> distributeSpeedZ(-0.1f, 0.1f);
+	Vector3 randomSpeed = {.x= distributeSpeedX(randomEngine),.y=0.0f, .z= distributeSpeedZ(randomEngine) };
+	
 
-#endif
+	feEnemy2->Initialize(feModelHandle, randomPosition, randomSpeed);
+	enemyes_.push_back(feEnemy2);
+
+}
+
+void EnemyManager::Tracking(){
+
 
 	//接近するときの距離
-	const float TRACKING_START_DISTANCE_ = 15.0f;
-	//攻撃するときの距離
-	const float ATTACK_START_DISTANCE_ = 6.0f;
-
-	//プレイヤーの座標
-	Vector3 playerPosition = player_->GetWorldPosition();
-	const float ATTACK_DISTANCE_OFFSET = 0.0f;
-	float MINIMUM_DISTANCE = player_->GetRadius() +1.0f + ATTACK_DISTANCE_OFFSET;
-	
-	
-	//敵はポリモーフィズムでやった方がよさそう
-
-	//全ての敵
-	for (Enemy* enemy : enemyes_) {
-		//プレイヤーの位置を設定
-		//使っているのはPreTrackingしかないので
-		if (enemy->GetCondition() == EnemyCondition::PreTracking) {
-			enemy->SetPlayerPosition(playerPosition);
-
-		}
-		
-		//更新
-		enemy->Update();
-
-		//AABB
-		AABB enemyAABB = enemy->GetAABB();
-
-		//移動中の時
-		if (enemy->GetCondition() == EnemyCondition::Move) {
-
-			#pragma region ステージの端に行ったら反転
-			//X
-			if ((enemyAABB.min.x < stageRect_.leftBack.x) || (enemyAABB.max.x > stageRect_.rightBack.x)) {
-				enemy->InvertSpeedX();
-			}
-			//Z
-			if ((enemyAABB.min.z < stageRect_.leftFront.z) || (enemyAABB.max.z > stageRect_.leftBack.z)) {
-				enemy->InvertSpeedZ();
-			}
-			#pragma endregion
-
-			#pragma region ステージオブジェクト
-
-			//仮置きのステージオブジェクト
-			std::list<StageObject*>stageObjects=objectManager_->GetStageObjets();
-			for (StageObject* stageObject : stageObjects) {
-
-				//AABBを取得
-				AABB objectAABB = stageObject->GetAABB();
-
-				//位置を取得
-				Vector3 objectPosition = stageObject->GetWorldPosition();
-
-				
-				
-				//お互いのAABBが接触している場合
-				if (((enemyAABB.max.x > objectAABB.min.x) && (enemyAABB.min.x < objectAABB.max.x)) &&
-					((enemyAABB.max.z > objectAABB.min.z) && (enemyAABB.min.z < objectAABB.max.z))) {
-					//オブジェクトとの差分ベクトル
-					Vector3 defference = VectorCalculation::Subtract(objectPosition, enemy->GetWorldPosition());
-					Vector3 normalizedDefference = VectorCalculation::Normalize(defference);
-
-
-					//敵の向いている方向
-					Vector3 enemyDirection = enemy->GetDirection();
+	const float TRACKING_START_DISTANCE_ = 40.0f;
+	////攻撃するときの距離
+	const float ATTACK_START_DISTANCE_ = 4.0f;
 
 
 
-					//前にある場合だけ計算
-					float dot = SingleCalculation::Dot(enemyDirection, normalizedDefference);
-
-					//進行方向上にあるときだけ計算する
-					if (dot > 0.0f) {
-
-						//差分ベクトルのXとZの大きさを比べ
-						//値が大きい方で反転させる
-						float defferenceValueX = std::abs(defference.x);
-						float defferenceValueZ = std::abs(defference.z);
-
-
-						if (defferenceValueX >= defferenceValueZ) {
-							enemy->InvertSpeedX();
-						}
-						else {
-							enemy->InvertSpeedZ();
-						}
-
-
-
-#ifdef _DEBUG
-						ImGui::Begin("DemoObjectEnemy");
-						ImGui::InputFloat("Dot", &dot);
-						ImGui::InputFloat3("defference", &defference.x);
-						ImGui::InputFloat("defferenceValueX", &defferenceValueX);
-						ImGui::InputFloat("defferenceValueZ", &defferenceValueZ);
-						ImGui::End();
-#endif // _DEBUG
-
-
-
-
-					}
-				}
-
-			}
-
-			#pragma endregion
-
-
-		}
-
-	}
-	
 	//現在の敵の数
-	uint32_t enemyAmount = static_cast<uint32_t>(enemyes_.size());
+	uint32_t enemyQuantity = static_cast<uint32_t>(enemyes_.size());
 
-	//1体だけの時
-	//衝突判定をやる必要が無いからね
-	if (enemyAmount == 1u) {
+	//プレイヤー
+	Vector3 playerSize = { .x = 1.0f,.y = 1.0f,.z = 1.0f };
+	Vector3 playerMaxAABB = { VectorCalculation::Add(playerPosition_,playerSize) };
+	Vector3 playerMinAABB = { VectorCalculation::Subtract(playerPosition_,playerSize) };
+	AABB playerAABB = { .min = playerMinAABB , .max = playerMaxAABB };
+
+
+	if (enemyQuantity >= 1u) {
 		for (Enemy* enemy : enemyes_) {
-			uint32_t condition = enemy->GetCondition();
 
+			//AABBを取得
+			AABB enemyAABB = enemy->GetAABB();
+
+			//状態
+			uint32_t condition = enemy->GetCondition();
 
 			//向き
 			Vector3 enemyDirection = enemy->GetDirection();
 
-			//それぞれのAABB
-			AABB playerAABB = player_->GetAABB();
-			AABB enemyAABB = enemy->GetAABB();
-
-
 			//プレイヤーと敵の差分ベクトル
 			//対象にするものがプレイヤーなのでプレイヤーから引いてね
-			Vector3 defference = VectorCalculation::Subtract(playerPosition, enemy->GetWorldPosition());
-			float defferenceDistance = SingleCalculation::Length(defference);
+			Vector3 defference = VectorCalculation::Subtract(playerPosition_, enemy->GetWorldPosition());
 
 
-			//正射影ベクトル
-			Vector3 projectDifference = VectorCalculation::Project(defference, enemyDirection);
-			float projectDefferenceDistance = SingleCalculation::Length(projectDifference);
-
-			
-			//プレイヤーと敵の間隔
-			const float PLAYER_ENEMY_INTERVAL = player_->GetRadius() + enemy->GetRadius();
-			PLAYER_ENEMY_INTERVAL;
-
-
-			
-
-			//範囲外になったら通常の動きへ。15
-			if (projectDefferenceDistance > TRACKING_START_DISTANCE_) {
-
-				
-
-				condition = EnemyCondition::Move;
-				enemy->SetCondition(condition);
-
-#ifdef _DEBUG
-				ImGui::Begin("ChangeMove"); 
-				ImGui::End();
-#endif // _DEBUG
-
-
-			}
-			else {
-				#ifdef _DEBUG
-				ImGui::Begin("AAAAAA"); 
-				ImGui::End();
-				#endif // _DEBUG
-			
-			}
 
 			Vector3 normalizedDefference = VectorCalculation::Normalize(defference);
 			float dot = SingleCalculation::Dot(normalizedDefference, enemyDirection);
 
-#ifdef _DEBUG
-			ImGui::Begin("Dot");
-			ImGui::InputFloat("Value", &dot);
-			ImGui::End();
-#endif // _DEBUG
-
-			
-			//設定した値より短くなったら接近開始
-			if (condition == EnemyCondition::Move) {
 
 
-				//ステージの端またはステージオブジェクトに当たったら
-				//スピードが反転する
-				
 
-				//追跡準備をする。15
-				if (projectDefferenceDistance <= TRACKING_START_DISTANCE_&& dot >0.9f) {
-					//前回のMove状態を記録
-					uint32_t preCondition = condition;
-					enemy->SetPreCondition(preCondition);
-					enemy->SaveSpeed();
-					//状態を記録
-					condition = EnemyCondition::PreTracking;
-					enemy->SetCondition(condition);
-				}
-			}
-			
-			//追跡の時に
-			if (condition == EnemyCondition::Tracking) {
-				//進行方向にいない場合
-				//Moveへ
-				if ((projectDefferenceDistance > TRACKING_START_DISTANCE_ ) && (dot <= 0.9f)) {
-			
-					//前回のMove状態を記録
-					uint32_t preCondition = condition;
-					enemy->SetPreCondition(preCondition);
-					
-					//状態を記録
-					condition = EnemyCondition::Move;
-					enemy->SetCondition(condition);
-			
-				}
-			
-				//設定した値より短くなったら攻撃開始
-				if (projectDefferenceDistance <= ATTACK_START_DISTANCE_ &&
-					MINIMUM_DISTANCE < projectDefferenceDistance) {
-					//前回のMove状態を記録
-					uint32_t preCondition = condition;
-					enemy->SetPreCondition(preCondition);
-			
-					//状態を記録
-					condition = EnemyCondition::Attack;
-					enemy->SetCondition(condition);
-				}
-			}
-			
-			//攻撃の時に
-			if (condition == EnemyCondition::Attack) {
-				//攻撃し終わった後距離が離れていれば通常の動きに戻る
-				if ((projectDefferenceDistance >= MINIMUM_DISTANCE)) {
-			
-					//前回の記録
-					uint32_t preCondition = condition;
-					enemy->SetPreCondition(preCondition);
-			
-					//状態を記録
-					condition = EnemyCondition::Move;
-					enemy->SetCondition(condition);
-				}
-			}
+			//距離を求める
+			float distance = SingleCalculation::Length(defference);
 
-
-#ifdef _DEBUG
-
-			int32_t debugCondition = static_cast<uint32_t>(condition);
-			int32_t debugPreCondition = static_cast<uint32_t>(enemy->GetPreCondition());
-
-			ImGui::Begin("Enemy1"); 
-			ImGui::InputFloat3("Difference", &defference.x);
-			ImGui::InputFloat("defferenceDistance", &defferenceDistance);
-			ImGui::InputFloat3("projectDifference", &projectDifference.x);
-			ImGui::InputFloat("Distance", &projectDefferenceDistance);
-			ImGui::InputInt("Condition", &debugCondition);
-			ImGui::InputInt("PreCondition", &debugPreCondition);
-			ImGui::End();
-#endif // _DEBUG
-		}
-	}
-
-	//1体より多い時
-	if (enemyAmount > 1u) {
-		for (std::list<Enemy*>::iterator it1 = enemyes_.begin(); it1 != enemyes_.end(); ++it1) {
-
-			//AABB
-			aabb[0] = (*it1)->GetAABB();
-			
-			enemyPosition[0] = (*it1)->GetWorldPosition();
-			//向き
-			Vector3 direction = (*it1)->GetDirection();
-
-			//内積
-			float dot = 0.0f;
-
-			for (std::list<Enemy*>::iterator it2 = enemyes_.begin(); it2 != enemyes_.end(); ++it2) {
-
-				//it1とit2が一致した場合は計算をせずに次のループへ
-				if (it1 == it2) {
-					continue;
-				}
-
-				//2体目のAABBを取得
-				aabb[1] = (*it2)->GetAABB();
-
-				//接触している場合
-				if ((aabb[0].min.x < aabb[1].max.x && aabb[0].max.x > aabb[1].min.x) &&
-					(aabb[0].min.y < aabb[1].max.y && aabb[0].max.y > aabb[1].min.y) &&
-					(aabb[0].min.z < aabb[1].max.z && aabb[0].max.z > aabb[1].min.z)) {
-					//ワールド座標
-					enemyPosition[1] = (*it2)->GetWorldPosition();
-
-
-					//敵同士の差分ベクトル
-					Vector3 enemyAndEnemyDifference = VectorCalculation::Subtract(enemyPosition[1], enemyPosition[0]);
-
-					//内積
-					//進行方向の前にいると+
-					Vector3 normalizedEnemyAndEnemy = VectorCalculation::Normalize(enemyAndEnemyDifference);
-					dot = SingleCalculation::Dot(direction, normalizedEnemyAndEnemy);
-
-
-					break;
-				}
-
+			//前方にいる時だけ追跡する
+			if (dot > 0.8f) {
 
 				
-			}
-
-			//現在の状態
-			uint32_t condition = (*it1)->GetCondition();
-
-			//プレイヤーとの距離
-			Vector3 playerEnemyDifference = VectorCalculation::Subtract(playerPosition, (*it1)->GetWorldPosition());
-			float playerEnemyDistance = SingleCalculation::Length(playerEnemyDifference);
-
-
-			//前方にいた場合
-			if (dot > 0.0f && condition == EnemyCondition::Move) {
-				//接触した場合
-				//止まる
-				if ((aabb[0].min.x < aabb[1].max.x && aabb[0].max.x > aabb[1].min.x) &&
-					(aabb[0].min.y < aabb[1].max.y && aabb[0].max.y > aabb[1].min.y) &&
-					(aabb[0].min.z < aabb[1].max.z && aabb[0].max.z > aabb[1].min.z)) {
-					uint32_t newCondition = EnemyCondition::NoneMove;
+				if ((distance < TRACKING_START_DISTANCE_&&distance>ATTACK_START_DISTANCE_)
+					&&condition==EnemyCondition::Move) {
 
 					//前の状態を保存
-					(*it1)->SetPreCondition(condition);
-					//状態の変更
-					(*it1)->SetCondition(newCondition);
-					
-					continue;
+					enemy->SetPreCondition(condition);
+
+					//現在の状態を保存
+					uint32_t newCondition = EnemyCondition::PreTracking;
+					enemy->SetPlayerPosition(playerPosition_);
+					enemy->SetCondition(newCondition);
 				}
-				//接触していない場合
-				else {
+				
+				//追跡している時
+				if (distance<= ATTACK_START_DISTANCE_&&condition == EnemyCondition::Tracking) {
+					//前の状態を保存
+					enemy->SetPreCondition(condition);
+
+					//現在の状態を保存
+					uint32_t newCondition = EnemyCondition::Attack;
+					enemy->SetCondition(newCondition);
+				}
+				//攻撃中にプレイヤーが離れた時
+				if (distance > ATTACK_START_DISTANCE_ && condition == EnemyCondition::Attack) {
+					//前の状態を保存
+					enemy->SetPreCondition(condition);
+
+					//現在の状態を保存
 					uint32_t newCondition = EnemyCondition::Move;
-
-					//前の状態を保存
-					(*it1)->SetPreCondition(condition);
-					//状態の変更
-					(*it1)->SetCondition(newCondition);
+					enemy->SetCondition(newCondition);
 				}
+
+
+
+
+
 			}
-			//前方にいない場合
+			//前方にいなければ強制的にMove
 			else {
-				if (playerEnemyDistance > TRACKING_START_DISTANCE_) {
-					uint32_t newCondition = EnemyCondition::Move;
-
-					//前の状態を保存
-					(*it1)->SetPreCondition(condition);
-					//スピードの保存
-					//(*it1)->SaveSpeed();
-					//状態の変更
-					(*it1)->SetCondition(newCondition);
-				}
-
-
-				//設定した値より短くなったら接近開始
-				if (condition == EnemyCondition::Move) {
-					if (playerEnemyDistance <= TRACKING_START_DISTANCE_) {
-						//前回のMove状態を記録
-						uint32_t preCondition = condition;
-						(*it1)->SetPreCondition(preCondition);
-
-						//状態を記録
-						condition = EnemyCondition::PreTracking;
-						(*it1)->SetCondition(condition);
-					}
-				}
-
-				//追跡の時に
-				if (condition == EnemyCondition::Tracking) {
-					//Moveへ
-					if (playerEnemyDistance > TRACKING_START_DISTANCE_) {
-						//前回のMove状態を記録
-						uint32_t preCondition = condition;
-						(*it1)->SetPreCondition(preCondition);
-
-						//状態を記録
-						condition = EnemyCondition::Move;
-						(*it1)->SetCondition(condition);
-
-					}
-
-					//設定した値より短くなったら攻撃開始
-					if (playerEnemyDistance <= ATTACK_START_DISTANCE_ &&
-						MINIMUM_DISTANCE < playerEnemyDistance) {
-						//前回のMove状態を記録
-						uint32_t preCondition = condition;
-						(*it1)->SetPreCondition(preCondition);
-
-						//状態を記録
-						condition = EnemyCondition::Attack;
-						(*it1)->SetCondition(condition);
-
-					}
-				}
+				//前の状態を保存
+				enemy->SetPreCondition(condition);
+				//現在の状態を保存
+				uint32_t newCondition = EnemyCondition::Move;
+				enemy->SetCondition(newCondition);
 			}
+
+#ifdef _DEBUG
+			ImGui::Begin("OneEnemy"); 
+			int intCondition = static_cast<int>(condition);
+			ImGui::InputInt("状態", &intCondition);
+			ImGui::InputFloat("内積", &dot);
+			ImGui::InputFloat3("敵の向き", &enemyDirection.x);
+			ImGui::InputFloat3("差分", &defference.x);
+
+			ImGui::End();
+#endif // _DEBUG
+
 		}
 	}
+
 }
 
-void EnemyManager::Draw(Camera& camera, SpotLight& spotLight){
+void EnemyManager::Update(){
 
-	//描画
+	
 	for (Enemy* enemy : enemyes_) {
-		enemy->Draw(camera,spotLight);
+
+		//AABBを取得
+		AABB enemyAABB = enemy->GetAABB();
+		Vector3 position = enemy->GetWorldPosition();
+
+		//X反転
+		if (enemy->GetWorldPosition().x-enemy->GetRadius() < stageLeftFrontPosition.x || 
+			enemy->GetWorldPosition().x + enemy->GetRadius() > stageRightFrontPosition.x) {
+			enemy->InvertSpeedX();
+		}
+		//Z反転
+		if (enemy->GetWorldPosition().z - enemy->GetRadius() < stageLeftFrontPosition.z ||
+			enemy->GetWorldPosition().z + enemy->GetRadius() > stageLeftBackPosition.z) {
+			enemy->InvertSpeedZ();
+		}
+
+		//敵の更新
+		enemy->Update();
+	}
+
+	//敵の数
+	uint32_t enemyCount = static_cast<uint32_t>(enemyes_.size());
+	
+	if (enemyCount < MAX_ENEMY_COUNT_) {
+		//時間が増える
+		//genarateTime_ += 1;
+
+		//3秒くらいしたら生成
+		if (genarateTime_ == 240) {
+			std::random_device seedGenerator;
+			std::mt19937 randomEngine(seedGenerator());
+
+			//ランダムの値
+			//位置
+			std::uniform_real_distribution<float> enemyKinds(1.0f, 2.9f);
+			uint32_t enemyKind = static_cast<uint32_t>(enemyKinds(randomEngine));
+
+			//岩
+			if (enemyKind == 1) {
+				//岩
+				GenarateRockEnemy(rockEnemyModelHandle_);
+
+				
+			}
+			else if (enemyKind == 2) {
+				//鉄
+				GenarateFeEnemy(feEnemyModelHandle_);
+			}
+
+
+			genarateTime_ = 0;
+		}
+
+	}
+
+
+	//追跡
+	Tracking();
+
+
+
+}
+
+void EnemyManager::Draw(Camera& camera, DirectionalLight& directionalLight){
+	//敵の描画
+	for (Enemy* enemy : enemyes_) {
+		enemy->Draw(camera, directionalLight);
 	}
 
 }
@@ -513,9 +277,9 @@ EnemyManager::~EnemyManager(){
 	for (Enemy* enemy : enemyes_) {
 		delete enemy;
 	}
-
-
 }
+
+
 
 
 

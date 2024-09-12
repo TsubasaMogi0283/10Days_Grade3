@@ -1,197 +1,229 @@
 #pragma once
-#include "WorldTransform.h"
+
 #include "Model.h"
-#include <memory>
-#include "Stage/Ground/StageRect.h"
-#include "../Collider/Collider.h"
-#include "AABB.h"
+#include "WorldTransform.h"
+#include "Material.h"
+#include "Input.h"
+#include "VectorCalculation.h"
+#include "Matrix4x4Calculation.h"
+#include "Func/PlayerFunc.h"
+#include "PlayerAttack.h"
+#include "Collider/Collider.h"
 
+// 前方宣言
 struct Camera;
-struct SpotLight;
-struct Material;
-class SampleScene;
-class ObjectManager;
+struct DirectionalLight;
+class FollowCamera;
 
-enum PlayerViewOfPoint {
-	//未定
-	NonePerson = 0,
-	//1人称視点
-	FirstPerson = 1,
-	//3人称後方
-	ThirdPersonBack = 2,
-};
 
-enum PlayerMoveCondition {
-	//動かない
-	NonePlayerMove,
-	//動く
-	OnPlayerMove,
-};
+/* Playerクラス */
+class Player :public Collider{
 
-class Player :public Collider {
 public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
+
+	// コンストラクタ、デストラクタ
 	Player() = default;
-
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize();
-
-	/// <summary>
-	/// 更新
-	/// </summary>
-	void Update();
-
-	/// <summary>
-	/// 描画
-	/// </summary>
-	/// <param name="camera"></param>
-	/// <param name="material"></param>
-	/// <param name="spotLight"></param>
-	void Draw(Camera& camera,Material& material,SpotLight& spotLight);
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
 	~Player() = default;
 
-public:
-	/// <summary>
-	/// 1人称または3人称かの設定
-	/// 1人称だったらモデルは表示させない
-	/// </summary>
-	/// <param name="pointOfView"></param>
-	inline void SetPointOfView(uint32_t pointOfView){
-		this->pointOfView_ = pointOfView;
-	}
+	// コピーコンストラクタ
+	Player(uint32_t modelHandle);
 
-	//Getterは後ろにconst を付ける方が良いらしい
-	//オブジェクトの状態を変更しない読み取り専用だから
+	// 初期化、更新、描画
+	void Init();
+	void Update();
+	void Draw3D(Camera& camera, DirectionalLight& light);
 
+	// Aボタンが押された時の処理
+	void FuncAButton();
 
-	/// <summary>
-	/// ワールド座標を所得
-	/// </summary>
-	/// <returns></returns>
-	Vector3 GetWorldPosition()override;
+	// stick入力時の処理
+	void FuncStickFunc(XINPUT_STATE joyState);
 
 	/// <summary>
-	///	衝突
+	/// 衝突
 	/// </summary>
 	void OnCollision()override;
-	
-	inline AABB GetAABB() {
-		return aabb_;
+
+#pragma region Accessor アクセッサ
+
+	// ワールド座標の取得
+	Vector3 GetWorldPosition() override {
+		return { transform_.worldMatrix_.m[3][0], transform_.worldMatrix_.m[3][1], transform_.worldMatrix_.m[3][2] };
 	}
 
 
-	/// <summa
-	/// 
-	/// ry>
-	/// 半径を取得
+	// Groundの四隅
+	void SetGroundCorners(Vector3 LB, Vector3 RB, Vector3 LF, Vector3 RF) {
+		groundCorners_.push_back(LB);
+		groundCorners_.push_back(RB);
+		groundCorners_.push_back(LF);
+		groundCorners_.push_back(RF);
+	}
+
+	// フォローカメラ
+	void SetFollowCamera(FollowCamera* camera) { this->followCamera_ = camera; }
+
+	// 着地状態
+	bool IsGrounded() const { return this->isGrounded_; }
+
+	// ジャンプ中か
+	bool IsJumping() const { return this->isJumping_; }
+
+	// ストンプ中か
+	bool IsStomping() const { return this->isStomping_; }
+
+	/// <summary>
+	/// 攻撃の当たり判定を取得
 	/// </summary>
 	/// <returns></returns>
-	inline float GetRadius() const {
-		return radius_;
+	PlayerAttack* GetPlayerAttack() const{
+		return attack_.get();
 	}
 
 	/// <summary>
-	/// 持っている鍵の数を増やす
-	/// </summary>
-	inline void AddHaveKeyQuantity() {
-		haveKeyQuantity_++;
-	}
-
-	/// <summary>
-	/// 今鍵を何個持っているか
+	/// 落下中かどうか
 	/// </summary>
 	/// <returns></returns>
-	inline uint32_t GetHavingKey() {
-		return haveKeyQuantity_;
+	bool GetIsDrop()const {
+		return isDrop_;
 	}
 
-	/// <summary>
-	/// 動く方向の設定
-	/// </summary>
-	/// <param name="move"></param>
-	inline void SetMoveDirection(Vector3& moveDirection) {
-		this->moveDirection_ = moveDirection;
-	}
+#pragma endregion 
 
-	/// <summary>
-	/// 動きの状態を設定
-	/// </summary>
-	/// <param name="condition"></param>
-	void SetPlayerMoveCondition(uint32_t& condition) {
-		this->moveCondition_ = condition;
-	}
-
-	/// <summary>
-	/// 四隅の取得
-	/// </summary>
-	/// <param name="stageRect"></param>
-	/// <returns></returns>
-	inline void SetStageRect(StageRect stageRect) {
-		this->stageRect_ = stageRect;
-	}
-
-	/// <summary>
-	/// 操作を受け付けるか受け付けないかの設定
-	/// </summary>
-	/// <param name="isControll"></param>
-	inline void SetIsAbleToControll(bool isControll) {
-		this->isControll_ = isControll;
-	}
-
-	/// <summary>
-	/// 体力を取得
-	/// </summary>
-	/// <returns></returns>
-	uint32_t GetHP()const {
-		return hp_;
-	}
-
-	
 
 private:
 
-	//モデル
-	std::unique_ptr<Model> model_ = nullptr;
+	// 移動方向を求める
+	void CalcMoveDirection();
 
-	//ワールドトランスフォーム
-	WorldTransform worldTransform_={};
+	// 移動処理
+	void Move();
 
-	//ステージの四隅
-	StageRect stageRect_ = {};
+	// 移動限界処理
+	void MoveLimited();
 
-	//カメラ視点
-	uint32_t pointOfView_ = 0u;
+	// Y軸の姿勢を傾ける処理
+	void BodyOrientation();
 
-	//持っている鍵の数
-	//可算なのでQuantity
-	uint32_t haveKeyQuantity_ = 0u;
+	// ジャンプのエンター処理
+	void EnterJampFunc();
 
-	//動く方向
-	Vector3 moveDirection_ = {};
+	// ジャンプ処理
+	void JumpFunc();
 
-	const float SIDE_SIZE = 1.0f;
-	AABB aabb_ = {};
+	// ジャンプ終了処理
+	void JumpExsit();
 
-	//体力
-	int32_t hp_ = 0;
-	//敵の攻撃に当たった時のタイマー
-	int32_t downTime_ = 0;
-	//敵の攻撃に当たったかどうか
-	bool isDamage_ = false;
-	bool acceptDamage_ = false;
+	// レベルに応じたジャンプの高さの計算
+	float CalcJumpForceForLevel(int level) const;
 
-	//操作可能かどうか
-	bool isControll_ = false;
-	//移動状態
-	uint32_t moveCondition_ = 0u;
+	// ストンプのエンター処理
+	void EnterStompFunc();
+
+	// ストンプ処理
+	void StompFunc();
+
+	// ストンプ終了処理
+	void StompExsit();
+
+	// Imguiの描画
+	void DrawImGui();
+
+	/// <summary>
+	/// スピード管理
+	/// </summary>
+	void SpeedManagiment();
+
+	/// <summary>
+	/// 点滅
+	/// </summary>
+	void Flashing();
+
+private:
+
+	// モデル
+	uint32_t modelHandle_ = 0;
+	std::unique_ptr<Model> model_;
+	// トランスフォーム
+	WorldTransform transform_{};
+	// マテリアル
+	Material mtl_{};
+
+	// 移動方向
+	Vector3 moveDirection_{};
+	// 移動量
+	Vector3 velocity_{};
+	// 移動速度
+	float moveSpeed_ = 0.3f;
+
+	// 姿勢
+	float bodyOrientation_ = 0.0f;
+	// 姿勢計算の補間速度
+	float orientationLerpSpeed_ = 0.1f;
+	
+	// ジャンプのフラグ
+	bool isJumping_ = false;
+	// 地面にいるかどうかのフラグ
+	bool isGrounded_ = true;
+	// Y軸方向の速度
+	float jumpVel_ = 0.0f;
+	// ベースのジャンプの初速速度
+	float baseJumpForce_ = 20.0f;
+	// ジャンプの成長率
+	float jumpGrowthRate_ = 1.1f;
+	// 重力の強さ
+	float jumpGravity_ = 30.0f;
+	// ジャンプのフレーム時間ごとの時間経過
+	float jumpDeltaTime_ = 0.036f;
+
+	// ストンプのフラグ
+	bool isStomping_ = false;
+	// Y軸方向の速度
+	float stompVel_ = 0.0f;
+	// 急降下のスピード
+	float stompSpeed_ = 1.0f;
+	// 重力の強さ
+	float stompGravoty_ = 1.0f;
+	// ストンプのフレーム時間ごとの時間経過
+	float stompDeltaTime_ = 0.9f;
+
+	// Groundの四隅座標
+	std::vector<Vector3> groundCorners_{};
+
+	//落下しているか
+	bool isDrop_ = false;
+
+	//移動スピードが減るかどうか
+	bool isSpeedDown_ = false;
+	//スピード倍率
+	float speedMagnification_ = 1.0f;
+	//減速中の時間
+	int speedDownTime_ = 0;
+
+	// キルストリーク
+	bool isKillStreak_ = false;
+	int killStrealCount_ = 0;
+	
+
+	//当たり判定
+	std::unique_ptr<PlayerAttack>attack_ = nullptr;
+
+
+
+#pragma region System システム
+
+	// LStickの入力
+	Vector2 iLStick_{};
+
+	// デッドゾーン
+	const float DZone_ = 0.2f;
+
+#pragma endregion 
+
+
+private: // フォローカメラ
+
+	FollowCamera* followCamera_ = nullptr;
 
 };
 

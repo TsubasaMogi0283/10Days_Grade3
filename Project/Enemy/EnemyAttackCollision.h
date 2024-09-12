@@ -7,7 +7,7 @@
 #include "../Collider/Collider.h"
 
 struct Camera;
-struct SpotLight;
+struct DirectionalLight;
 
 class EnemyAttackCollision :public Collider {
 public:
@@ -21,7 +21,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="modelHandle"></param>
-	void Initialize(uint32_t modelHandle);
+	void Initialize(uint32_t& modelHandle);
 
 	/// <summary>
 	/// 更新
@@ -33,7 +33,7 @@ public:
 	/// </summary>
 	/// <param name="camera"></param>
 	/// <param name="spotLight"></param>
-	void Draw(Camera&camera,SpotLight& spotLight);
+	void Draw(Camera&camera, DirectionalLight& directionalLight);
 
 	/// <summary>
 	/// デストラクタ

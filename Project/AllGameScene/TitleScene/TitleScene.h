@@ -1,14 +1,15 @@
 #pragma once
 #include "IGameScene.h"
 
+
 #include <memory>
 
 #include "Sprite.h"
-
+#include "WorldTransform.h"
 #include "Model.h"
 #include "Camera.h"
 #include <BackText.h>
-
+#include "../External/TsumiInput/TInput.h"
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
 
@@ -56,43 +57,40 @@ public:
 
 
 private:
+	
 
+	TInput* tInput_ = nullptr;
 	//カメラ
 	Camera camera_ = {};
 	Vector3 cameraPosition_ = {};
-
-	//平行光源
-	DirectionalLight directionalLight_ = {};
+	DirectionalLight directtionalLight_ = {};
 	//マテリアル
 	Material material_ = {};
-
-	std::unique_ptr<Sprite> text_ = nullptr;
-	std::unique_ptr<Sprite> title_ = nullptr;
-
-
 
 	//ポストエフェクト
 	//今は使わない
 	std::unique_ptr<BackText> back_ = nullptr;
+	///フラグ
+	bool isPlayScene_;
 
+	//タイトル
+	uint32_t modelHandle_ = 0;
+	std::unique_ptr<Model> titleModel_ = nullptr;
+	Material mtl_{};
+	WorldTransform transform_{};
+	ModelManager* modelManager_ = nullptr;
+	//タイトル2
+	uint32_t modelHandle2_ = 0;
+	std::unique_ptr<Model> titleModel2_ = nullptr;
+	Material mtl2_{};
+	WorldTransform transform2_{};
+	ModelManager* modelManager2_ = nullptr;
+	//B
+	uint32_t modelHandleB_ = 0;
+	std::unique_ptr<Model> titleModelB_ = nullptr;
+	Material mtlB_{};
+	WorldTransform transformB_{};
+	ModelManager* modelManagerB_ = nullptr;
 
-	uint32_t bTriggerTime_ = 0;
-	bool isBTrigger_ = false;
-
-	//点滅
-	bool isFlash_ = false;
-	uint32_t flashTime_ = 0;
-	const uint32_t FLASH_TIME_LIMIT_ = 30;
-	//高速点滅
-	bool isFastFlash_ = false;
-	const uint32_t FAST_FLASH_TIME_LIMIT_ = 60;
-	const uint32_t FAST_FLASH_TIME_INTERVAL_ = 3;
-	uint32_t textDisplayCount_ = 0;
-	uint32_t fastFlashTime_ = 0;
-
-
-
-	//スタート
-	bool isStart_ = false;
 };
 

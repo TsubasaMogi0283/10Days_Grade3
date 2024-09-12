@@ -1,112 +1,138 @@
 #pragma once
-#include "Enemy.h"
-#include <memory>
+
 #include <list>
 
-#include "Stage/Ground/StageRect.h"
 
-struct Camera;
-struct SpotLight;
-class Player;
-class ObjectManager;
+class ModelManager;
 
-
+#include "Enemy.h"
 class EnemyManager{
 public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	EnemyManager() = default;
-	
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="modelhandle"></param>
-	void Initialize(uint32_t modelhandle);
-	
+	/// <param name="rockModelhandle"></param>
+	/// <param name="feModelHandle"></param>
+	void Initialize(uint32_t& rockModelhandle,uint32_t &feModelHandle);
+
 	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update();
 
+
 	/// <summary>
 	/// 描画
 	/// </summary>
-	/// <param name="spotLight"></param>
-	void Draw(Camera& camera ,SpotLight& spotLight);
+	/// <param name="camera"></param>
+	/// <param name="directionalLight"></param>
+	void Draw(Camera& camera,DirectionalLight& directionalLight);
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
 	~EnemyManager();
 
+
 public:
+
 	/// <summary>
-	/// エネミーのリストを取得
+	/// 追跡
 	/// </summary>
-	/// <returns></returns>
-	inline std::list<Enemy*> GetEnemyes() {
-		return enemyes_;
+	void Tracking();
+
+	/// <summary>
+	/// プレイヤーの座標を取得
+	/// </summary>
+	/// <param name="playerPosition"></param>
+	void SetPlayerPosition(Vector3& playerPosition) {
+		this->playerPosition_ = playerPosition;
 	}
-	
+
+
+
+
+public:
+
+
 	/// <summary>
-	/// エネミーの生成
+	/// ステージの四隅の座標を取得
 	/// </summary>
-	void GenarateEnemy();
+	/// <param name="leftBack"></param>
+	/// <param name="rightBack"></param>
+	/// <param name="leftFront"></param>
+	/// <param name="rightFront"></param>
+	void SetStageRectPosition(Vector3& leftBack, Vector3& rightBack, Vector3& leftFront, Vector3& rightFront) {
+		this->stageLeftBackPosition = leftBack;
+		this->stageRightBackPosition = rightBack;
+		this->stageLeftFrontPosition = leftFront;
+		this->stageRightFrontPosition = rightFront;
+	}
 
 	/// <summary>
 	/// エネミーを消す処理
 	/// </summary>
 	void DeleteEnemy();
-		
-	/// <summary>
-	/// プレイヤーの設定
-	/// </summary>
-	/// <param name="player"></param>
-	inline void SetPlayer(Player* player) {
-		this->player_=player;
-	}
-	
-	/// <summary>
-	/// オブジェクト管理クラスの設定
-	/// </summary>
-	/// <param name="objectManager"></param>
-	inline void SetObjectManager(ObjectManager* objectManager) {
-		this->objectManager_ = objectManager;
+
+
+	//リストの取得
+	std::list<Enemy*> GetEnemyList() {
+		return enemyes_;
 	}
 
-	/// <summary>
-	/// ステージの四隅を取得
-	/// </summary>
-	/// <param name="stageRect"></param>
-	inline void SetStageRectangle(StageRect& stageRect) {
-		this->stageRect_ = stageRect;
-	}
-
-	
 
 private:
-	Player* player_ = nullptr;
-	ObjectManager* objectManager_ = nullptr;
+	/// <summary>
+	/// 岩の敵
+	/// </summary>
+	void GenarateRockEnemy(uint32_t& rockModelhandle);
 
-	//エネミーのリスト
-	std::list<Enemy*>enemyes_ = {};
-	//モデルハンドル
-	uint32_t modelHandle_ = 0;
-
-	const float ENEMY_SCALE_SIZE_ = 1.0f;
-	
+	/// <summary>
+	/// 鉄の敵
+	/// </summary>
+	void GenarateFeEnemy(uint32_t& feModelHandle);
 
 
-	
+private:
+	ModelManager* modelManager_ = nullptr;
 
-	AABB aabb[2] = {};
+	//最大数
+	const uint32_t MAX_ENEMY_COUNT_ = 15u;
 
-	Vector3 enemyPosition[2] = {};
+	uint32_t genarateTime_ = 0u;
 
-	StageRect stageRect_ = {};
 
-	//モデル
-	Material material_ = {};
+	//通常の敵
+	std::list<Enemy*> enemyes_ = {};
+
+private:
+	//岩
+	uint32_t rockEnemyModelHandle_ = 0u;
+	//鉄
+	uint32_t feEnemyModelHandle_ = 0u;
+
+
+
+private:
+
+	//プレイヤーの座標
+	Vector3 playerPosition_ = {};
+
+	//ステージの四隅の座標
+	//左奥
+	Vector3 stageLeftBackPosition = {};
+	//右奥
+	Vector3 stageRightBackPosition = {};
+	//左前
+	Vector3 stageLeftFrontPosition = {};
+	//右前
+	Vector3 stageRightFrontPosition = {};
+
+
 };
 

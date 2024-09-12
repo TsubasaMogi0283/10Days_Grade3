@@ -30,6 +30,11 @@ public:
 	}
 
 
+public:
+	Vector3 GetWorldPosition();
+
+
+
 private:
 	//転送
 	void Transfer();

@@ -1,118 +1,102 @@
 #include "TitleScene.h"
 #include <imgui.h>
 #include <Input.h>
-#include <AdjustmentItems.h>
-#include "SampleScene/SampleScene.h"
+#include "GameScene/GameScene.h"
+#include "ResultScene/ResultScene.h"
 
 #include "GameManager.h"
 #include "ModelManager.h"
-#include "AnimationManager.h"
-#include <numbers>
 #include <TextureManager.h>
 
 
 void TitleScene::Initialize(){
-
-	uint32_t logoTextureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Title/StartText.png");
-	uint32_t titleTextureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Title/Title.png");
-
-	//初期化
-	const Vector3 INITIAL_POSITION = {.x=0.0f,.y=0.0f,.z=0.0f};
-	text_.reset(Sprite::Create(logoTextureHandle, INITIAL_POSITION));
-	title_.reset(Sprite::Create(titleTextureHandle, INITIAL_POSITION));
-
-	isStart_ = false;
-	isFlash_ = true;
-	isFastFlash_ = false;
-
+	modelManager_ = ModelManager::GetInstance();
+	modelManager2_ = ModelManager::GetInstance();
+	directtionalLight_.Initialize();
+	
+	tInput_ = TInput::GetInstance();
 	//カメラ
 	camera_.Initialize();
 	camera_.translate_ = { 0.0f,0.0f,-9.8f };
+	
+	///ポストエフェクト
+	back_ = std::make_unique<BackText>();
+	back_->Initialize();
+	//タイトル
+	modelManager_ = ModelManager::GetInstance();
+	modelHandle_ =modelManager_->LoadModelFile("Resources/Title", "Title.obj");
+	titleModel_.reset(Model::Create(modelHandle_));
+	mtl_.Initialize();
+	transform_.Initialize();
+	//タイトル2
+	modelManager2_ = ModelManager::GetInstance();
+	modelHandle2_ = modelManager2_->LoadModelFile("Resources/Title", "Title2.obj");
+	titleModel2_.reset(Model::Create(modelHandle2_));
+	mtl2_.Initialize();
+	transform2_.Initialize();
+	//B
+	modelManagerB_ = ModelManager::GetInstance();
+	modelHandleB_ = modelManagerB_->LoadModelFile("Resources/Title", "B.obj");
+	titleModelB_.reset(Model::Create(modelHandleB_));
+	mtlB_.Initialize();
+	transformB_.Initialize();
+	transformB_.translate_ = { 0,-2,0 };
+	isPlayScene_ = false;
 }
 
 void TitleScene::Update(GameManager* gameManager){
+	transform_.Update();
+	transform2_.Update();
+	transformB_.Update();
+	directtionalLight_.Update();
+	camera_.Update();
+	mtl_.Update();
+	mtl2_.Update();
+	mtlB_.Update();
+	XINPUT_STATE joyState{};
+	joyState;
+	////コントローラーのBを押すと高速点滅
+	//if (Input::GetInstance()->GetJoystickState(joyState) == true) {
+	//
+	//	//Bボタンを押したとき
+	//	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+	//		bTriggerTime_ += 1;
+	//
+	//	}
+	//	if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) == 0) {
+	//		bTriggerTime_ = 0;
+	//	}
+	//
+	//	if (bTriggerTime_ == 1) {
+	//
+	//		isFastFlash_ = true;
+	//	}
+	//
+	//}
 
 
-	//まだボタンを押していない時
-	//通常点滅
-	if (isFlash_ == true) {
-		flashTime_ += 1;
+#ifdef _DEBUG
+	ImGui::Begin("タイトル"); 
+	ImGui::SliderFloat3("Position", &transform2_.translate_.y, -10.0f, 10.0f);
+	ImGui::End();
+#endif // _DEBUG
 
-		if (flashTime_ > FLASH_TIME_LIMIT_ * 0 &&
-			flashTime_ <= FLASH_TIME_LIMIT_ ) {
-			text_->SetInvisible(false);
+
+	//transform2_.translate_.y -= 0.1f;
+	//仮置き
+	//スペースキーで次のシーンへ
+	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE)==true|| tInput_->Trigger(PadData::B)) {
+		
+		isPlayScene_ = true;
+		return;
+	}
+	if(isPlayScene_ == true){
+		transform2_.translate_.y -= 0.1f;
+		if (transform2_.translate_.y < -3) {
+			gameManager->ChangeScene(new ResultScene());
 		}
-		if (flashTime_ > FLASH_TIME_LIMIT_ &&
-			flashTime_ <= FLASH_TIME_LIMIT_*2) {
-			text_->SetInvisible(true);
-
-		}
-		if (flashTime_ > FLASH_TIME_LIMIT_*2) {
-			flashTime_ = 0;
-		}
-
 	}
 	
-
-	XINPUT_STATE joyState{};
-	//コントローラーのBを押すと高速点滅
-	if (Input::GetInstance()->GetJoystickState(joyState) == true) {
-
-		//Bボタンを押したとき
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
-			bTriggerTime_ += 1;
-
-		}
-		if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) == 0) {
-			bTriggerTime_ = 0;
-		}
-
-		if (bTriggerTime_ == 1) {
-
-			isFastFlash_ = true;
-		}
-
-	}
-
-	//スペースを押したら高速点滅
-	if (Input::GetInstance()->IsPushKey(DIK_SPACE) == true) {
-		//脱出
-		isFastFlash_ = true;
-	}
-
-
-	//高速点滅
-	if (isFastFlash_ == true) {
-		fastFlashTime_ += 1;
-		if (fastFlashTime_ % FAST_FLASH_TIME_INTERVAL_ == 0) {
-			//もう一度学び直したが
-			//単純に+1にしたいなら前置インクリメント「++(名前)」がいいらしい
-
-			//加算される前の値を入れたいなら後置インクリメント「(名前)++」にしよう
-			++textDisplayCount_;
-		}
-		//表示
-		if (textDisplayCount_ % 2 == 0) {
-			text_->SetInvisible(true);
-		}
-		else {
-			text_->SetInvisible(false);
-		}
-
-
-		//指定した時間を超えたらシーンチェンジ
-		if (fastFlashTime_> FAST_FLASH_TIME_LIMIT_) {
-			isStart_ = true;
-		}
-	}
-
-
-	camera_.Update();
-
-	//脱出
-	if (isStart_ == true) {
-		gameManager->ChangeScene(new SampleScene());
-	}
 }
 
 void TitleScene::DrawSpriteBack()
@@ -121,22 +105,20 @@ void TitleScene::DrawSpriteBack()
 
 void TitleScene::DrawObject3D()
 {
+	titleModel_->Draw(transform_, camera_, mtl_, directtionalLight_);
+	titleModel2_->Draw(transform2_, camera_, mtl2_, directtionalLight_);
+	titleModelB_->Draw(transformB_, camera_, mtlB_, directtionalLight_);
 }
 
-void TitleScene::PreDrawPostEffectFirst()
-{
+void TitleScene::PreDrawPostEffectFirst(){
+	back_->PreDraw();
 }
 
-void TitleScene::DrawPostEffect()
-{
+void TitleScene::DrawPostEffect(){
+	back_->Draw();
 }
 
 void TitleScene::DrawSprite(){
-	title_->Draw();
-
-	
-	text_->Draw();
-	
 
 
 }

@@ -18,18 +18,21 @@
 //Material...色など三角形の表面の材質をけっていするもの
 struct Material
 {
-    float32_t4 color;
-    int32_t enableLighting; ///
-    float32_t4x4 uvTransform;
+    float4 color;
+    int enableLighting;
+    float4x4 uvTransform;
+    //光沢度
+    float shininess;
+    bool isEnviromentMap;
 };
 
 
 struct DirectionalLight
 {
 	//ライトの色
-    float32_t4 color;
+    float4 color;
 	//ライトの向き
-    float32_t3 direction;
+    float3 direction;
 	//ライトの輝度
     float intensity;
 };
@@ -43,7 +46,7 @@ struct DirectionalLight
 ConstantBuffer<Material> gMaterial : register(b0);
 //出来たらgDirectinalLightとそれに関するRootSignatureも変えてね
 ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
-Texture2D<float32_t4> gTexture : register(t0);
+Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 
 //Textureは基本的にそのまま読まずSamplerを介して読む
@@ -55,7 +58,7 @@ SamplerState gSampler : register(s0);
 
 struct PixelShaderOutput
 {
-    float32_t4 color : SV_TARGET0;
+    float4 color : SV_TARGET0;
 };
 
 
@@ -66,25 +69,58 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
 	
 	//Materialを拡張する
-    float4 transformedUV = mul(float32_t4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
-    float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
-
-    output.color = gMaterial.color * textureColor*input.color;
-    if (output.color.a == 0.0f)
+    float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
+    float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
+    output.color = gMaterial.color * textureColor * input.color;
+    
+    if (output.color.a <= 0.0f)
     {
         discard;
     }
     
     
-	////2値抜き
-	////textureのα値が0.5以下の時にPixelを棄却
-    //if (textureColor.a <= 0.5f)
-    //{
-    //    discard;
-    //}
+    
 	
+    //DirectionalLightingする場合
+    if (gMaterial.enableLighting == 1)
+    {
 	
-  
+		//このままdotだと[-1,1]になる。
+		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
+		//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
+	
+
+		////Half Lambert
+        //float NdotL = dot(normalize(input.normal), -normalize(gDirectionalLight.direction));
+        //float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+        //
+		//
+		////Cameraへの方向を算出
+        //float3 toEye = normalize(gCamera.worldPosition - input.position);
+		//
+		////入射光の反射ベクトルを求める
+        //float3 reflectLight = reflect(normalize(gDirectionalLight.direction), normalize(input.normal));
+		//
+		////HalfVector
+        //float3 halfVector = normalize(-gDirectionalLight.direction + toEye);
+        //float NDotH = dot(normalize(input.normal), halfVector);
+        //float specularPow = pow(saturate(NDotH), gMaterial.shininess);
+		//
+		////拡散反射
+        //float3 diffuse = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+		////鏡面反射
+		////1.0f,1.0f,1.0fの所は反射色。
+        //float3 specular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float3(1.0f, 1.0f, 1.0f);
+		//
+        //output.color.rgb = diffuse + specular;
+        //output.color.a = gMaterial.color.a * textureColor.a;
+        
+		
+    }
+    else
+    {
+        output.color = gMaterial.color * textureColor * input.color;
+    }
 	
 	
     return output;

@@ -1,26 +1,12 @@
 #pragma once
-#include <string>
-#include <cassert>
-#include <fstream>
-#include <sstream>
-#include <array>
-#include <memory>
-#include <list>
-#include <random>
 
-#include <DirectXTeX.h>
-#include "Matrix4x4.h"
-#include <Material.h>
 #include <TransformationMatrix.h>
-#include <DirectionalLight.h>
-#include "ModelData.h"
 
 
-#include "Vector4.h"
 #include "Matrix4x4Calculation.h"
 #include <VertexData.h>
 
-#include <VectorCalculation.h>
+
 #include <d3dx12.h>
 
 
@@ -30,6 +16,22 @@
 #include "Particle.h"
 #include <AccelerationField.h>
 #include "ModelManager.h"
+#include <random>
+
+
+enum ParticleMoveType {
+	
+	//通常の放出
+	NormalRelease,
+	//鉛直投げ上げ
+	ThrowUp,
+	//自由落下
+	FreeFall,
+};
+
+
+struct Material;
+struct DirectionalLight;
 
 struct Emitter {
 	//エミッタのTransform;
@@ -45,11 +47,17 @@ struct Emitter {
 class Particle3D {
 public:
 
-	//コンストラクタ
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Particle3D()=default;
 
-	//初期化
-	static Particle3D* Create(uint32_t modelHandle);
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="moveType"></param>
+	/// <returns></returns>
+	static Particle3D* Create(uint32_t &modelHandle,uint32_t moveType);
 
 
 private:
@@ -66,38 +74,41 @@ private:
 
 public:
 
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="camera"></param>
 	void Update(Camera& camera);
 
-	//通常の描画
-	//void Draw();
+	/// <summary>
+	/// 平行光源
+	/// </summary>
+	/// <param name="camera"></param>
+	/// <param name="material"></param>
+	/// <param name="directionalLight"></param>
+	void Draw(Camera& camera,Material &material,DirectionalLight& directionalLight);
 
-	//テクスチャを上書きをする描画
-	void Draw(uint32_t textureHandle,Camera& camera);
 
-
-	//デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Particle3D()=default;
 
 
 
 
 public:
-	//アクセッサのまとめ
 
-	//透明度の変更
-	void SetColor(Vector4 color) {
-		this->materialColor_ = color;
+
+
+	/// <summary>
+	/// 透明になっていくようにするかどうか
+	/// </summary>
+	/// <param name="isToTransparent"></param>
+	void SetIsToTransparent(bool isToTransparent) {
+		this->isToTransparent_ = isToTransparent;
 	}
 
-	void SetTransparency(float transparency) {
-		this->materialColor_.w = transparency;
-	}
-	
-	//ビルボードにするかどうか
-	//デフォルトではするようにしている
-	bool IsBillBordMode(bool isBillBordMode) {
-		this->isBillBordMode_ = isBillBordMode;
-	}
 
 
 #pragma region エミッタの中の設定
@@ -141,30 +152,11 @@ public:
 	}
 
 
-	//以下の2つはセットで使ってね
-	void SetField(bool isSetField) {
-		this->isSetField_ = isSetField;
-	}
-	void SetAccelerationField(AccelerationField accelerationField) {
-		this->accelerationField_ = accelerationField;
-	}
-
 #pragma endregion
 
-#pragma region Lightingの設定
-	void SetLighting(bool enableLighting) {
-		this->isEnableLighting_ = enableLighting;
-	}
-	//方向
-	void SetDirection(Vector3 direction) {
-		this->lightingDirection_ = direction;
-	}
-
-#pragma endregion
 
 private:
-	//TextureManagerを参考にする
-	std::list<ModelData> modelInformationList_;
+
 
 	//頂点リソースを作る
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
@@ -176,54 +168,37 @@ private:
 	int32_t instanceCount_ = 1;
 
 
-	//マテリアル用のリソースを作る
-	ComPtr<ID3D12Resource> materialResource_ = nullptr;
-	//色関係のメンバ変数
-	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
-
-	//Lighting用
-	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
-	DirectionalLightData* directionalLightData_ = nullptr;
-	//色
-	Vector4 directionalLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	float directionalLightIntensity_ = 3.0f;
-
-	//基本はtrueで
-	bool isEnableLighting_ = 1;
-	//方向
-	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
-
-
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
-	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_ = {};
 
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
-
-	static const int32_t MAX_INSTANCE_NUMBER_ = 100;
+	//最大数
+	static const int32_t MAX_INSTANCE_NUMBER_ = 7;
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 
-	int InstancingIndex_=0;
+	int instancingIndex_=0;
 
 	//パーティクル
 	std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
 
-	//ビルボード
-	bool isBillBordMode_ = true;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
+	//動きの種類
+	uint32_t moveType_ = ThrowUp;
+
+	//透明になっていくか
+	bool isToTransparent_ = true;
 
 
 	//エミッタの設定
 	Emitter emitter_ = {};
 	const float DELTA_TIME = 1.0f / 60.0f;
 
-	//フィールド
-	bool isSetField_ = false;
-	AccelerationField accelerationField_ = {};
+
+	//鉛直投げ上げ
+	float velocityY_ = 1.2f;
+
 
 };

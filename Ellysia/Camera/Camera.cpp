@@ -52,6 +52,15 @@ void Camera::Update() {
 	Transfer();
 }
 
+Vector3 Camera::GetWorldPosition(){
+	Vector3 position = {
+		.x = worldMatrix_.m[3][0],
+		.y = worldMatrix_.m[3][1],
+		.z = worldMatrix_.m[3][2]
+	};
+	return position;
+}
+
 void Camera::Transfer() {
 	bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraMatrixData_));
 	cameraMatrixData_->viewMatrix_ = viewMatrix_;

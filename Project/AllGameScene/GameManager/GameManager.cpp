@@ -1,17 +1,19 @@
 #include "GameManager.h"
-#include "SampleScene/SampleScene.h"
-#include "SampleScene2/SampleScene2.h"
-#include "TitleScene/TitleScene.h"
 
+#include "TitleScene/TitleScene.h"
+#include "GameScene/GameScene.h"
 //シーンファクトリー作った方がよさそう
 
 void GameManager::Initialize() {
 	//シーンごとに動作確認したいときはここを変えてね
-	currentGamaScene_ = new TitleScene();
 
+	currentGamaScene_ = new TitleScene();
 #ifdef _DEBUG
-	currentGamaScene_ = new SampleScene();
+	//currentGamaScene_ = new GameScene();
+
 #endif // _DEBUG
+
+	
 
 	//初期化
 	currentGamaScene_->Initialize();
