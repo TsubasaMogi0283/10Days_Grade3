@@ -305,6 +305,7 @@
     <ClCompile Include="Project\Player\Timer\pTimer.cpp" />
     <ClCompile Include="Project\Ease\Ease.cpp" />
     <ClCompile Include="Project\Record\Record.cpp" />
+    <ClCompile Include="Project\UI\GameUI.cpp" />
     <ClCompile Include="Project\Record\GameScoreUI\GameScoreUI.cpp" />
     <ClCompile Include="Project\TextureLoader\TextureLoader.cpp" />
   </ItemGroup>
@@ -419,6 +420,7 @@
     <ClInclude Include="Project\Player\Timer\pTimer.h" />
     <ClInclude Include="Project\Ease\Ease.h" />
     <ClInclude Include="Project\Record\Record.h" />
+    <ClInclude Include="Project\UI\GameUI.h" />
     <ClInclude Include="Project\Record\GameScoreUI\GameScoreUI.h" />
     <ClInclude Include="Project\TextureLoader\TextureLoader.h" />
   </ItemGroup>

@@ -22,7 +22,7 @@
 #include "Player/Player.h"
 #include <Enemy/EnemyManager.h>
 #include <Collider/CollisionManager.h>
-#include <Record/GameScoreUI/GameScoreUI.h>
+#include "UI/GameUI.h"
 
 
 
@@ -85,8 +85,10 @@ private:
 	/// </summary>
 	void FuncInput();
 
-
-
+	/// <summary>
+	/// あらかじめ読み込んでおく
+	/// </summary>
+	void PreLoad();
 
 private:
 
@@ -144,7 +146,7 @@ private:
 
 private:
 	//UI
-	std::unique_ptr<GameScoreUI> gameScoreUI_ = nullptr;
+	std::unique_ptr<GameUI> gameUI_ = nullptr;
 	
 };
 

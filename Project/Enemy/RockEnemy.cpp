@@ -299,7 +299,6 @@ void RockEnemy::Killed(){
 void RockEnemy::ReleaseParticle(){
 
 	RockEnemyParticle* rockParticle = new RockEnemyParticle();
-	//uint32_t particleModelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle","SampleParticle.obj");
 	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 	Vector3 enemyPosition = GetWorldPosition();
 	rockParticle->Initialize(particleModelHandle, enemyPosition);

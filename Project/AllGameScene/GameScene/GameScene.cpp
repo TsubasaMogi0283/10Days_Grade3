@@ -33,7 +33,9 @@ GameScene::GameScene()
 
 void GameScene::Initialize() {
 
-	
+	//あらかじめ読み込んでおく
+	PreLoad();
+
 
 	/* ----- FollowCamera フォローカメラ ----- */
 	uint32_t followCameraModelHD = modelManager_->LoadModelFile("Resources/FollowCamera", "FollowCamera.obj");
@@ -92,8 +94,8 @@ void GameScene::Initialize() {
 	enemyManager_->Initialize(rockEnemyModelhandle, feEnemyModelhandle);
 
 
-	gameScoreUI_ = std::make_unique<GameScoreUI>();
-	gameScoreUI_->Initialize();
+	gameUI_ = std::make_unique<GameUI>();
+	gameUI_->Initialize();
 
 
 	//衝突判定管理クラスの初期化
@@ -133,6 +135,15 @@ void GameScene::Update(GameManager* gameManager) {
 		gameManager->ChangeScene(new ResultScene());
 		return;
 	}
+	//制限時間が過ぎたらResultへ
+	if (gameUI_->GetIsTimeOver() == true) {
+		gameManager->ChangeScene(new ResultScene());
+		return;
+	}
+
+	
+
+
 
 	/* ----- FollowCamera フォローカメラ ----- */
 	followCamera_->Update();
@@ -190,9 +201,9 @@ void GameScene::Update(GameManager* gameManager) {
 
 #pragma region UI
 	//スコアの設定
-	gameScoreUI_->SetScore(score);
+	gameUI_->SetScore(score);
 	//更新
-	gameScoreUI_->Update();
+	gameUI_->Update();
 #pragma endregion
 
 	//地面の更新
@@ -209,7 +220,6 @@ void GameScene::DrawSpriteBack() {
 void GameScene::DrawObject3D() {
 	//skydome_->Draw(camera_);
 
-	/* ----- FollowCamera フォローカメラ ----- */
 	//----- FollowCamera フォローカメラ ----- 
 	//followCamera_->Draw3D(camera_, directtionalLight_);
 
@@ -236,7 +246,7 @@ void GameScene::DrawPostEffect() {
 }
 
 void GameScene::DrawSprite() {
-	gameScoreUI_->Draw();
+	gameUI_->Draw();
 }
 
 GameScene::~GameScene() {
@@ -265,4 +275,9 @@ void GameScene::FuncInput()
 		// Aボタンが押された時の処理
 		player_->FuncAButton();
 	}
+}
+
+void GameScene::PreLoad(){
+	ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/FeEnemy", "FeBreak.obj");
+	ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 }
