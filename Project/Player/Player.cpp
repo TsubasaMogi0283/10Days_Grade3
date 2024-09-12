@@ -6,10 +6,12 @@
 
 
 // コピーコンストラクタ
-Player::Player(uint32_t modelHandle)
+Player::Player(PlayerAssetsHandle handles)
 {
-	// モデルハンドの設定
-	this->modelHandle_ = modelHandle;
+	//記録
+	record_ = Record::GetInstance();
+
+	this->handles_ = handles;
 }
 
 
@@ -17,7 +19,7 @@ Player::Player(uint32_t modelHandle)
 void Player::Init()
 {
 	// モデルの初期化
-	model_.reset(Model::Create(modelHandle_));
+	model_.reset(Model::Create(handles_.player));
 
 	// トランスフォームの初期化
 	transform_.Initialize();
@@ -27,10 +29,16 @@ void Player::Init()
 	// マテリアルの初期化
 	mtl_.Initialize();
 
+	// 亀裂エフェクト
+	/*crackEffect_ = std::make_unique<CrackEffect>(handles_.crack);
+	crackEffect_->Init();*/
+
+	// 乱数生成器の作成
+	std::random_device seedGenerator;
+	randomEngine_.seed(seedGenerator());
 
 	//種類
 	collisionType_ = CollisionType::SphereType;
-
 
 	//判定
 	//自分
@@ -38,12 +46,9 @@ void Player::Init()
 	//敵の攻撃
 	SetCollisionMask(COLLISION_ATTRIBUTE_ENEMY_ATTACK);
 
-	
-
 	//攻撃
 	attack_ = std::make_unique<PlayerAttack>();
 	attack_->Initialize(transform_.translate_);
-
 }
 
 
@@ -69,18 +74,8 @@ void Player::Update()
 		StompFunc();
 	}
 
-	//上昇中
-	if (jumpVel_ >= 0.0f) {
-		isDrop_ = false;
-	}
-	//落下中
-	else {
-		isDrop_ = true;
-	}
-
 	//スピード管理
 	SpeedManagiment();
-
 
 	//色
 	Flashing();
@@ -89,27 +84,48 @@ void Player::Update()
 	attack_->SetPlayerPosition(worldPosition);
 	attack_->Update();
 
+
 #ifdef _DEBUG
 	// ImGuiの描画
 	DrawImGui();
 #endif // _DEBUG
+
+
+	// 亀裂エフェクト配列
+	for (std::shared_ptr<CrackEffect> crack : cracks_) {
+		crack->Update();
+	}
+	// 非アクティブなら削除
+	cracks_.remove_if([](std::shared_ptr<CrackEffect> crack) {
+		if (!crack->IsActive()) {
+			crack.reset();
+			return true;
+		}
+		return false;
+		}
+	);
 }
 
 
 // 描画処理
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
+	// プレイヤー
 	model_->Draw(transform_, camera, mtl_, light);
 
-	//攻撃
+	// 亀裂
+	//crackEffect_->Draw3D(camera, light);
+	// 亀裂エフェクト配列
+	for (std::shared_ptr<CrackEffect> crack : cracks_) {
+		crack->Draw3D(camera, light);
+	}
+
 #ifdef _DEBUG
+	//攻撃
 	if (isDrop_ ==true) {
 		attack_->Draw(camera, light);
 	}
-	
 #endif // _DEBUG
-
-	
 }
 
 
@@ -298,6 +314,7 @@ void Player::EnterStompFunc()
 	JumpExsit(); // ジャンプの終了処理
 	isStomping_ = true; // ストンプ中
 	stompVel_ = -stompSpeed_; // ストンプの速度を設定
+	isDrop_ = true;
 }
 
 
@@ -337,13 +354,63 @@ void Player::StompExsit()
 {
 	isStomping_ = false; // ストンプ終了
 	stompVel_ = 0.0f; // Y軸速度をリセット
+	AddNewCrack(); // 亀裂を出す
+	isDrop_ = false;
 }
+
+
+// 亀裂インスタンスの作成&配列追加
+void Player::AddNewCrack()
+{
+	// 初期スケール
+	float setScale = CalcCrackScaleForLevel(killStrealCount_);
+	Vector3 initScale = { setScale, setScale, setScale };
+
+	// 初期Y軸姿勢
+	std::uniform_real_distribution<float>
+		dist(-4.0f, +4.0f);
+	float initYRotate = dist(randomEngine_);
+
+	// 初期座標
+	Vector3 initPos = transform_.translate_;
+	initPos.y = 0.01f;
+
+	// newCrack
+	std::shared_ptr<CrackEffect> crack = std::make_shared<CrackEffect>(handles_.crack);
+
+	// 初期化。各種値の設定
+	crack->Init();
+	crack->SetScale(initScale);
+	crack->SetYRotate(initYRotate);
+	crack->SetPosition(initPos);
+
+	// リストに追加
+	cracks_.push_back(crack);
+}
+
+
+// レベルに応じた亀裂のスケールの計算
+float Player::CalcCrackScaleForLevel(int level) const
+{
+	return baseCrackScale_ * float(std::pow(crackScaleGrowScale_, level));
+}
+
 
 void Player::SpeedManagiment() {
 	//設定した時間になったら元に戻る
 	//ネストを増やしたくないから外に出す
 	if (speedDownTime_ > 200) {
 		isSpeedDown_ = false;
+	}
+
+	//一瞬当たったら減点
+	if (speedDownTime_ == 1) {
+
+		//0点より大きい時だけ減点させる
+		if (record_->GetTotalScore() > 0) {
+			record_->DeductionScore();
+		}
+		
 	}
 
 	//スピードの制限を付ける

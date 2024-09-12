@@ -37,17 +37,20 @@ struct DirectionalLight
     float intensity;
 };
 
+//カメラの位置を送る
+struct Camera
+{
+    float3 worldPosition;
+};
+
 //
 ////ConstantBuffer<構造体>変数名:register(b0);
-//ConstantBuffer<Material>gMaterial:register(b0);
-//Texture2D<float32_t4>gTexture:register(b0);
-//SamplerState gSample:register : register(s0);
-
 ConstantBuffer<Material> gMaterial : register(b0);
-//出来たらgDirectinalLightとそれに関するRootSignatureも変えてね
 ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
 Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
+ConstantBuffer<Camera> gCamera : register(b2);
+
 
 //Textureは基本的にそのまま読まずSamplerを介して読む
 //処理方法を記述している
@@ -71,6 +74,7 @@ PixelShaderOutput main(VertexShaderOutput input)
 	//Materialを拡張する
     float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
+    output.color = gMaterial.color * textureColor * input.color;
     
     if (output.color.a <= 0.0f)
     {
@@ -81,8 +85,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     
 	
     //DirectionalLightingする場合
-    if (gMaterial.enableLighting == 1)
-    {
+    if (gMaterial.enableLighting == 1){
 	
 		//このままdotだと[-1,1]になる。
 		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
@@ -92,10 +95,10 @@ PixelShaderOutput main(VertexShaderOutput input)
 		//Half Lambert
         float NdotL = dot(normalize(input.normal), -normalize(gDirectionalLight.direction));
         float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
-
+        
 		
 		//Cameraへの方向を算出
-        float3 toEye = normalize(gCamera.worldPosition - input.position);
+        float3 toEye = normalize(gCamera.worldPosition - input.position.xyz);
 		
 		//入射光の反射ベクトルを求める
         float3 reflectLight = reflect(normalize(gDirectionalLight.direction), normalize(input.normal));

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "Model.h"
 #include "WorldTransform.h"
 #include "Material.h"
@@ -7,13 +9,25 @@
 #include "VectorCalculation.h"
 #include "Matrix4x4Calculation.h"
 #include "Func/PlayerFunc.h"
+#include "Effects/StompSpeed/StompSpeed.h"
+#include "Effects/CrackEffect/CrackEffect.h"
+
 #include "PlayerAttack.h"
 #include "Collider/Collider.h"
+#include "Record/Record.h"
+
 
 // 前方宣言
 struct Camera;
 struct DirectionalLight;
 class FollowCamera;
+
+// プレイヤー関連のモデルハンドル
+struct PlayerAssetsHandle {
+	uint32_t player;
+	uint32_t stompSpeed;
+	uint32_t crack;
+};
 
 
 /* Playerクラス */
@@ -26,7 +40,7 @@ public:
 	~Player() = default;
 
 	// コピーコンストラクタ
-	Player(uint32_t modelHandle);
+	Player(PlayerAssetsHandle handles);
 
 	// 初期化、更新、描画
 	void Init();
@@ -126,6 +140,12 @@ private:
 	// ストンプ終了処理
 	void StompExsit();
 
+	// 亀裂インスタンスの作成&配列追加
+	void AddNewCrack();
+
+	// レベルに応じた亀裂のスケールの計算
+	float CalcCrackScaleForLevel(int level) const;
+
 	// Imguiの描画
 	void DrawImGui();
 
@@ -141,8 +161,10 @@ private:
 
 private:
 
+	// プレイヤー関連のモデルハンドル
+	PlayerAssetsHandle handles_{};
+
 	// モデル
-	uint32_t modelHandle_ = 0;
 	std::unique_ptr<Model> model_;
 	// トランスフォーム
 	WorldTransform transform_{};
@@ -218,12 +240,33 @@ private:
 	// デッドゾーン
 	const float DZone_ = 0.2f;
 
+	// 乱数生成器
+	std::mt19937 randomEngine_;
+
 #pragma endregion 
+
+
+private: // エフェクト
+
+	// 亀裂エフェクト
+	//std::unique_ptr<CrackEffect> crackEffect_;
+	// 亀裂エフェクト配列
+	std::list<std::shared_ptr<CrackEffect>> cracks_;
+
+	// 亀裂基本スケール
+	float baseCrackScale_ = 5.0f;
+	// 成長率
+	float crackScaleGrowScale_ = 1.2f;
 
 
 private: // フォローカメラ
 
 	FollowCamera* followCamera_ = nullptr;
+
+
+private:
+	Record* record_ = nullptr;
+
 
 };
 

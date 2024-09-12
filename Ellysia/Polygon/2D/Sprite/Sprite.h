@@ -39,6 +39,11 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 描画(上書き可能)
+	/// </summary>
+	/// <param name="textureHandle"></param>
+	void Draw(uint32_t& textureHandle);
 
 	/// <summary>
 	/// デストラクタ

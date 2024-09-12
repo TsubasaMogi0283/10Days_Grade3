@@ -50,7 +50,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Particle3D()=default;
+	Particle3D();
 
 	/// <summary>
 	/// 初期化
@@ -157,6 +157,9 @@ public:
 
 private:
 
+	ModelManager* modelManager_ = nullptr;
+
+
 
 	//頂点リソースを作る
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
@@ -168,11 +171,11 @@ private:
 	int32_t instanceCount_ = 1;
 
 
-
+	//インスタンス
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
 	//最大数
-	static const int32_t MAX_INSTANCE_NUMBER_ = 7;
+	static const int32_t MAX_INSTANCE_NUMBER_ = 20;
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 
@@ -201,4 +204,9 @@ private:
 	float velocityY_ = 1.2f;
 
 
+
+	//インスタンス
+	ComPtr<ID3D12Resource>cameraResource_ = nullptr;
+	Vector3* cameraPositionData_ = {};
+	Vector3 cameraPosition_ = {};
 };

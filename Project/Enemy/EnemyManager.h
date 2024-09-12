@@ -6,6 +6,7 @@
 class ModelManager;
 
 #include "Enemy.h"
+
 class EnemyManager{
 public:
 	/// <summary>
@@ -100,7 +101,6 @@ private:
 
 private:
 	ModelManager* modelManager_ = nullptr;
-
 	//最大数
 	const uint32_t MAX_ENEMY_COUNT_ = 15u;
 

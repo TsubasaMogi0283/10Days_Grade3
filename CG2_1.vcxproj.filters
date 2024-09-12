@@ -298,8 +298,15 @@
     <ClCompile Include="Project\Enemy\FeEnemy.cpp" />
     <ClCompile Include="Project\Enemy\RockEnemyParticle.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemyParticle.cpp" />
+    <ClCompile Include="Project\Player\Effects\StompSpeed\StompSpeed.cpp" />
     <ClCompile Include="Project\Player\PlayerAttack.cpp" />
     <ClCompile Include="Record.cpp" />
+    <ClCompile Include="Project\Player\Effects\CrackEffect\CrackEffect.cpp" />
+    <ClCompile Include="Project\Player\Timer\pTimer.cpp" />
+    <ClCompile Include="Project\Ease\Ease.cpp" />
+    <ClCompile Include="Project\Record\Record.cpp" />
+    <ClCompile Include="Project\UI\GameUI.cpp" />
+    <ClCompile Include="Project\TextureLoader\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -405,8 +412,16 @@
     <ClInclude Include="Project\Enemy\EnemyParticle.h" />
     <ClInclude Include="Project\Enemy\RockEnemyParticle.h" />
     <ClInclude Include="Project\Enemy\FeEnemyParticle.h" />
+    <ClInclude Include="Project\Player\Effects\StompSpeed\StompSpeed.h" />
     <ClInclude Include="Project\Player\PlayerAttack.h" />
     <ClInclude Include="Record.h" />
+    <ClInclude Include="Project\Player\Effects\CrackEffect\CrackEffect.h" />
+    <ClInclude Include="Project\Player\Timer\pTimer.h" />
+    <ClInclude Include="Project\Ease\Ease.h" />
+    <ClInclude Include="Project\Record\Record.h" />
+    <ClInclude Include="Project\UI\GameUI.h" />
+    <ClInclude Include="Project\Record\GameScoreUI\GameScoreUI.h" />
+    <ClInclude Include="Project\TextureLoader\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
