@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include <BackText.h>
 #include "Input.h"
+#include <Audio.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
@@ -74,13 +75,16 @@ private:
 
 
 	enum ResultCondition {
+
+		FadeInResult,
 		//スコアアップ
 		ScoreUp,
 		//表示
 		DisaplayScore,
 		//選択
 		SelectNextScene,
-		//
+		//遷移
+		ChangeNextSceneFromResult,
 
 
 
@@ -120,7 +124,7 @@ private:
 	//5桁が最大
 	static const uint32_t SCORE_DIGIT_ = 5u;
 	std::array<std::unique_ptr<Sprite>, SCORE_DIGIT_>scoreSprites_ = { nullptr };
-
+	float upTime_ = 0.0f;
 	
 
 	//位
@@ -129,6 +133,26 @@ private:
 	//スプライト
 	uint32_t numberQuantity[NUMBER_QUANTITY] = {};
 
+
+	std::unique_ptr<Sprite> backGround_ = nullptr;
+
+	//Bで次へ
+	std::unique_ptr<Sprite> bNext_ = nullptr;
+	int32_t flashingTime_ = 0;
+
+	std::unique_ptr<Sprite> white_ = nullptr;
+	float whiteAlpha_ = 1.0f;
+
+	//プレイヤー
+	std::unique_ptr<Sprite> player_ = nullptr;
+	uint32_t face_ = 0u;
+	uint32_t normalFace_ = 0u;
+	uint32_t hFace_ = 0u;
+
+
+	//ランク
+	std::unique_ptr<Sprite> rank_ = nullptr;
+	uint32_t rankName_ = 0u;
 
 
 private:
@@ -141,5 +165,25 @@ private:
 	//状態
 	int32_t condition_ = -1;
 	int32_t nextScene_ = -1;
+
+
+
+
+
+
+
+
+
+
+private:
+	Audio* roll_ = nullptr;
+	uint32_t rollHandle_ = 0u;
+	int32_t rollTime_ = 0;
+
+
+
+	uint32_t rankVoiceHandle_[4] = {};
+
+
 };
 
