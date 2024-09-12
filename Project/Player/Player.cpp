@@ -33,10 +33,14 @@ void Player::Init()
 	stompSpeedEffect_ = std::make_unique<pEffect::StompSpeed>(handles_.stompSpeed);
 	stompSpeedEffect_->Init();
 
+	// 亀裂エフェクト
+	crackEffect_ = std::make_unique<CrackEffect>(handles_.crack);
+	crackEffect_->Init();
+
 #pragma endregion 
+
 	//種類
 	collisionType_ = CollisionType::SphereType;
-
 
 	//判定
 	//自分
@@ -44,12 +48,9 @@ void Player::Init()
 	//敵の攻撃
 	SetCollisionMask(COLLISION_ATTRIBUTE_ENEMY_ATTACK);
 
-	
-
 	//攻撃
 	attack_ = std::make_unique<PlayerAttack>();
 	attack_->Initialize(transform_.translate_);
-
 }
 
 
@@ -106,6 +107,9 @@ void Player::Update()
 	// StompSpeed
 	stompSpeedEffect_->Update();
 
+	// 亀裂
+	crackEffect_->Update();
+
 #pragma endregion 
 }
 
@@ -113,25 +117,25 @@ void Player::Update()
 // 描画処理
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
+	// プレイヤー
+	model_->Draw(transform_, camera, mtl_, light);
+
 #pragma region Effect エフェクト
 
 	// StompSpeed
 	stompSpeedEffect_->Draw3D(camera, light);
 
+	// 亀裂
+	crackEffect_->Draw3D(camera, light);
+
 #pragma endregion 
 
-	// プレイヤー
-	model_->Draw(transform_, camera, mtl_, light);
-
-	//攻撃
 #ifdef _DEBUG
+	//攻撃
 	if (isDrop_ ==true) {
 		attack_->Draw(camera, light);
 	}
-	
 #endif // _DEBUG
-
-	
 }
 
 

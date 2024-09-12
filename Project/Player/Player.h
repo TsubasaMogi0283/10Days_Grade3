@@ -8,6 +8,7 @@
 #include "Matrix4x4Calculation.h"
 #include "Func/PlayerFunc.h"
 #include "Effects/StompSpeed/StompSpeed.h"
+#include "Effects/CrackEffect/CrackEffect.h"
 
 #include "PlayerAttack.h"
 #include "Collider/Collider.h"
@@ -21,6 +22,7 @@ class FollowCamera;
 struct PlayerAssetsHandle {
 	uint32_t player;
 	uint32_t stompSpeed;
+	uint32_t crack;
 };
 
 
@@ -235,6 +237,9 @@ private: // エフェクト
 
 	// StompSpeedEffect
 	std::unique_ptr<pEffect::StompSpeed> stompSpeedEffect_;
+
+	// 亀裂エフェクト
+	std::unique_ptr<CrackEffect> crackEffect_;
 
 
 private: // フォローカメラ

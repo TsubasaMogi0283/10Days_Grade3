@@ -301,6 +301,7 @@
     <ClCompile Include="Project\Player\Effects\StompSpeed\StompSpeed.cpp" />
     <ClCompile Include="Project\Player\PlayerAttack.cpp" />
     <ClCompile Include="Record.cpp" />
+    <ClCompile Include="Project\Player\Effects\CrackEffect\CrackEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -409,6 +410,7 @@
     <ClInclude Include="Project\Player\Effects\StompSpeed\StompSpeed.h" />
     <ClInclude Include="Project\Player\PlayerAttack.h" />
     <ClInclude Include="Record.h" />
+    <ClInclude Include="Project\Player\Effects\CrackEffect\CrackEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
