@@ -7,7 +7,8 @@
 
 
 void ResultScene::Initialize(){
-
+	back_ = std::make_unique<BackText>();
+	back_->Initialize();
 }
 
 void ResultScene::Update(GameManager* gameManager){
