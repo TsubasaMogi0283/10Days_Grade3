@@ -24,10 +24,9 @@ void GameUI::Initialize(){
 
 
 	isTimeStart_ = false;
-	isTimeStart_ = true;
 
 	//時間
-	time_ = currentTime_ * SECOND;
+	time_ = (currentTime_+1) * SECOND;
 	//初期位置
 	const Vector2 TIME_INITIAL_LEFT_POSITION = { .x = 680.0f,.y = 20.0f };
 	//生成
