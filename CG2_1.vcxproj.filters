@@ -306,7 +306,6 @@
     <ClCompile Include="Project\Ease\Ease.cpp" />
     <ClCompile Include="Project\Record\Record.cpp" />
     <ClCompile Include="Project\UI\GameUI.cpp" />
-    <ClCompile Include="Project\Record\GameScoreUI\GameScoreUI.cpp" />
     <ClCompile Include="Project\TextureLoader\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
