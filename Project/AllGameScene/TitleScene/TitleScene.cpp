@@ -102,7 +102,9 @@ void TitleScene::Update(GameManager* gameManager){
 	}
 	if(isPlayScene_ == true){
 		transform2_.translate_.y -= 0.1f;
+
 		if (transform2_.translate_.y < -4) {
+
 			gameManager->ChangeScene(new GameScene());
 		}
 	}
