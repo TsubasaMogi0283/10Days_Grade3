@@ -11,6 +11,7 @@
 
 void ResultScene::Initialize(){
 
+
 	for (uint32_t i = 0; i < 10; ++i) {
 		//数を文字列に変換した方が賢いよね！
 		//すっきり！
@@ -78,6 +79,7 @@ void ResultScene::Initialize(){
 
 	roll_ = Audio::GetInstance();
 	rollHandle_=roll_->LoadWave("Resources/Audio/ScoreUpSE.wav");
+
 
 }
 
