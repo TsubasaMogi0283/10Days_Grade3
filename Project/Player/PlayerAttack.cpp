@@ -41,11 +41,6 @@ void PlayerAttack::Update(){
 	material_.Update();
 
 
-#ifdef _DEBUG
-	ImGui::Begin("PlayerAttck"); 
-	ImGui::InputFloat3("位置", &worldTransform_.translate_.x);
-	ImGui::End();
-#endif // _DEBUG
 
 
 

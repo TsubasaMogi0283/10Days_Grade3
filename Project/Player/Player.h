@@ -247,7 +247,7 @@ private:
 	std::mt19937 randomEngine_;
 
 #pragma endregion 
-
+	
 
 private: // エフェクト
 

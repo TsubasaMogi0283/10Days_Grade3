@@ -157,16 +157,35 @@ private:
 
 
 
+	std::unique_ptr<Sprite> white_ = nullptr;
+	float whiteAlpha_ = 1.0f;
+
+	std::unique_ptr<Sprite> startSprite_ = nullptr;
+	std::unique_ptr<Sprite> endSprite_ = nullptr;
 
 
 
+private:
 
+	enum GameCondition {
+		FadeIn,
+		CountDown,
+		GamePlay,
+		FinishGame,
+		FadeOut,
+	};
 
+	int32_t condition_ = -1;
 
+	bool isFadeIn_ = true;
+	bool isGamePlay_ = false;
+	bool isFinishGame_ = false;
+	bool isFadeOut = false;
 
+	int32_t countDownTime_ = 240;
 
-
-
+	int displayStartTime_ = 0;
+	int displayFinishTime_ = 0;
 
 
 
