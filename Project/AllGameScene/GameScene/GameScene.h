@@ -16,7 +16,7 @@
 #include "SpotLight.h"
 #include <StageObject/Ground/Groud.h>
 #include "Enemy/RockEnemy.h"
-
+#include "Record/Record.h"
 
 #include "FollowCamera/FollowCamera.h"
 #include "Player/Player.h"
@@ -124,6 +124,9 @@ private:
 	XINPUT_STATE joyState_{};
 
 
+
+	Record* record_ = nullptr;
+
 #pragma endregion 
 
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
@@ -136,6 +139,11 @@ private:
 
 	//地面
 	std::unique_ptr<Ground>ground_ = nullptr;
+
+
+
+
+
 
 
 };

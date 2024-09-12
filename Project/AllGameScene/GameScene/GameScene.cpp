@@ -9,6 +9,7 @@
 #include <numbers>
 #include <VectorCalculation.h>
 #include "../External/TsumiInput/TInput.h"
+#include <Record/Record.h>
 
 
 //コンストラクタ
@@ -23,11 +24,16 @@ GameScene::GameScene()
 	input_ = Input::GetInstance();
 	tInput_ = TInput::GetInstance();
 
+	//記録
+	record_ = Record::GetInstance();;
+
 #pragma endregion 
 }
 
 
 void GameScene::Initialize() {
+
+	
 
 	/* ----- FollowCamera フォローカメラ ----- */
 	uint32_t followCameraModelHD = modelManager_->LoadModelFile("Resources/FollowCamera", "FollowCamera.obj");
@@ -169,6 +175,17 @@ void GameScene::Update(GameManager* gameManager) {
 
 	//衝突チェック
 	collisionManager_->CheckAllCollision();
+
+
+	//スコア
+	int32_t score = record_->GetTotalScore();
+
+#ifdef _DEBUG
+	ImGui::Begin("Score"); 
+	ImGui::InputInt("Value", &score);
+	ImGui::End();
+#endif // _DEBUG
+
 
 
 	//地面の更新
