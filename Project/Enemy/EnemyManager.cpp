@@ -18,7 +18,7 @@ void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle
 	feEnemyModelHandle_ = feModelHandle;
 
 	//生成
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 15; ++i) {
 		//岩
 		GenarateRockEnemy(rockModelhandle);
 		//鉄

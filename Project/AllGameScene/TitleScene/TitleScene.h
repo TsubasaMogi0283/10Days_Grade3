@@ -103,5 +103,11 @@ private:
 	Material mtlDungeon_{};
 	WorldTransform transformDungeon_{};
 	ModelManager* modelManagerDungeon_ = nullptr;
+
+
+	std::unique_ptr<Sprite> white_ = nullptr;
+	float whiteAlpha_ = 1.0f;
+
+
 };
 

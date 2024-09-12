@@ -152,11 +152,11 @@ void FeEnemy::Update() {
 		attackTime_ += 1;
 
 
-		const int RESET_TIME = 200;
+		const int RESET_TIME = 120;
 
 		//2～4秒までが攻撃
-		if (attackTime_ > 120 && attackTime_ <= RESET_TIME) {
-			if (attackTime_ == 121) {
+		if (attackTime_ > 40 && attackTime_ <= RESET_TIME) {
+			if (attackTime_ == 41) {
 				isAttack_ = true;
 
 			}

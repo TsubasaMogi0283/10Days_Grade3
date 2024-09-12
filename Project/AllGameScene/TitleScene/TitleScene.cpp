@@ -60,6 +60,14 @@ void TitleScene::Initialize(){
 	//
 	isPlayScene_ = false;
 	speed = 0.2f;
+
+
+
+	uint32_t whiteHandle = TextureManager::GetInstance()->LoadTexture("Resources/Back/White.png");
+	white_.reset(Sprite::Create(whiteHandle, {0.0f,0.0f,0.0f}));
+	white_->SetTransparency(0.0f);
+	white_->SetInvisible(true);
+
 }
 
 void TitleScene::Update(GameManager* gameManager){
@@ -102,7 +110,7 @@ void TitleScene::Update(GameManager* gameManager){
 	ImGui::SliderFloat3("Position", &transformD_.translate_.x, -100.0f, 100.0f);
 	ImGui::End();
 #endif // _DEBUG
-
+	white_->SetTransparency(whiteAlpha_);
 
 	//transform2_.translate_.y -= 0.1f;
 	//仮置き
@@ -118,11 +126,20 @@ void TitleScene::Update(GameManager* gameManager){
 		if (transformD_.translate_.y < 0.8) {
 			speed = 0;
 			transform2_.translate_.y -= 0.1f;
-			if (transform2_.translate_.y < -3) {
-				gameManager->ChangeScene(new GameScene());
+			if (transform2_.translate_.y < -3.0f) {
+				whiteAlpha_ += 0.01f;
+				white_->SetInvisible(false);
+				
 			}
 		}
 	}
+
+	if (whiteAlpha_ > 1.0f) {
+		gameManager->ChangeScene(new GameScene());
+		return;
+	}
+	
+
 	
 }
 
@@ -152,7 +169,7 @@ void TitleScene::DrawPostEffect(){
 }
 
 void TitleScene::DrawSprite(){
-
+	white_->Draw();
 
 }
 
