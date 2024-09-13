@@ -10,6 +10,8 @@
 #include "Camera.h"
 #include <BackText.h>
 #include "../External/TsumiInput/TInput.h"
+#include "Audio.h"
+
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
 
@@ -17,7 +19,7 @@ class TitleScene : public IGameScene {
 public:
 
 	//コンストラクタ
-	TitleScene()=default;
+	TitleScene() = default;
 
 
 	/// 初期化
@@ -57,7 +59,7 @@ public:
 
 
 private:
-	
+
 
 	TInput* tInput_ = nullptr;
 	//カメラ
@@ -104,10 +106,17 @@ private:
 	WorldTransform transformDungeon_{};
 	ModelManager* modelManagerDungeon_ = nullptr;
 
+	float theta_ = 0.0f;
 
 	std::unique_ptr<Sprite> white_ = nullptr;
-	float whiteAlpha_ = 1.0f;
+	float whiteAlpha_ = 0.0f;
+	bool isFadeOut_ = false;
 
+	Audio* bgm_ = nullptr;
+	float filter_ = 1.0f;
+	uint32_t bgmHandle = 0u;
 
+	Audio* startSE_ = nullptr;
+	uint32_t seHandle_ = 0u;
+	int32_t startSETime_ = 0;
 };
-
