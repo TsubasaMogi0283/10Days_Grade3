@@ -66,7 +66,6 @@ void Player::Init()
 // 更新処理
 void Player::Update()
 {
-	jumpTime_ = 0;
 	// トランスフォームの更新
 	transform_.Update();
 
@@ -149,16 +148,20 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 void Player::FuncAButton()
 {
 
-	jumpTime_ += 1;
-	if (jumpTime_ == 1) {
-		jumpSE_->PlayWave(jumpSEHandle_, false);
-
-	}
+	
 
 
 
 	// ジャンプしていなければジャンプ
 	if (!isJumping_) {
+		jumpTime_ += 1;
+		if (jumpTime_ == 1) {
+			jumpSE_->PlayWave(jumpSEHandle_, false);
+			jumpTime_ = 0;
+		}
+		else if (jumpTime_ == 0) {
+			jumpSE_->StopWave(jumpSEHandle_);
+		}
 		EnterJumpFunc();
 		return;
 	}
