@@ -53,12 +53,21 @@ void Player::Init()
 	//攻撃
 	attack_ = std::make_unique<PlayerAttack>();
 	attack_->Initialize(transform_.translate_);
+
+
+
+	jumpSE_ = Audio::GetInstance();
+	jumpSEHandle_ = jumpSE_->LoadWave("Resources/Audio/Game/Jump.wav");
+
+
 }
 
 
 // 更新処理
 void Player::Update()
 {
+	jumpTime_ = 0;
+
 	// トランスフォームの更新
 	transform_.Update();
 
@@ -140,6 +149,14 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 // Aボタンが押された時の処理
 void Player::FuncAButton()
 {
+
+	jumpTime_ += 1;
+	if (jumpTime_ == 1) {
+		jumpSE_->PlayWave(jumpSEHandle_, false);
+
+	}
+
+
 	// ジャンプしていなければジャンプ
 	if (!isJumping_) {
 		EnterJumpFunc();

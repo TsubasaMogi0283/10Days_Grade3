@@ -385,6 +385,9 @@ void GameScene::FuncInput()
 	// Aボタンの入力
 	if (tInput_->Trigger(PadData::B)) {
 
+		
+		
+
 		// Aボタンが押された時の処理
 		player_->FuncAButton();
 	}
