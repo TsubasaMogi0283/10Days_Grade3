@@ -16,6 +16,8 @@
 
 #include "Effects/CrackEffect/CrackEffect.h"
 
+#include "SE/PlayerSE.h"
+
 #include "PlayerAttack.h"
 #include "Collider/Collider.h"
 #include "Record/Record.h"
@@ -44,7 +46,7 @@ public:
 	~Player() = default;
 
 	// コピーコンストラクタ
-	Player(PlayerAssetsHandle handles);
+	Player(PlayerAssetsHandle handles, PlayerSEType ses);
 
 	// 初期化、更新、描画
 	void Init();
@@ -284,6 +286,15 @@ private: // エフェクト
 	float baseCrackScale_ = 5.0f;
 	// 成長率
 	float crackScaleGrowthScale_ = 1.2f;
+
+
+private: // SE
+
+	// プレイヤーのSEクラス
+	std::unique_ptr<PlayerSE> se_;
+
+	// SEの構造体
+	PlayerSEType seType_{};
 
 
 private: // フォローカメラ

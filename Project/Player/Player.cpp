@@ -6,12 +6,16 @@
 #include "ModelManager.h"
 
 // コピーコンストラクタ
-Player::Player(PlayerAssetsHandle handles)
+Player::Player(PlayerAssetsHandle handles, PlayerSEType ses)
 {
 	//記録
 	record_ = Record::GetInstance();
 
+	// モデルハンドル
 	this->handles_ = handles;
+
+	// SEハンドル
+	this->seType_ = ses;
 }
 
 
@@ -36,6 +40,9 @@ void Player::Init()
 		part->Init();
 		part->SetParent(&transform_);
 	}
+
+	// SEクラスのインスタンス
+	se_ = std::make_unique<PlayerSE>();
 
 	// 乱数生成器の作成
 	std::random_device seedGenerator;
@@ -276,6 +283,7 @@ void Player::EnterJumpFunc()
 	isJumping_ = true; // ジャンプ中
 	isGrounded_ = false; // 地面から離れた状態
 	jumpVel_ = CalcJumpForceForLevel(killStrealCount_); // ジャンプの初速を求める
+	se_->PlaySE(seType_.Jump); // ジャンプのSEを鳴らす
 }
 
 
@@ -388,6 +396,8 @@ void Player::StompFunc()
 		AddNewCrack();
 		// カメラのシェイクの処理を呼び出す
 		followCamera_->CallShake();
+		// SEを鳴らす
+		se_->PlaySE(seType_.Stomp);
 		// スタンタイマーを設定(5フレーム) & スタート
 		stompStunTime_.Init(0.0f, 2.0f);
 		stompStunTime_.Start();
@@ -560,13 +570,22 @@ void Player::DrawImGui()
 		ImGui::DragFloat("s速度", &stompVel_, 0.0f);
 		ImGui::Text("");
 
-
-
 		ImGui::Text("減速関連数値");
 		ImGui::Checkbox("IsSpeedDown", &isSpeedDown_);
 		ImGui::InputFloat("倍率", &speedMagnification_);
 		ImGui::InputInt("減速時間", &speedDownTime_);
 		ImGui::Text("");
+
+		ImGui::Text("SE関連");
+		if (ImGui::Button("OnPlay_Jump")) {
+			se_->PlaySE(seType_.Jump);
+		}
+		if (ImGui::Button("OnPlay_Stomp")) {
+			se_->PlaySE(seType_.Stomp);
+		}
+		if (ImGui::Button("OnPlay_Damaged")) {
+			se_->PlaySE(seType_.Damaged);
+		}
 
 
 		ImGui::TreePop();

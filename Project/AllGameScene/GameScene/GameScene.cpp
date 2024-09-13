@@ -5,6 +5,7 @@
 
 #include "GameManager.h"
 #include "ModelManager.h"
+#include "Audio.h"
 #include <TextureManager.h>
 #include <numbers>
 #include <VectorCalculation.h>
@@ -23,6 +24,9 @@ GameScene::GameScene()
 	// 入力
 	input_ = Input::GetInstance();
 	tInput_ = TInput::GetInstance();
+
+	// オーディオ
+	audio_ = Audio::GetInstance();
 
 	//記録
 	record_ = Record::GetInstance();
@@ -50,7 +54,12 @@ void GameScene::Initialize() {
 		.torso = modelManager_->LoadModelFile("Resources/Game/Player/Drill","Drill.obj"),
 		.crack = modelManager_->LoadModelFile("Resources/Player/Effects/CrackEffect", "CrackEffect.obj"),
 	};
-	player_ = std::make_unique<Player>(handles);
+	PlayerSEType SEs = {
+		.Jump = audio_->LoadWave("Resources/Audio/Player/pJump.wav"),
+		.Stomp = audio_->LoadWave("Resources/Audio/Player/pStomp.wav"),
+		.Damaged = audio_->LoadWave("Resources/Audio/Player/pDamaged.wav"),
+	};
+	player_ = std::make_unique<Player>(handles, SEs);
 	player_->Init();
 	// PlayerにFollowCameraを渡す
 	player_->SetFollowCamera(followCamera_.get());

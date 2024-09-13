@@ -32,6 +32,7 @@
 class GameManager;
 class ModelManager;
 class Input;
+class Audio;
 class TInput;
 
 class GameScene : public IGameScene {
@@ -122,6 +123,9 @@ private:
 	// 入力
 	Input* input_ = nullptr;
 	TInput* tInput_ = nullptr;
+
+	// オーディオ
+	Audio* audio_ = nullptr;
 
 	//操作は全部ゲームシーンで統一させたい
 	//コマンドパターンですっきりさせても良さそう

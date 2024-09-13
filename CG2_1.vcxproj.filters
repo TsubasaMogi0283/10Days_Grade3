@@ -308,6 +308,7 @@
     <ClCompile Include="Project\StageObject\Skydome\Skydome.cpp" />
     <ClCompile Include="Project\Player\Parts\Head\PlayerHead.cpp" />
     <ClCompile Include="Project\Player\Parts\Torso\PlayerTorso.cpp" />
+    <ClCompile Include="Project\Player\SE\PlayerSE.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -425,6 +426,7 @@
     <ClInclude Include="Project\Player\Parts\IPlayerParts.h" />
     <ClInclude Include="Project\Player\Parts\Head\PlayerHead.h" />
     <ClInclude Include="Project\Player\Parts\Torso\PlayerTorso.h" />
+    <ClInclude Include="Project\Player\SE\PlayerSE.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
