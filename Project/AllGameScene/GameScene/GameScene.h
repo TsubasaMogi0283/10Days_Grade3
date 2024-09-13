@@ -154,8 +154,7 @@ private:
 	std::unique_ptr<GameUI> gameUI_ = nullptr;
 	
 
-
-
+	
 
 
 	std::unique_ptr<Sprite> white_ = nullptr;
@@ -195,6 +194,10 @@ private:
 	Audio* finishSE_ = nullptr;
 	uint32_t finishSEHandle_ = 0u;
 	int32_t finishTime_ = 0;
+
+
+
+
 
 };
 

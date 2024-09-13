@@ -136,5 +136,8 @@ private:
 	std::array<std::unique_ptr<Sprite>, TIME_DIGIT_>timeSprites_ = { nullptr };
 
 
+	std::unique_ptr<Sprite> howTo_ = nullptr;
+
+
 };
 

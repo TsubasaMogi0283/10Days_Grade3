@@ -117,6 +117,8 @@ void GameScene::Initialize() {
 
 
 
+	
+
 
 	finishSE_ = Audio::GetInstance();
 	finishSEHandle_ = finishSE_->LoadWave("Resources/Audio/Game/Finish.wav");
@@ -381,7 +383,7 @@ void GameScene::FuncInput()
 	player_->FuncStickFunc(joyState_);
 
 	// Aボタンの入力
-	if (tInput_->Trigger(PadData::A)) {
+	if (tInput_->Trigger(PadData::B)) {
 
 		// Aボタンが押された時の処理
 		player_->FuncAButton();
