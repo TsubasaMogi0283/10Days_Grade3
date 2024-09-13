@@ -1,11 +1,15 @@
 #include "FollowCamera.h"
 #include "Player/Player.h"
+#include "../External/TsumiInput/TInput.h"
 
 
 // コピーコンストラクタ
 FollowCamera::FollowCamera(uint32_t modelHandle)
 {
 	this->modelHandle_ = modelHandle;
+
+	// 入力
+	tInput_ = TInput::GetInstance();
 }
 
 
@@ -85,7 +89,30 @@ void FollowCamera::FuncStickFunc(XINPUT_STATE joyState)
 	};
 
 	// 回転処理
-	CalcOrientation();
+	CalcStickOrientation();
+
+	// フォロー処理
+	FollowFunc();
+
+	// シェイク処理
+	if (isShake_) { // フラグが立っていたら入る
+		ShakeFunc();
+	}
+}
+void FollowCamera::FuncKeyFunc()
+{
+	iKeys_ = { 0.0f, 0.0f }; // 初期化
+
+	// 矢印キーの左右入力
+	if (tInput_->Press(DIK_LEFT)) {
+		iKeys_.x = -1.0f; // 左矢印キーで左回転
+	}
+	if (tInput_->Press(DIK_RIGHT)) {
+		iKeys_.x = 1.0f; // 右矢印キーで右回転
+	}
+
+	// 回転処理
+	CalcKeyOrientation();
 
 	// フォロー処理
 	FollowFunc();
@@ -105,7 +132,7 @@ void FollowCamera::CallShake()
 
 
 // 回転処理
-void FollowCamera::CalcOrientation()
+void FollowCamera::CalcStickOrientation()
 {
 	if (std::abs(iRStick_.x) > DZone_ || std::abs(iRStick_.y) > DZone_) {
 
@@ -118,6 +145,17 @@ void FollowCamera::CalcOrientation()
 		// 現在の角度を目標角度の間を補間
 		camera_.rotate_.y = pFunc::Lerp(camera_.rotate_.y, targetAngle, orientationLerpSpeed_);
 	}
+}
+void FollowCamera::CalcKeyOrientation()
+{
+	// 目標回転角度
+	float addAngle = iKeys_.x * addOrientationSpeed_;
+
+	// 現在の角度と目標角度の計算
+	float targetAngle = camera_.rotate_.y + addAngle;
+
+	// 現在の角度を目標角度の間を補間
+	camera_.rotate_.y = pFunc::Lerp(camera_.rotate_.y, targetAngle, orientationLerpSpeed_);
 }
 
 
@@ -149,7 +187,7 @@ void FollowCamera::CalcForwardVec()
 	Vector3 defForward = { 0.0f, 0.0f, 1.0f };
 
 	// Y軸の回転行列
-	Matrix4x4 rotateYMat = 
+	Matrix4x4 rotateYMat =
 		Matrix4x4Calculation::MakeRotateYMatrix(camera_.rotate_.y);
 
 	// 前方ベクトルを求める
@@ -184,7 +222,7 @@ void FollowCamera::EnterShakeFunc()
 	shakeTimer_.Init(0.0f, 30.0f); // 時間の設定(0.5秒)
 	shakeTimer_.Start(); // タイマースタート
 	distribution =  // ランダム生成の範囲設定
-		std::uniform_real_distribution<float>(-1.0f, 1.0f); 
+		std::uniform_real_distribution<float>(-1.0f, 1.0f);
 }
 
 
@@ -256,7 +294,7 @@ void FollowCamera::DrawImGui()
 		ImGui::Text("入力関連数値");
 		ImGui::DragFloat2("R_Stick", &iRStick_.x, 0.0f);
 		ImGui::Text("");
-		
+
 		ImGui::TreePop();
 	}
 }

@@ -449,27 +449,26 @@ void GameScene::FuncInput()
 	// stickの入力を取得 
 	input_->GetJoystickState(joyState_);
 
-	// カメラの操作
+	// sticl入力操作時の処理
 	followCamera_->FuncStickFunc(joyState_);
+	// key入力操作時の処理
+	followCamera_->FuncKeyFunc();
 
-	// 入力があれば移動
+	// sticl入力操作時の処理
 	player_->FuncStickFunc(joyState_);
+	// key入力操作時の処理
+	player_->FuncKeyFunc();
 
 	// Aボタンの入力
 	if (tInput_->Trigger(PadData::B)) {
 
-		
-		
-
 		// Aボタンが押された時の処理
 		player_->FuncAButton();
 	}
-
-	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
+	if (tInput_->Trigger(DIK_SPACE)) {
 		// Aボタンが押された時の処理
 		player_->FuncAButton();
 	}
-
 }
 
 void GameScene::PreLoad(){

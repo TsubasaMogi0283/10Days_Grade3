@@ -28,7 +28,7 @@ void GameUI::Initialize(){
 	//時間
 	time_ = (currentTime_) * SECOND;
 #ifdef _DEBUG
-	time_ = 3*SECOND;
+	time_ = 30*SECOND;
 #endif // _DEBUG
 
 

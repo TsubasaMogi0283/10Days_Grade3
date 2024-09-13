@@ -4,12 +4,16 @@
 #include <algorithm>
 #include <Collider/CollisionConfig.h>
 #include "ModelManager.h"
+#include "../External/TsumiInput/TInput.h"
 
 // コピーコンストラクタ
 Player::Player(PlayerAssetsHandle handles)
 {
 	//記録
 	record_ = Record::GetInstance();
+
+	// 入力
+	tInput_ = TInput::GetInstance();
 
 	this->handles_ = handles;
 }
@@ -20,7 +24,7 @@ void Player::Init()
 {
 	// トランスフォームの初期化
 	transform_.Initialize();
-	transform_.translate_.y = 1.0f;
+	transform_.translate_.y = 0.0f;
 	radius_ = 1.0f;
 	transform_.scale_ = { .x = radius_,.y = radius_,.z = radius_ };
 
@@ -73,7 +77,8 @@ void Player::Update()
 	mtl_.Update();
 
 	// 移動方向を求める
-	CalcMoveDirection();
+	CalcStickMoveDirection();
+	CalcKeyMoveDirection();
 
 	// ジャンプ処理
 	if (isJumping_) { // フラグが立っていたら入る
@@ -137,7 +142,7 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 
 #ifdef _DEBUG
 	//攻撃
-	if (isDrop_ ==true) {
+	if (isDrop_ == true) {
 		//attack_->Draw(camera, light);
 	}
 #endif // _DEBUG
@@ -147,8 +152,6 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 // Aボタンが押された時の処理
 void Player::FuncAButton()
 {
-
-
 	// ジャンプしていなければジャンプ
 	if (!isJumping_) {
 		jumpTime_ += 1;
@@ -181,13 +184,41 @@ void Player::FuncStickFunc(XINPUT_STATE joyState)
 	};
 
 	// 移動処理
-	Move();
+	StickMove();
 
 	// Y軸の姿勢処理
-	BodyOrientation();
+	StickBodyOrientation();
 }
 
-void Player::OnCollision(){
+
+// key入力操作時の処理
+void Player::FuncKeyFunc()
+{
+	// 0で初期化
+	iKeys_ = { 0.0f, 0.0f };
+
+	if (tInput_->Press(DIK_W)) {
+		iKeys_.y = 1.0f;
+	}
+	if (tInput_->Press(DIK_S)) {
+		iKeys_.y = -1.0f;
+	}
+	if (tInput_->Press(DIK_A)) {
+		iKeys_.x = -1.0f;
+	}
+	if (tInput_->Press(DIK_D)) {
+		iKeys_.x = 1.0f;
+	}
+
+	// 移動処理
+	KeyMove();
+
+	// Y軸の姿勢処理
+	KeyBodyOrientation();
+}
+
+
+void Player::OnCollision() {
 #ifdef _DEBUG
 	ImGui::Begin("PlayerOnCollision");
 	ImGui::End();
@@ -200,22 +231,34 @@ void Player::OnCollision(){
 
 
 // 移動方向を求める
-void Player::CalcMoveDirection()
+void Player::CalcStickMoveDirection()
 {
 	// カメラの前方と右方
 	Vector3 forward = followCamera_->GetForwardVec();
 	Vector3 right = followCamera_->GetRightVec();
 
-	moveDirection_ = {
+	stickMoveDirection_ = {
 		.x = (iLStick_.x * right.x) + (iLStick_.y * forward.x),
 		.y = 0.0f,
 		.z = (iLStick_.x * right.z) + (iLStick_.y * forward.z),
 	};
 }
+void Player::CalcKeyMoveDirection()
+{
+	// カメラの前方と右方
+	Vector3 forward = followCamera_->GetForwardVec();
+	Vector3 right = followCamera_->GetRightVec();
+
+	keyMoveDirection_ = {
+		.x = (iKeys_.x * right.x) + (iKeys_.y * forward.x),
+		.y = 0.0f,
+		.z = (iKeys_.x * right.z) + (iKeys_.y * forward.z),
+	};
+}
 
 
 // 移動処理
-void Player::Move()
+void Player::StickMove()
 {
 	// ストンプ中は移動できない。早期return
 	if (isStomping_) { return; }
@@ -227,22 +270,43 @@ void Player::Move()
 	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
 
 		// 移動量の計算(カメラの前方と右方に基づく)
-		velocity_ = moveDirection_;
+		velocity_ = stickMoveDirection_;
 
 		// 移動量を正規化し速さを乗算
 		velocity_ = VectorCalculation::Multiply(VectorCalculation::Normalize(velocity_), moveSpeed_);
 
-		
 		//制限をかける
 		velocity_ = VectorCalculation::Multiply(velocity_, speedMagnification_);
 
-		
 		// 移動
 		transform_.translate_ = VectorCalculation::Add(transform_.translate_, velocity_);
 
 		// 移動限界処理
 		MoveLimited();
 	}
+}
+void Player::KeyMove()
+{
+	// ストンプ中は移動できない。早期return
+	if (isStomping_) { return; }
+
+	// velocityは0で更新
+	velocity_ = { 0.0f, 0.0f, 0.0f };
+
+	// 移動量の計算(カメラの前方と右方に基づく)
+	velocity_ = keyMoveDirection_;
+
+	// 移動量を正規化し速さを乗算
+	velocity_ = VectorCalculation::Multiply(VectorCalculation::Normalize(velocity_), moveSpeed_);
+
+	//制限をかける
+	velocity_ = VectorCalculation::Multiply(velocity_, speedMagnification_);
+
+	// 移動
+	transform_.translate_ = VectorCalculation::Add(transform_.translate_, velocity_);
+
+	// 移動限界処理
+	MoveLimited();
 }
 
 
@@ -258,7 +322,7 @@ void Player::MoveLimited()
 		minZ = min(groundCorners_[0].z, corner.z);
 		maxZ = max(groundCorners_[0].z, corner.z);
 	}
-	
+
 	// 移動限界を設定
 	transform_.translate_.x = max(transform_.translate_.x, minX);
 	transform_.translate_.x = min(transform_.translate_.x, maxX);
@@ -268,22 +332,33 @@ void Player::MoveLimited()
 
 
 // Y軸の姿勢を傾ける処理
-void Player::BodyOrientation()
+void Player::StickBodyOrientation()
 {
-	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) {
+	// 正規化した移動方向
+	Vector3 normalizeDirection = VectorCalculation::Normalize(stickMoveDirection_);
 
-		// 正規化した移動方向
-		Vector3 normalizeDirection = VectorCalculation::Normalize(moveDirection_);
+	// 目標回転角度
+	float targetAngle = std::atan2(normalizeDirection.x, normalizeDirection.z);
 
-		// 目標回転角度
-		float targetAngle = std::atan2(normalizeDirection.x, normalizeDirection.z);
+	// 現在の角度と目標角度から最短を求める
+	float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
 
-		// 現在の角度と目標角度から最短を求める
-		float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
+	// 現在の角度を目標角度の間を補間
+	transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
+}
+void Player::KeyBodyOrientation()
+{
+	// 正規化した移動方向
+	Vector3 normalizeDirection = VectorCalculation::Normalize(keyMoveDirection_);
 
-		// 現在の角度を目標角度の間を補間
-		transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
-	}
+	// 目標回転角度
+	float targetAngle = std::atan2(normalizeDirection.x, normalizeDirection.z);
+
+	// 現在の角度と目標角度から最短を求める
+	float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
+
+	// 現在の角度を目標角度の間を補間
+	transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
 }
 
 
@@ -321,7 +396,7 @@ void Player::JumpFunc()
 // ジャンプ終了処理
 void Player::ExsitJumpFunc()
 {
-	
+
 	isJumping_ = false; // ジャンプ終了
 	jumpVel_ = 0.0f; // Y軸速度をリセット
 }
@@ -498,7 +573,7 @@ void Player::SpeedManagiment() {
 		if (record_->GetTotalScore() > 0) {
 			record_->DeductionScore();
 		}
-		
+
 	}
 
 	//スピードの制限を付ける
@@ -515,12 +590,12 @@ void Player::SpeedManagiment() {
 		speedMagnification_ = 1.0f;
 	}
 
-	
 
-	
+
+
 }
 
-void Player::Flashing(){
+void Player::Flashing() {
 	if ((speedDownTime_ / 12) % 2 == 0) {
 		mtl_.color_.x = 1.0f;
 		mtl_.color_.y = 1.0f;
