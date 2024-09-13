@@ -334,31 +334,37 @@ void Player::MoveLimited()
 // Y軸の姿勢を傾ける処理
 void Player::StickBodyOrientation()
 {
-	// 正規化した移動方向
-	Vector3 normalizeDirection = VectorCalculation::Normalize(stickMoveDirection_);
+	if (std::abs(iLStick_.x) > DZone_ || std::abs(iLStick_.y) > DZone_) 
+	{
+		// 正規化した移動方向
+		Vector3 normalizeDirection = VectorCalculation::Normalize(stickMoveDirection_);
 
-	// 目標回転角度
-	float targetAngle = std::atan2(normalizeDirection.x, normalizeDirection.z);
+		// 目標回転角度
+		float targetAngle = std::atan2(normalizeDirection.x, normalizeDirection.z);
 
-	// 現在の角度と目標角度から最短を求める
-	float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
+		// 現在の角度と目標角度から最短を求める
+		float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
 
-	// 現在の角度を目標角度の間を補間
-	transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
+		// 現在の角度を目標角度の間を補間
+		transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
+	}
 }
 void Player::KeyBodyOrientation()
 {
-	// 正規化した移動方向
-	Vector3 normalizeDirection = VectorCalculation::Normalize(keyMoveDirection_);
+	if (std::abs(iKeys_.x) > DZone_ || std::abs(iKeys_.y) > DZone_)
+	{
+		// 正規化した移動方向
+		Vector3 normalizeDirection = VectorCalculation::Normalize(keyMoveDirection_);
 
-	// 目標回転角度
-	float targetAngle = std::atan2(normalizeDirection.x, normalizeDirection.z);
+		// 目標回転角度
+		float targetAngle = std::atan2(normalizeDirection.x, normalizeDirection.z);
 
-	// 現在の角度と目標角度から最短を求める
-	float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
+		// 現在の角度と目標角度から最短を求める
+		float shortestAngle = pFunc::ShortestAngle(transform_.rotate_.y, targetAngle);
 
-	// 現在の角度を目標角度の間を補間
-	transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
+		// 現在の角度を目標角度の間を補間
+		transform_.rotate_.y = pFunc::Lerp(transform_.rotate_.y, transform_.rotate_.y + shortestAngle, orientationLerpSpeed_);
+	}
 }
 
 
