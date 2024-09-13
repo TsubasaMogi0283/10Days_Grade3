@@ -176,13 +176,8 @@ private:
 	// プレイヤー関連のモデルハンドル
 	PlayerAssetsHandle handles_{};
 
-	// モデル
-	std::unique_ptr<Model> model_;
-	std::unique_ptr<Model>drill_ = nullptr;
-
 	// トランスフォーム
 	WorldTransform transform_{};
-	WorldTransform drillTransform_{};
 	// マテリアル
 	Material mtl_{};
 

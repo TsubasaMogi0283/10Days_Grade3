@@ -18,13 +18,7 @@ Player::Player(PlayerAssetsHandle handles)
 // 初期化処理
 void Player::Init()
 {
-	// モデルの初期化
-	model_.reset(Model::Create(handles_.player));
-	uint32_t drillHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Player/Drill","Drill.obj");
-	drill_.reset(Model::Create(drillHandle));
-
 	// トランスフォームの初期化
-	drillTransform_.Initialize();
 	transform_.Initialize();
 	transform_.translate_.y = 1.0f;
 	radius_ = 1.0f;
@@ -67,8 +61,6 @@ void Player::Update()
 {
 	// トランスフォームの更新
 	transform_.Update();
-	drillTransform_.translate_ = GetWorldPosition();
-	drillTransform_.Update();
 
 	// マテリアルの更新
 	mtl_.Update();
@@ -83,7 +75,6 @@ void Player::Update()
 
 	// ストンプの処理
 	if (isStomping_) { // フラグが立っていたら入る
-		drillTransform_.rotate_.y += 0.1f;
 		StompFunc();
 	}
 
@@ -127,13 +118,11 @@ void Player::Update()
 // 描画処理
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
-	// プレイヤー
-	/*model_->Draw(transform_, camera, mtl_, light);
-	drill_->Draw(drillTransform_, camera, mtl_, light);*/
 	// ボディの描画処理
 	for (std::shared_ptr<IPlayerParts> part : iParts_) {
 		part->Draw3D(camera, light);
 	}
+
 	// 亀裂エフェクトの描画処理
 	for (std::shared_ptr<CrackEffect> crack : cracks_) {
 		crack->Draw3D(camera, light);
