@@ -307,8 +307,8 @@
     <ClCompile Include="Project\UI\GameUI.cpp" />
     <ClCompile Include="Project\TextureLoader\TextureLoader.cpp" />
     <ClCompile Include="Project\StageObject\Skydome\Skydome.cpp" />
-    <ClCompile Include="Project\Player\Part\Head\PlayerHead.cpp" />
-    <ClCompile Include="Project\Player\Part\Torso\PlayerTorso.cpp" />
+    <ClCompile Include="Project\Player\Parts\Head\PlayerHead.cpp" />
+    <ClCompile Include="Project\Player\Parts\Torso\PlayerTorso.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\AdjustmentItems\AdjustmentItems.h" />
@@ -424,9 +424,9 @@
     <ClInclude Include="Project\Record\GameScoreUI\GameScoreUI.h" />
     <ClInclude Include="Project\TextureLoader\TextureLoader.h" />
     <ClInclude Include="Project\StageObject\Skydome\Skydome.h" />
-    <ClInclude Include="Project\Player\Part\IPlayerParts.h" />
-    <ClInclude Include="Project\Player\Part\Head\PlayerHead.h" />
-    <ClInclude Include="Project\Player\Part\Torso\PlayerTorso.h" />
+    <ClInclude Include="Project\Player\Parts\IPlayerParts.h" />
+    <ClInclude Include="Project\Player\Parts\Head\PlayerHead.h" />
+    <ClInclude Include="Project\Player\Parts\Torso\PlayerTorso.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

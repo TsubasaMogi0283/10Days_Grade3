@@ -7,22 +7,22 @@
 #include "../IPlayerParts.h"
 
 
-/* Playerの胴体 */
-class PlayerTorso : public PlayerParts {
+/* Playerの頭 */
+class PlayerHead : public IPlayerParts {
 
 public:
 
 	// コンストラクタ、デストラクタ
-	PlayerTorso() = default;
-	~PlayerTorso() = default;
+	PlayerHead() = default;
+	~PlayerHead() = default;
 
 	// コピーコンストラクタ
-	PlayerTorso(uint32_t handle);
+	PlayerHead(uint32_t handle);
 
 	// 初期化、更新、描画
-	void Init();
-	void Update();
-	void Draw3D(Camera& camera, DirectionalLight& light);
+	void Init() override;
+	void Update() override;
+	void Draw3D(Camera& camera, DirectionalLight& light) override;
 
 
 #pragma region Accessor アクセッサ

@@ -22,18 +22,26 @@ void Player::Init()
 	model_.reset(Model::Create(handles_.player));
 	uint32_t drillHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Player/Drill","Drill.obj");
 	drill_.reset(Model::Create(drillHandle));
+
 	// トランスフォームの初期化
 	drillTransform_.Initialize();
 	transform_.Initialize();
 	transform_.translate_.y = 1.0f;
 	radius_ = 1.0f;
 	transform_.scale_ = { .x = radius_,.y = radius_,.z = radius_ };
+
 	// マテリアルの初期化
 	mtl_.Initialize();
 
-	// 亀裂エフェクト
-	/*crackEffect_ = std::make_unique<CrackEffect>(handles_.crack);
-	crackEffect_->Init();*/
+	// ボディのインスタンス作成
+	iParts_.resize(EnumSize<PlayerPartType>::value);
+	iParts_[enum_val(PlayerPartType::HEAD)] = std::make_unique<PlayerHead>(handles_.head);
+	iParts_[enum_val(PlayerPartType::TORSO)] = std::make_unique<PlayerHead>(handles_.torso);
+	// 初期化とペアレント
+	for (std::shared_ptr<IPlayerParts> part : iParts_) {
+		part->Init();
+		part->SetParent(&transform_);
+	}
 
 	// 乱数生成器の作成
 	std::random_device seedGenerator;
@@ -92,11 +100,15 @@ void Player::Update()
 
 #ifdef _DEBUG
 	// ImGuiの描画
-	//DrawImGui();
+	DrawImGui();
 #endif // _DEBUG
 
+	// ボディの更新処理
+	for (std::shared_ptr<IPlayerParts> part : iParts_) {
+		part->Update();
+	}
 
-	// 亀裂エフェクト配列
+	// 亀裂エフェクトの更新処理
 	for (std::shared_ptr<CrackEffect> crack : cracks_) {
 		crack->Update();
 	}
@@ -116,11 +128,13 @@ void Player::Update()
 void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
 	// プレイヤー
-	model_->Draw(transform_, camera, mtl_, light);
-	drill_->Draw(drillTransform_, camera, mtl_, light);
-	// 亀裂
-	//crackEffect_->Draw3D(camera, light);
-	// 亀裂エフェクト配列
+	/*model_->Draw(transform_, camera, mtl_, light);
+	drill_->Draw(drillTransform_, camera, mtl_, light);*/
+	// ボディの描画処理
+	for (std::shared_ptr<IPlayerParts> part : iParts_) {
+		part->Draw3D(camera, light);
+	}
+	// 亀裂エフェクトの描画処理
 	for (std::shared_ptr<CrackEffect> crack : cracks_) {
 		crack->Draw3D(camera, light);
 	}

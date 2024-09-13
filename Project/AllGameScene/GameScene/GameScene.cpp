@@ -47,6 +47,8 @@ void GameScene::Initialize() {
 	/* ----- Player プレイヤー ----- */
 	PlayerAssetsHandle handles = {
 		.player = modelManager_->LoadModelFile("Resources/Game/Player/Head","Head.obj"),
+		.head = modelManager_->LoadModelFile("Resources/Game/Player/Head","Head.obj"),
+		.torso = modelManager_->LoadModelFile("Resources/Game/Player/Drill","Drill.obj"),
 		.stompSpeed = modelManager_->LoadModelFile("Resources/Player/Effects/StompSpeedEffect", "StompSpeedEffect.obj"),
 		.crack = modelManager_->LoadModelFile("Resources/Player/Effects/CrackEffect", "CrackEffect.obj"),
 	};

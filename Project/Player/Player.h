@@ -9,6 +9,11 @@
 #include "VectorCalculation.h"
 #include "Matrix4x4Calculation.h"
 #include "Func/PlayerFunc.h"
+
+#include "Parts/IPlayerParts.h"
+#include "Parts/Head/PlayerHead.h"
+#include "Parts/Torso/PlayerTorso.h"
+
 #include "Effects/StompSpeed/StompSpeed.h"
 #include "Effects/CrackEffect/CrackEffect.h"
 
@@ -26,7 +31,7 @@ class FollowCamera;
 struct PlayerAssetsHandle {
 	uint32_t player;
 	uint32_t head;
-	uint32_t body;
+	uint32_t torso;
 	uint32_t stompSpeed;
 	uint32_t crack;
 };
@@ -236,10 +241,8 @@ private:
 	bool isKillStreak_ = false;
 	int killStrealCount_ = 0;
 	
-
 	//当たり判定
 	std::unique_ptr<PlayerAttack>attack_ = nullptr;
-
 
 
 #pragma region System システム
@@ -254,12 +257,16 @@ private:
 	std::mt19937 randomEngine_;
 
 #pragma endregion 
+
+
+private: // 体のパーツ
+
+	// 体のパーツ配列
+	std::vector<std::shared_ptr<IPlayerParts>> iParts_;
 	
 
 private: // エフェクト
 
-	// 亀裂エフェクト
-	//std::unique_ptr<CrackEffect> crackEffect_;
 	// 亀裂エフェクト配列
 	std::list<std::shared_ptr<CrackEffect>> cracks_;
 
@@ -275,6 +282,7 @@ private: // フォローカメラ
 
 
 private:
+
 	Record* record_ = nullptr;
 
 
