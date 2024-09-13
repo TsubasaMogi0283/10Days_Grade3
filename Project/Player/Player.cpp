@@ -139,7 +139,7 @@ void Player::FuncAButton()
 {
 	// ジャンプしていなければジャンプ
 	if (!isJumping_) {
-		EnterJampFunc();
+		EnterJumpFunc();
 		return;
 	}
 
@@ -268,7 +268,7 @@ void Player::BodyOrientation()
 
 
 // ボタン押下時に呼び出されるジャンプのエンター処理
-void Player::EnterJampFunc()
+void Player::EnterJumpFunc()
 {
 	isJumping_ = true; // ジャンプ中
 	isGrounded_ = false; // 地面から離れた状態
@@ -293,13 +293,13 @@ void Player::JumpFunc()
 		// 着地状態
 		isGrounded_ = true;
 		// 終了処理
-		JumpExsit();
+		ExsitJumpFunc();
 	}
 }
 
 
 // ジャンプ終了処理
-void Player::JumpExsit()
+void Player::ExsitJumpFunc()
 {
 	isJumping_ = false; // ジャンプ終了
 	jumpVel_ = 0.0f; // Y軸速度をリセット
@@ -316,7 +316,7 @@ float Player::CalcJumpForceForLevel(int level) const
 // ストンプのエンター処理
 void Player::EnterStompFunc()
 {
-	JumpExsit(); // ジャンプの終了処理
+	ExsitJumpFunc(); // ジャンプの終了処理
 	isStomping_ = true; // ストンプ中
 	stompVel_ = -stompSpeed_; // ストンプの速度を設定
 	isDrop_ = true;
@@ -349,18 +349,19 @@ void Player::StompFunc()
 		// 着地状態
 		isGrounded_ = true;
 		// ストンプ終了処理
-		StompExsit();
+		ExsitStompFunc();
 	}
 }
 
 
 // ストンプ終了処理
-void Player::StompExsit()
+void Player::ExsitStompFunc()
 {
 	isStomping_ = false; // ストンプ終了
 	stompVel_ = 0.0f; // Y軸速度をリセット
 	AddNewCrack(); // 亀裂を出す
 	isDrop_ = false;
+	followCamera_->CallShake(); // カメラのシェイクの処理を呼び出す
 }
 
 
@@ -397,7 +398,7 @@ void Player::AddNewCrack()
 // レベルに応じた亀裂のスケールの計算
 float Player::CalcCrackScaleForLevel(int level) const
 {
-	return baseCrackScale_ * float(std::pow(crackScaleGrowScale_, level));
+	return baseCrackScale_ * float(std::pow(crackScaleGrowthScale_, level));
 }
 
 

@@ -36,6 +36,7 @@ void FollowCamera::Init()
 
 	// オフセットの設定
 	offset_ = constOffset_;
+
 }
 
 
@@ -88,6 +89,18 @@ void FollowCamera::FuncStickFunc(XINPUT_STATE joyState)
 
 	// フォロー処理
 	FollowFunc();
+
+	// シェイク処理
+	if (isShake_) { // フラグが立っていたら入る
+		ShakeFunc();
+	}
+}
+
+
+// シェイクの処理
+void FollowCamera::CallShake()
+{
+	EnterShakeFunc();
 }
 
 
@@ -159,6 +172,65 @@ void FollowCamera::CalcRightVec()
 }
 
 
+// シェイクのエンター処理
+void FollowCamera::EnterShakeFunc()
+{
+	// シェイク開始時の座標を保存しておく
+	shakeStartPos_ = camera_.translate_;
+
+	isShake_ = true; // フラグを立てる
+	shakeIntensity_ = // 強さを求める
+		CalcShakeIntensityForLevel(player_->GetKillStreakCount());
+	shakeTimer_.Init(0.0f, 30.0f); // 時間の設定(0.5秒)
+	shakeTimer_.Start(); // タイマースタート
+	distribution =  // ランダム生成の範囲設定
+		std::uniform_real_distribution<float>(-1.0f, 1.0f); 
+}
+
+
+// シェイク処理
+void FollowCamera::ShakeFunc()
+{
+	// 時間の更新
+	shakeTimer_.Update();
+
+	// タイマーーが終了していれば終了
+	if (shakeTimer_.IsFinish()) {
+		ExsitShakeFunc();
+		return;
+	}
+
+	// 残り時間に応じでシェイクの強度を減衰させる(線形に減衰)
+	float currentIntensity = shakeIntensity_ * (1.0f - shakeTimer_.GetRatio());
+
+	// ランダムに変動させる処理
+	Vector3 shakeOffset = {
+		distribution(generator) * currentIntensity,
+		distribution(generator) * currentIntensity,
+		distribution(generator) * currentIntensity,
+	};
+
+	// カメラの座標に加算
+	camera_.translate_ = VectorCalculation::Add(camera_.translate_, shakeOffset);
+}
+
+
+// シェイクの終了処理
+void FollowCamera::ExsitShakeFunc()
+{
+	isShake_ = false; // シェイク終了
+	shakeIntensity_ = 0.0f; // 強さを0で初期化
+	shakeTimer_.Clear(); // タイマーをクリア
+}
+
+
+// レベルに応じてシェイクの強さの計算
+float FollowCamera::CalcShakeIntensityForLevel(int level) const
+{
+	return baseShakeIntensity_ * float(std::pow(shakeGrowthRate_, level));
+}
+
+
 // ImGuiの描画
 void FollowCamera::DrawImGui()
 {
@@ -167,6 +239,14 @@ void FollowCamera::DrawImGui()
 		ImGui::Text("トランスフォーム");
 		ImGui::DragFloat3("Rotate", &camera_.rotate_.x, 0.001f);
 		ImGui::DragFloat3("Transform", &camera_.translate_.x, 0.01f);
+		ImGui::Text("");
+
+		ImGui::Text("シェイク関連数値");
+		ImGui::Checkbox("IsShake", &isShake_);
+		ImGui::DragFloat("シェイクの強さ", &shakeIntensity_, 0.0f);
+		if (ImGui::Button("EnterShakeFunc")) {
+			EnterShakeFunc();
+		}
 		ImGui::Text("");
 
 		ImGui::Text("ベクトル");

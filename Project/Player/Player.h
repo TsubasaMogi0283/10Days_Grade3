@@ -65,7 +65,6 @@ public:
 		return { transform_.worldMatrix_.m[3][0], transform_.worldMatrix_.m[3][1], transform_.worldMatrix_.m[3][2] };
 	}
 
-
 	// Groundの四隅
 	void SetGroundCorners(Vector3 LB, Vector3 RB, Vector3 LF, Vector3 RF) {
 		groundCorners_.push_back(LB);
@@ -85,6 +84,12 @@ public:
 
 	// ストンプ中か
 	bool IsStomping() const { return this->isStomping_; }
+
+	// キルストリーク中か
+	bool IsKillStreak() const { return this->isKillStreak_; }
+
+	// キルストリークカウント
+	int GetKillStreakCount() const { return this->killStrealCount_; }
 
 	/// <summary>
 	/// 攻撃の当たり判定を取得
@@ -120,13 +125,13 @@ private:
 	void BodyOrientation();
 
 	// ジャンプのエンター処理
-	void EnterJampFunc();
+	void EnterJumpFunc();
 
 	// ジャンプ処理
 	void JumpFunc();
 
 	// ジャンプ終了処理
-	void JumpExsit();
+	void ExsitJumpFunc();
 
 	// レベルに応じたジャンプの高さの計算
 	float CalcJumpForceForLevel(int level) const;
@@ -138,7 +143,7 @@ private:
 	void StompFunc();
 
 	// ストンプ終了処理
-	void StompExsit();
+	void ExsitStompFunc();
 
 	// 亀裂インスタンスの作成&配列追加
 	void AddNewCrack();
@@ -259,7 +264,7 @@ private: // エフェクト
 	// 亀裂基本スケール
 	float baseCrackScale_ = 5.0f;
 	// 成長率
-	float crackScaleGrowScale_ = 1.2f;
+	float crackScaleGrowthScale_ = 1.2f;
 
 
 private: // フォローカメラ

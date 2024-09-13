@@ -262,15 +262,6 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 
-
-
-
-
-
-
-	
-
-
 	//制限時間が過ぎたらResultへ
 	if (gameUI_->GetIsTimeOver() == true) {
 		isGamePlay_ = false;
@@ -312,24 +303,16 @@ void GameScene::DrawSpriteBack() {
 
 void GameScene::DrawObject3D() {
 
-	//----- FollowCamera フォローカメラ ----- 
-	//followCamera_->Draw3D(camera_, directtionalLight_);
-
 	skydome_->Draw(camera_, directtionalLight_);
 
 	//地面の描画
 	ground_->Draw(camera_, directtionalLight_);
 
-
-	
 	//敵の描画
 	enemyManager_->Draw(camera_, directtionalLight_);
 
-
 	//----- Player プレイヤー ----- //
 	player_->Draw3D(camera_, directtionalLight_);
-
-
 }
 
 void GameScene::PreDrawPostEffectFirst() {
