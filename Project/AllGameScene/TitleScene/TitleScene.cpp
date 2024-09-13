@@ -84,25 +84,6 @@ void TitleScene::Update(GameManager* gameManager){
 	mtlD_.Update();
 	mtlDungeon_.Update();
 	XINPUT_STATE joyState{};
-	joyState;
-	////コントローラーのBを押すと高速点滅
-	//if (Input::GetInstance()->GetJoystickState(joyState) == true) {
-	//
-	//	//Bボタンを押したとき
-	//	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
-	//		bTriggerTime_ += 1;
-	//
-	//	}
-	//	if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) == 0) {
-	//		bTriggerTime_ = 0;
-	//	}
-	//
-	//	if (bTriggerTime_ == 1) {
-	//
-	//		isFastFlash_ = true;
-	//	}
-	//
-	//}
 
 
 #ifdef _DEBUG
