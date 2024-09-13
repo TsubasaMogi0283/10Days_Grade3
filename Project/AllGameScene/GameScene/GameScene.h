@@ -24,8 +24,9 @@
 #include <Collider/CollisionManager.h>
 #include "UI/GameUI.h"
 #include <StageObject/Skydome/Skydome.h>
+#include "GameAudioScene/GameAudioManager.h"
 
-
+#include "Audio.h"
 
 
 //StatePatternを使う時は必ず前方宣言をするように
@@ -165,6 +166,8 @@ private:
 
 
 
+	std::unique_ptr<GameAudioManager> gameAudioManager_ = nullptr;
+	int32_t gameChange_ = 0;
 private:
 
 	enum GameCondition {
@@ -189,7 +192,9 @@ private:
 
 
 
-
+	Audio* finishSE_ = nullptr;
+	uint32_t finishSEHandle_ = 0u;
+	int32_t finishTime_ = 0;
 
 };
 

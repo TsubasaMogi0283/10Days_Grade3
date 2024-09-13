@@ -27,6 +27,11 @@ void GameUI::Initialize(){
 
 	//時間
 	time_ = (currentTime_) * SECOND;
+#ifdef _DEBUG
+	time_ = 3*SECOND;
+#endif // _DEBUG
+
+
 	//初期位置
 	const Vector2 TIME_INITIAL_LEFT_POSITION = { .x = 680.0f,.y = 20.0f };
 	//生成
