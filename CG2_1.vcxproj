@@ -197,6 +197,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Player\Effects\CrackEffect\CrackEffect.cpp" />
     <ClCompile Include="Project\Player\Effects\StompSpeed\StompSpeed.cpp" />
     <ClCompile Include="Project\Player\Func\PlayerFunc.cpp" />
+    <ClCompile Include="Project\Player\Part\Head\PlayerHead.cpp" />
+    <ClCompile Include="Project\Player\Part\Torso\PlayerTorso.cpp" />
     <ClCompile Include="Project\Player\Player.cpp" />
     <ClCompile Include="Project\DraftPlayer\DraftPlayer.cpp" />
     <ClCompile Include="Project\Enemy\RockEnemy.cpp" />
@@ -483,6 +485,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Player\Effects\CrackEffect\CrackEffect.h" />
     <ClInclude Include="Project\Player\Effects\StompSpeed\StompSpeed.h" />
     <ClInclude Include="Project\Player\Func\PlayerFunc.h" />
+    <ClInclude Include="Project\Player\Part\Head\PlayerHead.h" />
+    <ClInclude Include="Project\Player\Part\IPlayerParts.h" />
+    <ClInclude Include="Project\Player\Part\Torso\PlayerTorso.h" />
     <ClInclude Include="Project\Player\Player.h" />
     <ClInclude Include="Project\DraftPlayer\DraftPlayer.h" />
     <ClInclude Include="Project\Enemy\RockEnemy.h" />

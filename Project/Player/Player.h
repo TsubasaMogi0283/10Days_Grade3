@@ -25,6 +25,8 @@ class FollowCamera;
 // プレイヤー関連のモデルハンドル
 struct PlayerAssetsHandle {
 	uint32_t player;
+	uint32_t head;
+	uint32_t body;
 	uint32_t stompSpeed;
 	uint32_t crack;
 };
