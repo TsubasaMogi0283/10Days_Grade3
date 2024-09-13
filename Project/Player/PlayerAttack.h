@@ -6,7 +6,7 @@
 #include "Material.h"
 #include "Model.h"
 
-
+class Player;
 struct Camera;
 struct DirectionalLight;
 
@@ -64,7 +64,15 @@ public:
 		this->playerPosition_ = position;
 	}
 
+	void SetPlayer(Player* setPlayer) {
+		this->player_ = setPlayer;
+	}
+
 private:
+
+	// プレイヤー
+	Player* player_ = nullptr;
+
 	//モデル
 	std::unique_ptr<Model>model_ = nullptr;
 	//ワールドトランスフォーム

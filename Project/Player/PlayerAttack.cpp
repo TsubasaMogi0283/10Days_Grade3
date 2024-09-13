@@ -2,6 +2,7 @@
 #include "ModelManager.h"
 #include <VectorCalculation.h>
 #include <Collider/CollisionConfig.h>
+#include "Player.h"
 
 void PlayerAttack::Initialize(Vector3& position){
 	uint32_t modelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/CG3/Sphere", "Sphere.obj");
@@ -53,12 +54,13 @@ void PlayerAttack::Draw(Camera& camera, DirectionalLight& directionalLight){
 
 void PlayerAttack::OnCollision(){
 
+	// キル成功
+	player_->OnKillSuccess();
+
 #ifdef _DEBUG
 	ImGui::Begin("PlayerAttackOnCollision");
 	ImGui::End();
 #endif
-
-
 }
 
 Vector3 PlayerAttack::GetWorldPosition(){

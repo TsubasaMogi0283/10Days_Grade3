@@ -53,6 +53,7 @@ void Player::Init()
 	//攻撃
 	attack_ = std::make_unique<PlayerAttack>();
 	attack_->Initialize(transform_.translate_);
+	attack_->SetPlayer(this);
 }
 
 
@@ -432,19 +433,49 @@ float Player::CalcCrackScaleForLevel(int level) const
 // キルイベントを検出する
 void Player::DetectKillEvent()
 {
-	// キルしたかのフラグをチェック
-	if (isKillConfirmed_) {
+	// タイマーが設定されていれば
+	if (killStreakTimer_.IsActive()) {
 
-		// フラグが立っている場合は
+		// キルストリークのタイマー更新
+		killStreakTimer_.Update();
 
-		// ToDO : キルカウント加算
+		// 終了していればリセット処理
+		if (killStreakTimer_.IsFinish()) {
+			OnKillFailure();
+		}
 	}
-	else {
+}
 
-		// キルできなかった場合は
 
-		// ToDO : キルカウントを0で初期化
+// キルが成功したときの処理
+void Player::OnKillSuccess()
+{
+	// キルストリークのフラグを立てる
+	isKillStreak_ = true;
+
+	// キルストリーク上限5
+	if (killStrealCount_ < 5) {
+		// キルストリークカウントの加算
+		killStrealCount_++;
 	}
+
+	// タイマーの設定 & スタート
+	killStreakTimer_.Init(0.0f, 5.0f * 60.0f); // (5秒)
+	killStreakTimer_.Start();
+}
+
+
+// キルが失敗したときの処理
+void Player::OnKillFailure()
+{
+	// キルストリークのフラグを折る
+	isKillStreak_ = false;
+
+	// カウントは0で初期化
+	killStrealCount_ = 0; 
+
+	// タイマーのクリア
+	killStreakTimer_.Clear();
 }
 
 
@@ -513,7 +544,8 @@ void Player::DrawImGui()
 		ImGui::Text("キル関連数値");
 		ImGui::Checkbox("キルストリーク", &isKillStreak_);
 		ImGui::SliderInt("キルストリーク数", &killStrealCount_, 0, 5);
-		ImGui::Text("");
+		int time = int(std::abs(killStreakTimer_.GetEndFrame() - killStreakTimer_.GetNowFrame()));
+		ImGui::DragInt("キルストリークタイマー", &time, 0.0f);
 
 		ImGui::Text("姿勢関連数値");
 		ImGui::DragFloat("姿勢の補間速度", &orientationLerpSpeed_, 0.01f);

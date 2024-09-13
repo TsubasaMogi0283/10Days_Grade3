@@ -62,6 +62,12 @@ public:
 	/// </summary>
 	void OnCollision()override;
 
+	// キルが成功したときの処理
+	void OnKillSuccess();
+
+	// キルが失敗したときの処理
+	void OnKillFailure();
+
 #pragma region Accessor アクセッサ
 
 	// ワールド座標の取得
@@ -238,10 +244,12 @@ private:
 
 	// キルが確認されたかのフラグ
 	bool isKillConfirmed_ = false;
-
-	// キルストリーク
+	// キルストリークしているかのフラグ
 	bool isKillStreak_ = false;
+	// キルストリークカウント
 	int killStrealCount_ = 0;
+	// キルストリークが切れるまでのタイマー
+	pTimer killStreakTimer_{};
 	
 	//当たり判定
 	std::unique_ptr<PlayerAttack>attack_ = nullptr;
