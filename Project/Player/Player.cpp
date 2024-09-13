@@ -148,9 +148,6 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 void Player::FuncAButton()
 {
 
-	
-
-
 
 	// ジャンプしていなければジャンプ
 	if (!isJumping_) {

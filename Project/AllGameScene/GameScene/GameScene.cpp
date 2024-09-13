@@ -117,8 +117,17 @@ void GameScene::Initialize() {
 
 
 
+	//カウントダウン
+	uint32_t count[3] = {};
+	count[2] = TextureManager::GetInstance()->LoadTexture("Resources/Number/3.png");
+	count[1] = TextureManager::GetInstance()->LoadTexture("Resources/Number/2.png");
+	count[0] = TextureManager::GetInstance()->LoadTexture("Resources/Number/1.png");
+	for (int i = 0; i < 3; ++i) {
+		countDown_[i].reset(Sprite::Create(count[i], {600,300,0.0f}));
+		countDown_[i]->SetInvisible(true);
+	}
 	
-
+	countDownTime_ = 240;
 
 	finishSE_ = Audio::GetInstance();
 	finishSEHandle_ = finishSE_->LoadWave("Resources/Audio/Game/Finish.wav");
@@ -132,6 +141,7 @@ void GameScene::Initialize() {
 
 	uint32_t startHandle = TextureManager::GetInstance()->LoadTexture("Resources/Game/Start.png");
 	startSprite_.reset(Sprite::Create(startHandle, { 0.0f,0.0f,0.0f }));
+	startSprite_->SetInvisible(true);
 
 	uint32_t endhandle = TextureManager::GetInstance()->LoadTexture("Resources/Game/End.png");
 
@@ -187,9 +197,29 @@ void GameScene::Update(GameManager* gameManager) {
 			whiteAlpha_ = 0.0f;
 
 
-			displayStartTime_ += 1;
+			countDownTime_ -=1;
 
-			if (displayStartTime_ > 180) {
+			if (countDownTime_ <= 240 && countDownTime_ > 180) {
+				countDown_[2]->SetInvisible(false);
+			}
+			else if (countDownTime_ <= 180 && countDownTime_ > 120) {
+				countDown_[2]->SetInvisible(true);
+				countDown_[1]->SetInvisible(false);
+			}
+			else if (countDownTime_ <= 120 && countDownTime_ > 60) {
+				countDown_[1]->SetInvisible(true);
+				countDown_[0]->SetInvisible(false);
+			}
+			else if (countDownTime_ <= 60 && countDownTime_ > 0) {
+				countDown_[0]->SetInvisible(true);
+				startSprite_->SetInvisible(false);
+			}
+
+
+
+			
+			if (countDownTime_ < 0) {
+				startSprite_->SetInvisible(true);
 				isGamePlay_ = true;
 			}
 
@@ -350,12 +380,15 @@ void GameScene::DrawPostEffect() {
 
 void GameScene::DrawSprite() {
 
-	if (isFadeIn_ == true&& (displayStartTime_>0&&displayStartTime_<=180)) {
-		startSprite_->Draw();
-	}
 
+	startSprite_->Draw();
 	if (isFinishGame_ == true && displayFinishTime_ <= 180) {
 		endSprite_->Draw();
+	}
+
+
+	for (int i = 0; i < 3; ++i) {
+		countDown_[i]->Draw();
 	}
 
 	gameUI_->Draw();

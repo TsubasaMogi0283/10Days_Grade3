@@ -197,8 +197,7 @@ private:
 
 
 
-	
-
+	std::array<std::unique_ptr<Sprite>, 3> countDown_ = { nullptr };
 
 };
 

@@ -33,7 +33,7 @@ void GameUI::Initialize(){
 
 
 	//初期位置
-	const Vector2 TIME_INITIAL_LEFT_POSITION = { .x = 660.0f,.y = 20.0f };
+	const Vector2 TIME_INITIAL_LEFT_POSITION = { .x = 630.0f,.y = 20.0f };
 	//生成
 	for (uint32_t i = 0; i < TIME_DIGIT_; ++i) {
 		timeSprites_[i].reset(Sprite::Create(numberQuantity[0], { .x = i * -64.0f + TIME_INITIAL_LEFT_POSITION.x, .y = TIME_INITIAL_LEFT_POSITION.y,.z = 0.0f }));
