@@ -184,6 +184,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\PostEffect\Vignette\Vignette.cpp" />
     <ClCompile Include="External\TsumiInput\TInput.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
+    <ClCompile Include="Project\AllGameScene\GameScene\GameAudioScene\GameAudioManager.cpp" />
+    <ClCompile Include="Project\AllGameScene\GameScene\GameAudioScene\GameAudioScene.cpp" />
+    <ClCompile Include="Project\AllGameScene\GameScene\GameAudioScene\GameAudioSceneFinish.cpp" />
     <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp" />
     <ClCompile Include="Project\AllGameScene\ResultScene\ResultScene.cpp" />
     <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp" />
@@ -467,6 +470,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="External\TsumiInput\TInput.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
+    <ClInclude Include="Project\AllGameScene\GameScene\GameAudioScene\GameAudioManager.h" />
+    <ClInclude Include="Project\AllGameScene\GameScene\GameAudioScene\GameAudioScene.h" />
+    <ClInclude Include="Project\AllGameScene\GameScene\GameAudioScene\GameAudioSceneFinish.h" />
+    <ClInclude Include="Project\AllGameScene\GameScene\GameAudioScene\IGameAudioScene.h" />
     <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h" />
     <ClInclude Include="Project\AllGameScene\ResultScene\ResultScene.h" />
     <ClInclude Include="Project\AllGameScene\TitleScene\TitleScene.h" />

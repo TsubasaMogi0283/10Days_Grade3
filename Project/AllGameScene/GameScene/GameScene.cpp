@@ -10,8 +10,8 @@
 #include <VectorCalculation.h>
 #include "../External/TsumiInput/TInput.h"
 #include <Record/Record.h>
-
-
+#include "GameAudioScene/GameAudioScene.h"
+#include "GameScene/GameAudioScene/GameAudioSceneFinish.h"
 //コンストラクタ
 GameScene::GameScene()
 {
@@ -117,6 +117,9 @@ void GameScene::Initialize() {
 
 
 
+	gameAudioManager_ = std::make_unique<GameAudioManager>();
+	gameAudioManager_->Initialize();
+
 	uint32_t whiteHandle= TextureManager::GetInstance()->LoadTexture("Resources/Back/White.png");
 	white_.reset(Sprite::Create(whiteHandle, { 0.0f,0.0f,0.0f }));
 
@@ -193,6 +196,12 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 	if (isGamePlay_ == true) {
+		gameChange_ += 1;
+		if (gameChange_==1) {
+			gameAudioManager_->ChangeGameAudioScene(new GameAudioScene());
+
+		}
+		
 		isFadeIn_ = false;
 		gameUI_->SetIsTimeStart(true);
 
@@ -244,7 +253,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 
-
+	gameAudioManager_->Update();
 
 
 	/* ----- Player プレイヤー ----- */
@@ -265,7 +274,7 @@ void GameScene::Update(GameManager* gameManager) {
 	//制限時間が過ぎたらResultへ
 	if (gameUI_->GetIsTimeOver() == true) {
 		isGamePlay_ = false;
-		isFinishGame_ = true;;
+		isFinishGame_ = true;
 	}
 
 	if (isFinishGame_ == true) {
@@ -283,6 +292,9 @@ void GameScene::Update(GameManager* gameManager) {
 
 
 	if (isFadeOut == true) {
+
+		gameAudioManager_->ChangeGameAudioScene(new GameAudioSceneFinish());
+
 		whiteAlpha_ += 0.01f;
 		if (whiteAlpha_ > 1.0f) {
 			whiteAlpha_ = 1.0f;

@@ -24,6 +24,7 @@
 #include <Collider/CollisionManager.h>
 #include "UI/GameUI.h"
 #include <StageObject/Skydome/Skydome.h>
+#include "GameAudioScene/GameAudioManager.h"
 
 
 
@@ -165,6 +166,8 @@ private:
 
 
 
+	std::unique_ptr<GameAudioManager> gameAudioManager_ = nullptr;
+	int32_t gameChange_ = 0;
 private:
 
 	enum GameCondition {
