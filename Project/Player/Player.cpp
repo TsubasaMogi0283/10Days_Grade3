@@ -326,7 +326,7 @@ void Player::EnterStompFunc()
 	isStomping_ = true; // ストンプ中
 	stompStartYPos_ = transform_.translate_.y; // 開始位置を保存
 	stompVel_ = -stompSpeed_; // ストンプの速度を設定
-	stompTimer_.Init(0.0f, 500.0f); // タイマーの設定
+	stompTimer_.Init(0.0f, 5.0f); // タイマーの設定
 	stompTimer_.Start(); // タイマースタート
 	isDrop_ = true;
 }
