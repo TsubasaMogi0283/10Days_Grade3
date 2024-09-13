@@ -298,7 +298,6 @@
     <ClCompile Include="Project\Enemy\FeEnemy.cpp" />
     <ClCompile Include="Project\Enemy\RockEnemyParticle.cpp" />
     <ClCompile Include="Project\Enemy\FeEnemyParticle.cpp" />
-    <ClCompile Include="Project\Player\Effects\StompSpeed\StompSpeed.cpp" />
     <ClCompile Include="Project\Player\PlayerAttack.cpp" />
     <ClCompile Include="Project\Player\Effects\CrackEffect\CrackEffect.cpp" />
     <ClCompile Include="Project\Player\Timer\pTimer.cpp" />
@@ -414,7 +413,6 @@
     <ClInclude Include="Project\Enemy\EnemyParticle.h" />
     <ClInclude Include="Project\Enemy\RockEnemyParticle.h" />
     <ClInclude Include="Project\Enemy\FeEnemyParticle.h" />
-    <ClInclude Include="Project\Player\Effects\StompSpeed\StompSpeed.h" />
     <ClInclude Include="Project\Player\PlayerAttack.h" />
     <ClInclude Include="Project\Player\Effects\CrackEffect\CrackEffect.h" />
     <ClInclude Include="Project\Player\Timer\pTimer.h" />

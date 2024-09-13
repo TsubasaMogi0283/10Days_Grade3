@@ -14,7 +14,6 @@
 #include "Parts/Head/PlayerHead.h"
 #include "Parts/Torso/PlayerTorso.h"
 
-#include "Effects/StompSpeed/StompSpeed.h"
 #include "Effects/CrackEffect/CrackEffect.h"
 
 #include "PlayerAttack.h"
@@ -32,7 +31,6 @@ struct PlayerAssetsHandle {
 	uint32_t player;
 	uint32_t head;
 	uint32_t torso;
-	uint32_t stompSpeed;
 	uint32_t crack;
 };
 
