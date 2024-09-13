@@ -20,8 +20,8 @@ void GameUI::Initialize(){
 		scoreSprites_[i].reset(Sprite::Create(numberQuantity[0], {.x= i*-64.0f+SCORE_INITIAL_LEFT_POSITION.x, .y= SCORE_INITIAL_LEFT_POSITION .y,.z=0.0f}));
 	}
 
-
-
+	uint32_t hpwToHandle = TextureManager::GetInstance()->LoadTexture("Resources/Game/Howto.png");
+	howTo_.reset(Sprite::Create(hpwToHandle, {0.0f,0.0f,0.0f}));
 
 	isTimeStart_ = false;
 
@@ -33,7 +33,7 @@ void GameUI::Initialize(){
 
 
 	//初期位置
-	const Vector2 TIME_INITIAL_LEFT_POSITION = { .x = 680.0f,.y = 20.0f };
+	const Vector2 TIME_INITIAL_LEFT_POSITION = { .x = 660.0f,.y = 20.0f };
 	//生成
 	for (uint32_t i = 0; i < TIME_DIGIT_; ++i) {
 		timeSprites_[i].reset(Sprite::Create(numberQuantity[0], { .x = i * -64.0f + TIME_INITIAL_LEFT_POSITION.x, .y = TIME_INITIAL_LEFT_POSITION.y,.z = 0.0f }));
@@ -124,4 +124,6 @@ void GameUI::Draw(){
 	for (uint32_t i = 0; i < SCORE_DIGIT_; ++i) {
 		scoreSprites_[i]->Draw(numberQuantity[scorePlaces_[i]]);
 	}
+
+	howTo_->Draw();
 }
