@@ -464,6 +464,12 @@ void GameScene::FuncInput()
 		// Aボタンが押された時の処理
 		player_->FuncAButton();
 	}
+
+	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
+		// Aボタンが押された時の処理
+		player_->FuncAButton();
+	}
+
 }
 
 void GameScene::PreLoad(){

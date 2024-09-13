@@ -274,6 +274,11 @@ void ResultScene::Update(GameManager* gameManager){
 
 			}
 
+			if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
+				condition_ = ChangeNextSceneFromResult;
+
+			}
+
 
 			//点滅
 			flashingTime_ += 1;
