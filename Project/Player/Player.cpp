@@ -75,11 +75,8 @@ void Player::Update()
 
 	// ストンプの処理
 	if (isStomping_) { // フラグが立っていたら入る
-		StompFunc();
+		StompUpdate();
 	}
-
-	// キルイベントを検出する
-	DetectKillEvent();
 
 	//スピード管理
 	SpeedManagiment();
@@ -134,7 +131,7 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 #ifdef _DEBUG
 	//攻撃
 	if (isDrop_ ==true) {
-		attack_->Draw(camera, light);
+		//attack_->Draw(camera, light);
 	}
 #endif // _DEBUG
 }
@@ -292,10 +289,10 @@ void Player::JumpFunc()
 	transform_.translate_.y += jumpVel_ * jumpDeltaTime_;
 
 	// 地面との接触判定
-	if (transform_.translate_.y <= 0.0f) {
+	if (transform_.translate_.y <= groundLevel_) {
 
 		// 地面に戻す
-		transform_.translate_.y = 2.0f;
+		transform_.translate_.y = groundLevel_;
 		// 着地状態
 		isGrounded_ = true;
 		// 終了処理
@@ -332,6 +329,23 @@ void Player::EnterStompFunc()
 }
 
 
+// ストンプの更新処理 
+void Player::StompUpdate()
+{
+	// タイマーが開始されていたらストンプ処理
+	if (stompTimer_.IsActive()) {
+		StompFunc();
+		return;
+	}
+
+	// スタンのタイマーが開始されていたらストン処理
+	if (stompStunTime_.IsActive()) {
+		StompStunFunc();
+		return;
+	}
+}
+
+
 // ストンプ処理
 void Player::StompFunc()
 {
@@ -365,17 +379,42 @@ void Player::StompFunc()
 	// タイマーが終了していたら終了処理を呼ぶ
 	if (stompTimer_.IsFinish()) {
 		// 地面に戻す
-		transform_.translate_.y = 1.0f;
+		transform_.translate_.y = groundLevel_;
 		// 着地状態
 		isGrounded_ = true;
-		// ストンプ終了処理
-		ExsitStompFunc();
+		// タイマーをクリア
+		stompTimer_.Clear();
+		// 亀裂を出す
+		AddNewCrack();
+		// カメラのシェイクの処理を呼び出す
+		followCamera_->CallShake();
+		// スタンタイマーを設定(5フレーム) & スタート
+		stompStunTime_.Init(0.0f, 2.0f);
+		stompStunTime_.Start();
+		return;
 	}
 
 	// 補間処理
 	transform_.translate_.y =
 		stompStartYPos_ + (1.0f - stompStartYPos_) * Ease::InBack(stompTimer_.GetRatio());
-	//transform_.translate_.y = pFunc::Lerp(stompStartYPos_, 1.0f, stompTimer_.GetRatio());
+	//transform_.translate_.y = pFunc::Lerp(stompStartYPos_, groundLevel_, stompTimer_.GetRatio());
+}
+
+
+// ストンプ硬直処理
+void Player::StompStunFunc()
+{
+	// タイマー更新
+	stompStunTime_.Update();
+
+	// タイマーが終了したら終了処理
+	if (stompStunTime_.IsFinish()) {
+		// タイマーをクリア
+		stompStunTime_.Clear();
+		// 終了処理
+		ExsitStompFunc();
+		return;
+	}
 }
 
 
@@ -385,10 +424,7 @@ void Player::ExsitStompFunc()
 	isStomping_ = false; // ストンプ終了
 	stompStartYPos_ = 0.0f; // 0で初期化
 	stompVel_ = 0.0f; // Y軸速度をリセット
-	stompTimer_.Clear(); // タイマーをクリア
-	AddNewCrack(); // 亀裂を出す
 	isDrop_ = false;
-	followCamera_->CallShake(); // カメラのシェイクの処理を呼び出す
 }
 
 
@@ -426,25 +462,6 @@ void Player::AddNewCrack()
 float Player::CalcCrackScaleForLevel(int level) const
 {
 	return baseCrackScale_ * float(std::pow(crackScaleGrowthScale_, level));
-}
-
-
-// キルイベントを検出する
-void Player::DetectKillEvent()
-{
-	// キルしたかのフラグをチェック
-	if (isKillConfirmed_) {
-
-		// フラグが立っている場合は
-
-		// ToDO : キルカウント加算
-	}
-	else {
-
-		// キルできなかった場合は
-
-		// ToDO : キルカウントを0で初期化
-	}
 }
 
 
@@ -510,10 +527,10 @@ void Player::DrawImGui()
 		ImGui::DragFloat3("Transform", &transform_.translate_.x, 0.01f);
 		ImGui::Text("");
 
-		ImGui::Text("キル関連数値");
+		/*ImGui::Text("キル関連数値");
 		ImGui::Checkbox("キルストリーク", &isKillStreak_);
 		ImGui::SliderInt("キルストリーク数", &killStrealCount_, 0, 5);
-		ImGui::Text("");
+		ImGui::Text("");*/
 
 		ImGui::Text("姿勢関連数値");
 		ImGui::DragFloat("姿勢の補間速度", &orientationLerpSpeed_, 0.01f);
