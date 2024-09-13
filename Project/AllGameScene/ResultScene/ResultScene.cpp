@@ -97,7 +97,7 @@ void ResultScene::Initialize(){
 	bgm_ = Audio::GetInstance();
 	bgmHandle_ =bgm_->LoadWave("Resources/Audio/Result/ResultBGM.wav");
 	bgm_->PlayWave(bgmHandle_, true);
-	bgm_->ChangeVolume(bgmHandle_,0.4f);
+	bgm_->ChangeVolume(bgmHandle_,0.6f);
 	filter_ = 1.0f;
 
 

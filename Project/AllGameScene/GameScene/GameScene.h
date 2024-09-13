@@ -26,7 +26,7 @@
 #include <StageObject/Skydome/Skydome.h>
 #include "GameAudioScene/GameAudioManager.h"
 
-
+#include "Audio.h"
 
 
 //StatePatternを使う時は必ず前方宣言をするように
@@ -192,7 +192,9 @@ private:
 
 
 
-
+	Audio* finishSE_ = nullptr;
+	uint32_t finishSEHandle_ = 0u;
+	int32_t finishTime_ = 0;
 
 };
 

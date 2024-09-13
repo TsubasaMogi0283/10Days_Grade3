@@ -117,6 +117,11 @@ void GameScene::Initialize() {
 
 
 
+
+	finishSE_ = Audio::GetInstance();
+	finishSEHandle_ = finishSE_->LoadWave("Resources/Audio/Game/Finish.wav");
+	
+
 	gameAudioManager_ = std::make_unique<GameAudioManager>();
 	gameAudioManager_->Initialize();
 
@@ -278,6 +283,12 @@ void GameScene::Update(GameManager* gameManager) {
 	}
 
 	if (isFinishGame_ == true) {
+
+		finishTime_ += 1;
+		if (finishTime_ == 1) {
+			finishSE_->PlayWave(finishSEHandle_, false);
+			finishSE_->ChangeVolume(finishSEHandle_, 0.7f);
+		}
 
 		///表示
 		displayFinishTime_ += 1;
