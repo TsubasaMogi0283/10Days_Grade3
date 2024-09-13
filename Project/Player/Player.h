@@ -143,8 +143,14 @@ private:
 	// ストンプのエンター処理
 	void EnterStompFunc();
 
+	// ストンプの更新処理 
+	void StompUpdate();
+
 	// ストンプ処理
 	void StompFunc();
+
+	// ストンプ硬直処理　
+	void StompStunFunc();
 
 	// ストンプ終了処理
 	void ExsitStompFunc();
@@ -154,9 +160,6 @@ private:
 
 	// レベルに応じた亀裂のスケールの計算
 	float CalcCrackScaleForLevel(int level) const;
-
-	// キルイベントを検出する
-	void DetectKillEvent();
 
 	// Imguiの描画
 	void DrawImGui();
@@ -192,6 +195,9 @@ private:
 	float bodyOrientation_ = 0.0f;
 	// 姿勢計算の補間速度
 	float orientationLerpSpeed_ = 0.1f;
+
+	// 地面のY地点
+	float groundLevel_ = 0.0;
 	
 	// ジャンプのフラグ
 	bool isJumping_ = false;
@@ -222,6 +228,8 @@ private:
 	float stompStartYPos_ = 0.0f;
 	// ストンプのタイマー
 	pTimer stompTimer_{};
+	// ストンプ硬直タイマー
+	pTimer stompStunTime_{};
 
 	// Groundの四隅座標
 	std::vector<Vector3> groundCorners_{};
@@ -241,7 +249,7 @@ private:
 
 	// キルストリーク
 	bool isKillStreak_ = false;
-	int killStrealCount_ = 0;
+	int killStrealCount_ = 2;
 	
 	//当たり判定
 	std::unique_ptr<PlayerAttack>attack_ = nullptr;
