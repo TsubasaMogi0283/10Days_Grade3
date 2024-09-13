@@ -75,7 +75,7 @@ void TitleScene::Initialize(){
 
 	
 	bgm_->PlayWave(bgmHandle, true);
-	bgm_->ChangeVolume(bgmHandle, 0.7f);
+	bgm_->ChangeVolume(bgmHandle, 0.4f);
 
 
 	startSE_ = Audio::GetInstance();
@@ -122,7 +122,7 @@ void TitleScene::Update(GameManager* gameManager){
 
 	if (startSETime_ == 1) {
 		startSETime_ = 0;
-		startSE_->ChangeVolume(seHandle_,0.6f);
+		startSE_->ChangeVolume(seHandle_,0.5f);
 		startSE_->PlayWave(seHandle_, false);
 	}
 

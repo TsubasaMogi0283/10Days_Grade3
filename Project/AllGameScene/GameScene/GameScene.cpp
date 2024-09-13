@@ -133,6 +133,17 @@ void GameScene::Initialize() {
 	finishSEHandle_ = finishSE_->LoadWave("Resources/Audio/Game/Finish.wav");
 	
 
+
+	countSE_ = Audio::GetInstance();
+	countSEHandle_ = countSE_->LoadWave("Resources/Audio/Game/Count.wav");
+
+	startSE_ = Audio::GetInstance();
+	startSEHandle_ = startSE_->LoadWave("Resources/Audio/Game/Start.wav");
+
+
+
+
+
 	gameAudioManager_ = std::make_unique<GameAudioManager>();
 	gameAudioManager_->Initialize();
 
@@ -197,20 +208,49 @@ void GameScene::Update(GameManager* gameManager) {
 			whiteAlpha_ = 0.0f;
 
 
+			countSE_ = Audio::GetInstance();
+			countSEHandle_ = countSE_->LoadWave("Resources/Audio/Game/Count.wav");
+
+			startSE_ = Audio::GetInstance();
+			startSEHandle_ = startSE_->LoadWave("Resources/Audio/Game/Start.wav");
+
+
 			countDownTime_ -=1;
 
 			if (countDownTime_ <= 240 && countDownTime_ > 180) {
+				if (countDownTime_ == 239) {
+					countSE_->PlayWave(countSEHandle_, false);
+					countSE_->ChangeVolume(countSEHandle_, 0.6f);
+
+				}
 				countDown_[2]->SetInvisible(false);
 			}
 			else if (countDownTime_ <= 180 && countDownTime_ > 120) {
+				if (countDownTime_ == 180) {
+					countSE_->PlayWave(countSEHandle_, false);
+					countSE_->ChangeVolume(countSEHandle_, 0.6f);
+
+				}
 				countDown_[2]->SetInvisible(true);
 				countDown_[1]->SetInvisible(false);
 			}
 			else if (countDownTime_ <= 120 && countDownTime_ > 60) {
+				if (countDownTime_ ==120) {
+					countSE_->PlayWave(countSEHandle_, false);
+					countSE_->ChangeVolume(countSEHandle_, 0.6f);
+
+				}
+
 				countDown_[1]->SetInvisible(true);
 				countDown_[0]->SetInvisible(false);
 			}
 			else if (countDownTime_ <= 60 && countDownTime_ > 0) {
+				if (countDownTime_ == 60) {
+					startSE_->PlayWave(startSEHandle_, false);
+					startSE_->ChangeVolume(startSEHandle_, 0.6f);
+
+				}
+				
 				countDown_[0]->SetInvisible(true);
 				startSprite_->SetInvisible(false);
 			}

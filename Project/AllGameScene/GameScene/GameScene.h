@@ -196,6 +196,13 @@ private:
 	int32_t finishTime_ = 0;
 
 
+	Audio* countSE_ = nullptr;
+	uint32_t countSEHandle_ = 0u;
+	
+	Audio* startSE_ = nullptr;
+	uint32_t startSEHandle_ = 0u;
+
+
 
 	std::array<std::unique_ptr<Sprite>, 3> countDown_ = { nullptr };
 
