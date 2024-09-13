@@ -66,7 +66,21 @@ void TitleScene::Initialize(){
 	uint32_t whiteHandle = TextureManager::GetInstance()->LoadTexture("Resources/Back/White.png");
 	white_.reset(Sprite::Create(whiteHandle, {0.0f,0.0f,0.0f}));
 	white_->SetTransparency(0.0f);
-	white_->SetInvisible(true);
+
+
+
+
+	bgmHandle = Audio::GetInstance()->LoadWave("Resources/Audio/Title/TitleBGM.wav");
+	bgm_ = Audio::GetInstance();
+
+	
+	bgm_->PlayWave(bgmHandle, true);
+	bgm_->ChangeVolume(bgmHandle, 0.7f);
+
+
+	startSE_ = Audio::GetInstance();
+	seHandle_ = startSE_->LoadWave("Resources/Audio/Decide.wav");
+	startSETime_ = 0;
 
 }
 
@@ -91,31 +105,67 @@ void TitleScene::Update(GameManager* gameManager){
 	ImGui::SliderFloat3("Position", &transformD_.translate_.x, -100.0f, 100.0f);
 	ImGui::End();
 #endif // _DEBUG
-	white_->SetTransparency(whiteAlpha_);
+	
+	theta_ += 0.05f;
+	transformB_.translate_.y = std::sinf(theta_)*(0.3f)-1.5f;
 
 	//transform2_.translate_.y -= 0.1f;
 	//仮置き
 	//スペースキーで次のシーンへ
-	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE)==true|| tInput_->Trigger(PadData::B)) {
+	if ((Input::GetInstance()->IsTriggerKey(DIK_SPACE)==true|| tInput_->Trigger(PadData::B))&& isPlayScene_==false) {
 		
+
+		
+		startSETime_ += 1;
 		isPlayScene_ = true;
-		return;
 	}
+
+	if (startSETime_ == 1) {
+		startSETime_ = 0;
+		startSE_->ChangeVolume(seHandle_,0.6f);
+		startSE_->PlayWave(seHandle_, false);
+	}
+
+
+
 	if(isPlayScene_ == true){
+		
+
 		transformD_.translate_.y -= speed;
 		transformD_.rotate_.y -= 0.2f;
 		if (transformD_.translate_.y < 0.8) {
 			speed = 0;
 			transform2_.translate_.y -= 0.1f;
+			
+			
+			
+
 			if (transform2_.translate_.y < -3.0f) {
-				whiteAlpha_ += 0.01f;
-				white_->SetInvisible(false);
+				
+				isFadeOut_ = true;
 				
 			}
 		}
 	}
 
+
+	if (isFadeOut_ == true) {
+		filter_ -= 0.01f;
+		whiteAlpha_ += 0.01f;
+
+	}
+	
+#ifdef _DEBUG
+	ImGui::Begin("SS");
+	ImGui::InputFloat("A",&whiteAlpha_);
+	ImGui::End();
+#endif // _DEBUG
+
+
+	bgm_->SetLowPassFilter(bgmHandle, filter_);
+	white_->SetTransparency(whiteAlpha_);
 	if (whiteAlpha_ > 1.0f) {
+		bgm_->StopWave(bgmHandle);
 		gameManager->ChangeScene(new GameScene());
 		return;
 	}
