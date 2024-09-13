@@ -80,7 +80,7 @@ void ResultScene::Initialize(){
 	scoreFromRecord_ = Record::GetInstance()->GetTotalScore();
 
 #ifdef _DEBUG
-	scoreFromRecord_ = 5000;
+	scoreFromRecord_ = 3000;
 
 #endif // _DEBUG
 
@@ -94,7 +94,11 @@ void ResultScene::Initialize(){
 
 
 
-
+	bgm_ = Audio::GetInstance();
+	bgmHandle_ =bgm_->LoadWave("Resources/Audio/Result/ResultBGM.wav");
+	bgm_->PlayWave(bgmHandle_, true);
+	bgm_->ChangeVolume(bgmHandle_,0.4f);
+	filter_ = 1.0f;
 
 
 
@@ -102,7 +106,15 @@ void ResultScene::Initialize(){
 	roll_ = Audio::GetInstance();
 	rollHandle_=roll_->LoadWave("Resources/Audio/ScoreUpSE.wav");
 
+	rankVoice_ = Audio::GetInstance();
+	rankVoiceHandle_[0] = rankVoice_->LoadWave("Resources/Audio/Result/Dead.wav");
+	rankVoiceHandle_[1] = rankVoice_->LoadWave("Resources/Audio/Result/TonkachiRank.wav");
+	rankVoiceHandle_[2] = rankVoice_->LoadWave("Resources/Audio/Result/HummerRank.wav");
+	rankVoiceHandle_[3] = rankVoice_->LoadWave("Resources/Audio/Result/DrillRank.wav");
+	rankVoiceHandle_[4] = rankVoice_->LoadWave("Resources/Audio/Result/PB.wav");
 
+	decideSE_ = Audio::GetInstance();
+	decideSEHandle_ = decideSE_->LoadWave("Resources/Audio/Decide.wav");
 }
 
 void ResultScene::Update(GameManager* gameManager){
@@ -212,6 +224,32 @@ void ResultScene::Update(GameManager* gameManager){
 		}
 
 
+		rankTime_ += 1;
+		if (rankTime_ == 1) {
+			//岩くず
+			if (rankName_ == lowestRank_) {
+				rankVoice_->PlayWave(rankVoiceHandle_[0], false);
+			}
+			//とんかち
+			else if (rankName_ == tonkachiRank_) {
+				rankVoice_->PlayWave(rankVoiceHandle_[1], false);
+			}
+			//はんまー
+			else if (rankName_ == hummerRank_) {
+				rankVoice_->PlayWave(rankVoiceHandle_[2], false);
+			}
+			//どりる
+			else if (rankName_ == drillRank_) {
+				rankVoice_->PlayWave(rankVoiceHandle_[3], false);
+			}
+			//PB
+			else if (rankName_ == pbRank_) {
+				rankVoice_->PlayWave(rankVoiceHandle_[4], false);
+			}
+
+		}
+
+
 		//次へ進む
 		if (displayTime_ > 180) {
 			//
@@ -287,15 +325,22 @@ void ResultScene::Update(GameManager* gameManager){
 
 
 	case ChangeNextSceneFromResult:
-		//リプレイ
 		
+		seTime += 1;
+		if (seTime == 1) {
+			decideSE_->PlayWave(decideSEHandle_, false);
+			decideSE_->ChangeVolume(decideSEHandle_, 0.6f);
+		}
 		
+		filter_ = 0.01f;
+
+
 
 		whiteAlpha_ += 0.01f;
 
 		if (whiteAlpha_ > 1.0f) {
 			whiteAlpha_ = 1.0f;
-
+			bgm_->StopWave(bgmHandle_);
 			gameManager->ChangeScene(new TitleScene());
 			return;
 
@@ -308,7 +353,7 @@ void ResultScene::Update(GameManager* gameManager){
 	}
 
 	
-
+	bgm_->SetLowPassFilter(bgmHandle_, filter_);
 
 	//透明
 	white_->SetTransparency(whiteAlpha_);

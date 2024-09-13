@@ -191,14 +191,22 @@ private:
 
 
 private:
+	Audio* bgm_ = nullptr;
+	uint32_t bgmHandle_ = 0u;
+	float filter_ = 1.0f;
+	
 	Audio* roll_ = nullptr;
 	uint32_t rollHandle_ = 0u;
 	int32_t rollTime_ = 0;
 
 
+	Audio* rankVoice_ = nullptr;
+	uint32_t rankVoiceHandle_[5] = {};
+	int32_t rankTime_ = 0;
 
-	uint32_t rankVoiceHandle_[4] = {};
 
-
+	Audio* decideSE_ = nullptr;
+	uint32_t decideSEHandle_ = 0u;
+	int32_t seTime = 0;
 };
 
