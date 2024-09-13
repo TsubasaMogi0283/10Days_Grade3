@@ -9,7 +9,7 @@
 void GameManager::Initialize() {
 	//シーンごとに動作確認したいときはここを変えてね
 
-	currentGamaScene_ = new ResultScene();
+	currentGamaScene_ = new GameScene();
 
 
 #ifdef _DEBUG
