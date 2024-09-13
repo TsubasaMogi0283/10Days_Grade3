@@ -67,7 +67,6 @@ void Player::Init()
 void Player::Update()
 {
 	jumpTime_ = 0;
-
 	// トランスフォームの更新
 	transform_.Update();
 
@@ -155,6 +154,7 @@ void Player::FuncAButton()
 		jumpSE_->PlayWave(jumpSEHandle_, false);
 
 	}
+
 
 
 	// ジャンプしていなければジャンプ
@@ -321,6 +321,7 @@ void Player::JumpFunc()
 // ジャンプ終了処理
 void Player::ExsitJumpFunc()
 {
+	
 	isJumping_ = false; // ジャンプ終了
 	jumpVel_ = 0.0f; // Y軸速度をリセット
 }
@@ -349,6 +350,7 @@ void Player::EnterStompFunc()
 // ストンプの更新処理 
 void Player::StompUpdate()
 {
+	//jumpSE_->StopWave(jumpSEHandle_);
 	// タイマーが開始されていたらストンプ処理
 	if (stompTimer_.IsActive()) {
 		StompFunc();

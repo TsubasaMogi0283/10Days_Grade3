@@ -51,7 +51,7 @@ void FeEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& spee
 
 	killAudio_ = Audio::GetInstance();
 	killHandle_ = killAudio_->LoadWave("Resources/Audio/Game/Fe.wav");
-	killAudio_->ChangeVolume(killHandle_, 0.7f);
+	killAudio_->ChangeVolume(killHandle_, 0.9f);
 }
 
 void FeEnemy::Update() {
