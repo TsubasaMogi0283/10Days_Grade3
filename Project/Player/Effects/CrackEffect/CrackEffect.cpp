@@ -75,12 +75,9 @@ bool CrackEffect::SubAlpha()
 	// タイマーの更新
 	timer_.Update();
 
-	// 変化率
-	float t = timer_.GetNowFrame() / timer_.GetEndFrame();
-
 	// イージング処理でalpha値を減らす
 	mtl_.color_.w =
-		1.0f + (0.0f - 1.0f) * Ease::InCubic(t);
+		1.0f + (0.0f - 1.0f) * Ease::InCubic(timer_.GetRatio());
 
 	// タイマーが終了したらtrueを返す
 	if (timer_.IsFinish()) {

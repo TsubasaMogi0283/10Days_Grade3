@@ -155,6 +155,9 @@ private:
 	// レベルに応じた亀裂のスケールの計算
 	float CalcCrackScaleForLevel(int level) const;
 
+	// キルイベントを検出する
+	void DetectKillEvent();
+
 	// Imguiの描画
 	void DrawImGui();
 
@@ -215,6 +218,10 @@ private:
 	float stompGravoty_ = 1.0f;
 	// ストンプのフレーム時間ごとの時間経過
 	float stompDeltaTime_ = 0.9f;
+	// ストンプの開始Ｙ座標
+	float stompStartYPos_ = 0.0f;
+	// ストンプのタイマー
+	pTimer stompTimer_{};
 
 	// Groundの四隅座標
 	std::vector<Vector3> groundCorners_{};
@@ -228,6 +235,9 @@ private:
 	float speedMagnification_ = 1.0f;
 	//減速中の時間
 	int speedDownTime_ = 0;
+
+	// キルが確認されたかのフラグ
+	bool isKillConfirmed_ = false;
 
 	// キルストリーク
 	bool isKillStreak_ = false;

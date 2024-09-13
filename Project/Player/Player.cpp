@@ -78,6 +78,9 @@ void Player::Update()
 		StompFunc();
 	}
 
+	// キルイベントを検出する
+	DetectKillEvent();
+
 	//スピード管理
 	SpeedManagiment();
 
@@ -321,7 +324,10 @@ void Player::EnterStompFunc()
 {
 	ExsitJumpFunc(); // ジャンプの終了処理
 	isStomping_ = true; // ストンプ中
+	stompStartYPos_ = transform_.translate_.y; // 開始位置を保存
 	stompVel_ = -stompSpeed_; // ストンプの速度を設定
+	stompTimer_.Init(0.0f, 500.0f); // タイマーの設定
+	stompTimer_.Start(); // タイマースタート
 	isDrop_ = true;
 }
 
@@ -329,24 +335,35 @@ void Player::EnterStompFunc()
 // ストンプ処理
 void Player::StompFunc()
 {
-	// 重力をY軸速度に加える
-	stompVel_ -= stompGravoty_ * stompDeltaTime_;
+	//// 重力をY軸速度に加える
+	//stompVel_ -= stompGravoty_ * stompDeltaTime_;
 
-	
+	//// 最大落下速度を制限する
+	//const float maxFallSpeed = -30.0f;  // 例: 最大速度
+	//if (stompVel_ < maxFallSpeed) {
+	//	stompVel_ = maxFallSpeed;
+	//}
+
+	//// プレイヤーのY軸方向の移動を更新
+	//transform_.translate_.y += stompVel_ * stompDeltaTime_;
+
+	//// 地面との接触判定
+	//if (transform_.translate_.y <= 0.0f) {
+
+	//	// 地面に戻す
+	//	transform_.translate_.y = 1.0f;
+	//	// 着地状態
+	//	isGrounded_ = true;
+	//	// ストンプ終了処理
+	//	ExsitStompFunc();
+	//}
 
 
-	// 最大落下速度を制限する
-	const float maxFallSpeed = -30.0f;  // 例: 最大速度
-	if (stompVel_ < maxFallSpeed) {
-		stompVel_ = maxFallSpeed;
-	}
+	// タイマー更新
+	stompTimer_.Update();
 
-	// プレイヤーのY軸方向の移動を更新
-	transform_.translate_.y += stompVel_ * stompDeltaTime_;
-
-	// 地面との接触判定
-	if (transform_.translate_.y <= 0.0f) {
-
+	// タイマーが終了していたら終了処理を呼ぶ
+	if (stompTimer_.IsFinish()) {
 		// 地面に戻す
 		transform_.translate_.y = 1.0f;
 		// 着地状態
@@ -354,6 +371,11 @@ void Player::StompFunc()
 		// ストンプ終了処理
 		ExsitStompFunc();
 	}
+
+	// 補間処理
+	transform_.translate_.y =
+		stompStartYPos_ + (1.0f - stompStartYPos_) * Ease::InBack(stompTimer_.GetRatio());
+	//transform_.translate_.y = pFunc::Lerp(stompStartYPos_, 1.0f, stompTimer_.GetRatio());
 }
 
 
@@ -361,7 +383,9 @@ void Player::StompFunc()
 void Player::ExsitStompFunc()
 {
 	isStomping_ = false; // ストンプ終了
+	stompStartYPos_ = 0.0f; // 0で初期化
 	stompVel_ = 0.0f; // Y軸速度をリセット
+	stompTimer_.Clear(); // タイマーをクリア
 	AddNewCrack(); // 亀裂を出す
 	isDrop_ = false;
 	followCamera_->CallShake(); // カメラのシェイクの処理を呼び出す
@@ -384,7 +408,7 @@ void Player::AddNewCrack()
 	Vector3 initPos = transform_.translate_;
 	initPos.y = 0.01f;
 
-	// newCrack
+	// newCrackインスタンス
 	std::shared_ptr<CrackEffect> crack = std::make_shared<CrackEffect>(handles_.crack);
 
 	// 初期化。各種値の設定
@@ -402,6 +426,25 @@ void Player::AddNewCrack()
 float Player::CalcCrackScaleForLevel(int level) const
 {
 	return baseCrackScale_ * float(std::pow(crackScaleGrowthScale_, level));
+}
+
+
+// キルイベントを検出する
+void Player::DetectKillEvent()
+{
+	// キルしたかのフラグをチェック
+	if (isKillConfirmed_) {
+
+		// フラグが立っている場合は
+
+		// ToDO : キルカウント加算
+	}
+	else {
+
+		// キルできなかった場合は
+
+		// ToDO : キルカウントを0で初期化
+	}
 }
 
 

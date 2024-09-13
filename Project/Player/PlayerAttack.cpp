@@ -8,7 +8,7 @@ void PlayerAttack::Initialize(Vector3& position){
 	model_.reset(Model::Create(modelHandle));
 
 	collisionType_ = CollisionType::SphereType;
-	radius_ = 3.0f;
+	radius_ = 2.0f;
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
