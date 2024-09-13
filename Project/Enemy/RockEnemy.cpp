@@ -45,7 +45,9 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 	isAttack_ = false;
 
 
-
+	killAudio_ = Audio::GetInstance();
+	killHandle_ = killAudio_->LoadWave("Resources/Audio/Game/Rock.wav");
+	killAudio_->ChangeVolume(killHandle_, 2.0f);
 
 }
 
@@ -277,6 +279,8 @@ void RockEnemy::Killed(){
 			ReleaseParticle();
 			//加算
 			record_->AddRockScore();
+
+			killAudio_->PlayWave(killHandle_, false);
 
 		}
 		//表示

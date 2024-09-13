@@ -53,6 +53,13 @@ void Player::Init()
 	//攻撃
 	attack_ = std::make_unique<PlayerAttack>();
 	attack_->Initialize(transform_.translate_);
+
+
+
+	jumpSE_ = Audio::GetInstance();
+	jumpSEHandle_ = jumpSE_->LoadWave("Resources/Audio/Game/Jump.wav");
+
+
 }
 
 
@@ -140,8 +147,18 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 // Aボタンが押された時の処理
 void Player::FuncAButton()
 {
+
+
 	// ジャンプしていなければジャンプ
 	if (!isJumping_) {
+		jumpTime_ += 1;
+		if (jumpTime_ == 1) {
+			jumpSE_->PlayWave(jumpSEHandle_, false);
+			jumpTime_ = 0;
+		}
+		else if (jumpTime_ == 0) {
+			jumpSE_->StopWave(jumpSEHandle_);
+		}
 		EnterJumpFunc();
 		return;
 	}
@@ -304,6 +321,7 @@ void Player::JumpFunc()
 // ジャンプ終了処理
 void Player::ExsitJumpFunc()
 {
+	
 	isJumping_ = false; // ジャンプ終了
 	jumpVel_ = 0.0f; // Y軸速度をリセット
 }
@@ -332,6 +350,7 @@ void Player::EnterStompFunc()
 // ストンプの更新処理 
 void Player::StompUpdate()
 {
+	//jumpSE_->StopWave(jumpSEHandle_);
 	// タイマーが開始されていたらストンプ処理
 	if (stompTimer_.IsActive()) {
 		StompFunc();

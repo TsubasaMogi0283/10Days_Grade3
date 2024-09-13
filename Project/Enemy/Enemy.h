@@ -9,7 +9,7 @@
 #include "EnemyAttackCollision.h"
 #include "Collider/Collider.h"
 #include "Record/Record.h"
-
+#include "Audio.h"
 
 
 
@@ -191,8 +191,9 @@ protected:
 	Vector3 preTrackingPosition_ = {};
 	Vector3 preTrackingPlayerPosition_ = {};
 
-
-
+	Audio* killAudio_ = nullptr;
+	int32_t killHandle_ = 0u;
+	int32_t killTime_ = 0;
 	
 
 protected:

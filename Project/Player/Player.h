@@ -19,7 +19,7 @@
 #include "PlayerAttack.h"
 #include "Collider/Collider.h"
 #include "Record/Record.h"
-
+#include "Audio.h"
 
 // 前方宣言
 struct Camera;
@@ -295,6 +295,10 @@ private:
 
 	Record* record_ = nullptr;
 
+
+	Audio* jumpSE_ = nullptr;
+	uint32_t jumpSEHandle_ = 0u;
+	int32_t jumpTime_ = 0;
 
 };
 
