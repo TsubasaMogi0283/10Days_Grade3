@@ -458,18 +458,16 @@ void GameScene::FuncInput()
 	// Aボタンの入力
 	if (tInput_->Trigger(PadData::B)) {
 
-		
-		
-
+		// Aボタンが押された時の処理
+		player_->FuncAButton();
+	}
+	if (tInput_->Trigger(DIK_SPACE)) {
 		// Aボタンが押された時の処理
 		player_->FuncAButton();
 	}
 
-	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
-		// Aボタンが押された時の処理
-		player_->FuncAButton();
-	}
-
+	// key入力操作時の処理
+	player_->FuncKeyFunc();
 }
 
 void GameScene::PreLoad(){

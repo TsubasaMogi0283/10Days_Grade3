@@ -25,6 +25,7 @@
 struct Camera;
 struct DirectionalLight;
 class FollowCamera;
+class TInput;
 
 // プレイヤー関連のモデルハンドル
 struct PlayerAssetsHandle {
@@ -56,6 +57,9 @@ public:
 
 	// stick入力時の処理
 	void FuncStickFunc(XINPUT_STATE joyState);
+
+	// key入力操作時の処理
+	void FuncKeyFunc();
 
 	/// <summary>
 	/// 衝突
@@ -117,16 +121,19 @@ public:
 private:
 
 	// 移動方向を求める
-	void CalcMoveDirection();
+	void CalcStickMoveDirection();
+	void CalcKeyMoveDirection();
 
 	// 移動処理
-	void Move();
+	void StickMove();
+	void KeyMove();
 
 	// 移動限界処理
 	void MoveLimited();
 
 	// Y軸の姿勢を傾ける処理
-	void BodyOrientation();
+	void StickBodyOrientation();
+	void KeyBodyOrientation();
 
 	// ジャンプのエンター処理
 	void EnterJumpFunc();
@@ -185,7 +192,8 @@ private:
 	Material mtl_{};
 
 	// 移動方向
-	Vector3 moveDirection_{};
+	Vector3 stickMoveDirection_{};
+	Vector3 keyMoveDirection_{};
 	// 移動量
 	Vector3 velocity_{};
 	// 移動速度
@@ -259,6 +267,12 @@ private:
 
 	// LStickの入力
 	Vector2 iLStick_{};
+
+	// Keyの入力
+	Vector2 iKeys_{};
+
+	// 入力
+	TInput* tInput_ = nullptr;
 
 	// デッドゾーン
 	const float DZone_ = 0.2f;
