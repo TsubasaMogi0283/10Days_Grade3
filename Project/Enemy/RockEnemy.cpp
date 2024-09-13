@@ -20,7 +20,7 @@ void RockEnemy::Initialize(uint32_t& modelHandle, Vector3& position, Vector3& sp
 
 
 	//半径
-	radius_ = 2.0f;
+	radius_ = 2.5f;
 	//生きているかどうか
 	isAlive_ = true;
 
@@ -299,7 +299,6 @@ void RockEnemy::Killed(){
 void RockEnemy::ReleaseParticle(){
 
 	RockEnemyParticle* rockParticle = new RockEnemyParticle();
-	//uint32_t particleModelHandle= ModelManager::GetInstance()->LoadModelFile("Resources/SampleParticle","SampleParticle.obj");
 	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 	Vector3 enemyPosition = GetWorldPosition();
 	rockParticle->Initialize(particleModelHandle, enemyPosition);

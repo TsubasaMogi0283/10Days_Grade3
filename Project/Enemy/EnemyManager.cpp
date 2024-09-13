@@ -18,7 +18,7 @@ void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle
 	feEnemyModelHandle_ = feModelHandle;
 
 	//生成
-	for (int i = 0; i < 1; ++i) {
+	for (int i = 0; i < 15; ++i) {
 		//岩
 		GenarateRockEnemy(rockModelhandle);
 		//鉄
@@ -27,9 +27,6 @@ void EnemyManager::Initialize(uint32_t& rockModelhandle, uint32_t& feModelHandle
 	}
 	
 }
-
-
-
 
 void EnemyManager::DeleteEnemy(){
 	//敵が生存していなかったら消す
@@ -228,7 +225,7 @@ void EnemyManager::Update(){
 	
 	if (enemyCount < MAX_ENEMY_COUNT_) {
 		//時間が増える
-		//genarateTime_ += 1;
+		genarateTime_ += 1;
 
 		//3秒くらいしたら生成
 		if (genarateTime_ == 240) {

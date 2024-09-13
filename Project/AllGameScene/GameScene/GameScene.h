@@ -22,7 +22,8 @@
 #include "Player/Player.h"
 #include <Enemy/EnemyManager.h>
 #include <Collider/CollisionManager.h>
-#include <Record/GameScoreUI/GameScoreUI.h>
+#include "UI/GameUI.h"
+#include <StageObject/Skydome/Skydome.h>
 
 
 
@@ -85,8 +86,10 @@ private:
 	/// </summary>
 	void FuncInput();
 
-
-
+	/// <summary>
+	/// あらかじめ読み込んでおく
+	/// </summary>
+	void PreLoad();
 
 private:
 
@@ -141,11 +144,53 @@ private:
 	std::unique_ptr<Ground>ground_ = nullptr;
 
 
+	std::unique_ptr<Skydome>skydome_ = nullptr;
+
+
 
 private:
 	//UI
-	std::unique_ptr<GameScoreUI> gameScoreUI_ = nullptr;
+	std::unique_ptr<GameUI> gameUI_ = nullptr;
 	
+
+
+
+
+
+	std::unique_ptr<Sprite> white_ = nullptr;
+	float whiteAlpha_ = 1.0f;
+
+	std::unique_ptr<Sprite> startSprite_ = nullptr;
+	std::unique_ptr<Sprite> endSprite_ = nullptr;
+
+
+
+private:
+
+	enum GameCondition {
+		FadeIn,
+		CountDown,
+		GamePlay,
+		FinishGame,
+		FadeOut,
+	};
+
+	int32_t condition_ = -1;
+
+	bool isFadeIn_ = true;
+	bool isGamePlay_ = false;
+	bool isFinishGame_ = false;
+	bool isFadeOut = false;
+
+	int32_t countDownTime_ = 240;
+
+	int displayStartTime_ = 0;
+	int displayFinishTime_ = 0;
+
+
+
+
+
 };
 
 

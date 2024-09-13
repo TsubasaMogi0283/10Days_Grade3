@@ -3,7 +3,7 @@
 #include "FollowCamera/FollowCamera.h"
 #include <algorithm>
 #include <Collider/CollisionConfig.h>
-
+#include "ModelManager.h"
 
 // コピーコンストラクタ
 Player::Player(PlayerAssetsHandle handles)
@@ -20,8 +20,10 @@ void Player::Init()
 {
 	// モデルの初期化
 	model_.reset(Model::Create(handles_.player));
-
+	uint32_t drillHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Player/Drill","Drill.obj");
+	drill_.reset(Model::Create(drillHandle));
 	// トランスフォームの初期化
+	drillTransform_.Initialize();
 	transform_.Initialize();
 	transform_.translate_.y = 1.0f;
 	radius_ = 1.0f;
@@ -57,6 +59,8 @@ void Player::Update()
 {
 	// トランスフォームの更新
 	transform_.Update();
+	drillTransform_.translate_ = GetWorldPosition();
+	drillTransform_.Update();
 
 	// マテリアルの更新
 	mtl_.Update();
@@ -71,6 +75,7 @@ void Player::Update()
 
 	// ストンプの処理
 	if (isStomping_) { // フラグが立っていたら入る
+		drillTransform_.rotate_.y += 0.1f;
 		StompFunc();
 	}
 
@@ -87,7 +92,7 @@ void Player::Update()
 
 #ifdef _DEBUG
 	// ImGuiの描画
-	DrawImGui();
+	//DrawImGui();
 #endif // _DEBUG
 
 
@@ -112,7 +117,7 @@ void Player::Draw3D(Camera& camera, DirectionalLight& light)
 {
 	// プレイヤー
 	model_->Draw(transform_, camera, mtl_, light);
-
+	drill_->Draw(drillTransform_, camera, mtl_, light);
 	// 亀裂
 	//crackEffect_->Draw3D(camera, light);
 	// 亀裂エフェクト配列
@@ -284,7 +289,7 @@ void Player::JumpFunc()
 	if (transform_.translate_.y <= 0.0f) {
 
 		// 地面に戻す
-		transform_.translate_.y = 1.0f;
+		transform_.translate_.y = 2.0f;
 		// 着地状態
 		isGrounded_ = true;
 		// 終了処理

@@ -10,7 +10,7 @@ void DirectionalLight::Initialize(){
 	//ライトの向き
 	direction_= { 0.0f,-1.0f,0.0f };
 	//輝度
-	intensity_= 1.0f;
+	intensity_= 0.5f;
 
 
 }

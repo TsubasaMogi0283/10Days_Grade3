@@ -152,11 +152,11 @@ void FeEnemy::Update() {
 		attackTime_ += 1;
 
 
-		const int RESET_TIME = 200;
+		const int RESET_TIME = 120;
 
 		//2～4秒までが攻撃
-		if (attackTime_ > 120 && attackTime_ <= RESET_TIME) {
-			if (attackTime_ == 121) {
+		if (attackTime_ > 40 && attackTime_ <= RESET_TIME) {
+			if (attackTime_ == 41) {
 				isAttack_ = true;
 
 			}
@@ -288,7 +288,6 @@ void FeEnemy::Killed() {
 void FeEnemy::ReleaseParticle() {
 
 	FeEnemyParticle* rockParticle = new FeEnemyParticle();
-	//uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/RockEnemy", "RockBreak.obj");
 	uint32_t particleModelHandle = ModelManager::GetInstance()->LoadModelFile("Resources/Game/Enemy/FeEnemy","FeBreak.obj");
 	Vector3 enemyPosition = GetWorldPosition();
 	rockParticle->Initialize(particleModelHandle, enemyPosition);

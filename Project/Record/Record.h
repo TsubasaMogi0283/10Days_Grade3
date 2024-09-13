@@ -93,6 +93,14 @@ public:
 	void AddTenThousandPlace();
 
 
+	void SetNextSceneFromResult(int32_t next) {
+		this->nextSceneFromResult_ = next;
+	}
+
+	int32_t GetNextSceneFromResult() {
+		return nextSceneFromResult_;
+	}
+
 
 private:
 	//合計スコア
@@ -106,5 +114,9 @@ private:
 	const int32_t DEDUCATION_POINT_ = -50;
 
 
+
+
+private:
+	int32_t nextSceneFromResult_ = -1;
 };
 
