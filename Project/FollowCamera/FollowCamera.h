@@ -16,6 +16,7 @@
 class Player;
 struct Camera;
 struct DirectionalLight;
+class TInput;
 
 
 /* フォローカメラ */
@@ -37,6 +38,7 @@ public:
 
 	// stick入力時の処理
 	void FuncStickFunc(XINPUT_STATE joyState);
+	void FuncKeyFunc();
 
 	// シェイクの処理
 	void CallShake();
@@ -62,7 +64,8 @@ public:
 private:
 
 	// 回転処理
-	void CalcOrientation();
+	void CalcStickOrientation();
+	void CalcKeyOrientation();
 
 	// フォロー処理
 	void FollowFunc();
@@ -142,6 +145,12 @@ private:
 
 	// LStickの入力
 	Vector2 iRStick_{};
+
+	// Keyの入力
+	Vector2 iKeys_{};
+
+	// 入力
+	TInput* tInput_ = nullptr;
 
 	// デッドゾーン
 	const float DZone_ = 0.2f;
