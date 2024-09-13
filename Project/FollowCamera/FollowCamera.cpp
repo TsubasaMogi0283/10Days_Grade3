@@ -37,9 +37,6 @@ void FollowCamera::Init()
 	// オフセットの設定
 	offset_ = constOffset_;
 
-	// 乱数生成器の作成
-	std::random_device seedGenerator;
-	randomEngine_.seed(seedGenerator());
 }
 
 
@@ -62,11 +59,6 @@ void FollowCamera::Update()
 
 	// 右方ベクトルを求める
 	CalcRightVec();
-
-	// シェイク処理
-	if (isShake_) { // フラグが立っていたら入る
-		ShakeFunc();
-	}
 
 
 #ifdef _DEBUG
@@ -97,13 +89,18 @@ void FollowCamera::FuncStickFunc(XINPUT_STATE joyState)
 
 	// フォロー処理
 	FollowFunc();
+
+	// シェイク処理
+	if (isShake_) { // フラグが立っていたら入る
+		ShakeFunc();
+	}
 }
 
 
 // シェイクの処理
-void FollowCamera::IsShake(uint32_t count)
+void FollowCamera::CallShake()
 {
-	count;
+	EnterShakeFunc();
 }
 
 
@@ -178,12 +175,16 @@ void FollowCamera::CalcRightVec()
 // シェイクのエンター処理
 void FollowCamera::EnterShakeFunc()
 {
+	// シェイク開始時の座標を保存しておく
+	shakeStartPos_ = camera_.translate_;
+
 	isShake_ = true; // フラグを立てる
 	shakeIntensity_ = // 強さを求める
 		CalcShakeIntensityForLevel(player_->GetKillStreakCount());
-	shakeTimer_.Init(0.0f, 200.0f); // 時間の設定(20フレーム)
-	shakeTimer_.Start(); // タイマー更新
-	shakeFrequency_ = 5.0f; // 頻度の設定
+	shakeTimer_.Init(0.0f, 30.0f); // 時間の設定(0.5秒)
+	shakeTimer_.Start(); // タイマースタート
+	distribution =  // ランダム生成の範囲設定
+		std::uniform_real_distribution<float>(-1.0f, 1.0f); 
 }
 
 
@@ -193,28 +194,24 @@ void FollowCamera::ShakeFunc()
 	// 時間の更新
 	shakeTimer_.Update();
 
-	// 強さが時間と主に減少
-	shakeIntensity_ = shakeIntensity_ * (1.0f - shakeTimer_.GetRatio());
-
-	// シェイクの振動(正弦波を使用)
-	Vector2 shakeAmount = {
-		.x = shakeIntensity_ * std::sinf(shakeFrequency_ * shakeTimer_.GetNowFrame() * 2.0f * Math::PI),
-		.y = shakeIntensity_ * std::cosf(shakeFrequency_ * shakeTimer_.GetNowFrame() * 2.0f * Math::PI),
-	};
-
-	// 乱数をついかして動きをランダムに(オプション)
-	std::uniform_real_distribution<float> dist(-1.0f, +1.0f);
-	shakeAmount.x += dist(randomEngine_);
-	shakeAmount.y += dist(randomEngine_);
-
-	// カメラの位置を更新
-	/*shakePos_.x += shakeAmount.x;
-	shakePos_.y += shakeAmount.y;*/
-
 	// タイマーーが終了していれば終了
 	if (shakeTimer_.IsFinish()) {
 		ExsitShakeFunc();
+		return;
 	}
+
+	// 残り時間に応じでシェイクの強度を減衰させる(線形に減衰)
+	float currentIntensity = shakeIntensity_ * (1.0f - shakeTimer_.GetRatio());
+
+	// ランダムに変動させる処理
+	Vector3 shakeOffset = {
+		distribution(generator) * currentIntensity,
+		distribution(generator) * currentIntensity,
+		distribution(generator) * currentIntensity,
+	};
+
+	// カメラの座標に加算
+	camera_.translate_ = VectorCalculation::Add(camera_.translate_, shakeOffset);
 }
 
 
@@ -222,6 +219,8 @@ void FollowCamera::ShakeFunc()
 void FollowCamera::ExsitShakeFunc()
 {
 	isShake_ = false; // シェイク終了
+	shakeIntensity_ = 0.0f; // 強さを0で初期化
+	shakeTimer_.Clear(); // タイマーをクリア
 }
 
 

@@ -39,7 +39,7 @@ public:
 	void FuncStickFunc(XINPUT_STATE joyState);
 
 	// シェイクの処理
-	void IsShake(uint32_t count);
+	void CallShake();
 
 
 #pragma region Accessor アクセッサ
@@ -127,15 +127,15 @@ private:
 	bool isShake_ = false;
 
 	// シェイクの基本の強さ
-	float baseShakeIntensity_ = 1.0f;
+	float baseShakeIntensity_ = 0.2f;
 	// シェイクの成長率
 	float shakeGrowthRate_ = 1.2f;
 	// シェイクの強さ
 	float shakeIntensity_ = 0.0f;
-	// シェイクの頻度
-	float shakeFrequency_ = 0.0f;
 	// シェイクの時間
 	pTimer shakeTimer_{};
+	// シェイク開始時のカメラの座標
+	Vector3 shakeStartPos_{};
 
 
 #pragma region System システム
@@ -147,7 +147,8 @@ private:
 	const float DZone_ = 0.2f;
 
 	// 乱数生成器
-	std::mt19937 randomEngine_;
+	std::default_random_engine generator;
+	std::uniform_real_distribution<float> distribution;
 
 #pragma endregion 
 

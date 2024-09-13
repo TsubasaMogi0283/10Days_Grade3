@@ -356,6 +356,7 @@ void Player::ExsitStompFunc()
 	stompVel_ = 0.0f; // Y軸速度をリセット
 	AddNewCrack(); // 亀裂を出す
 	isDrop_ = false;
+	followCamera_->CallShake(); // カメラのシェイクの処理を呼び出す
 }
 
 
