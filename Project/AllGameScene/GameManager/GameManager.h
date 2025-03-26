@@ -3,6 +3,17 @@
 #include "IGameScene.h"
 #include <cstdint>
 
+enum NextCondition {
+	//
+	ReplayGame,
+	//タイトルに戻る
+	ReturnToTitle,
+};
+
+
+
+
+
 //main.cppにあるものを全部こっちに引っ越しする
 class GameManager {
 public:

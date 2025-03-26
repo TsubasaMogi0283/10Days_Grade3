@@ -581,7 +581,7 @@ void PipelineManager::GenerateModelPSO() {
 	//Tableで利用する数
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
-	//CBVを使う
+	//DirectionalLight
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -589,7 +589,6 @@ void PipelineManager::GenerateModelPSO() {
 	rootParameters[3].Descriptor.ShaderRegister = 1;
 
 
-	//CBVを使う
 	//カメラ用
 	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//VertwxShaderで使う
@@ -709,8 +708,6 @@ void PipelineManager::GenerateModelPSO() {
 	//InputLayout・・VertexShaderへ渡す頂点データがどのようなものかを指定するオブジェクト
 
 
-
-	//余分に読み込んでしまうけどこれしか方法が無かった
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
@@ -751,10 +748,13 @@ void PipelineManager::GenerateModelPSO() {
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
+
+
+
+
 	//ブレンドモードの選択
 	//switchでやった方が楽でしょう
 	switch (PipelineManager::GetInstance()->selectModelBlendMode_) {
-
 	case BlendModeNone:
 		//ブレンド無し
 		blendDesc.RenderTarget[0].BlendEnable = false;
@@ -768,9 +768,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 
-
-
-
 		break;
 
 
@@ -780,11 +777,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-
-
-
-
-
 
 		break;
 
@@ -816,10 +808,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-
-
-
-
 
 		break;
 
@@ -864,9 +852,7 @@ void PipelineManager::GenerateModelPSO() {
 	graphicsPipelineStateDesc.pRootSignature = PipelineManager::GetInstance()->modelPSO_.rootSignature_.Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { PipelineManager::GetInstance()->modelPSO_.vertexShaderBlob_->GetBufferPointer(),PipelineManager::GetInstance()->modelPSO_.vertexShaderBlob_->GetBufferSize() };
-	//vertexShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.PS = { PipelineManager::GetInstance()->modelPSO_.pixelShaderBlob_->GetBufferPointer(),PipelineManager::GetInstance()->modelPSO_.pixelShaderBlob_->GetBufferSize() };
-	//pixelShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.BlendState = blendDesc;
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
 
@@ -1337,7 +1323,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	D3D12_ROOT_PARAMETER rootParameters[6] = {};
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -1358,7 +1344,6 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 
 	//今回はDescriptorTableを使う
-	//Instancing
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//VertwxShaderで使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
@@ -1392,7 +1377,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 
 	//DescriptorTableを使う
-	//Texture
+	//Texture用
 	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//PixelShaderを使う
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -1401,22 +1386,28 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//Tableで利用する数
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
-	//CBVを使う
-	//DirectionalLight
+
+	//カメラ
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
-	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//レジスタ番号1を使う
-	rootParameters[3].Descriptor.ShaderRegister = 1;
+	rootParameters[3].Descriptor.ShaderRegister = 0;
 
 
-	//CBVを使う
-	//カメラ
+	//DirectionalLight
 	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//VertwxShaderで使う
-	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	//register...Shader上のResource配置情報
+	//PixelShaderで使う
+	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号1を使う
 	rootParameters[4].Descriptor.ShaderRegister = 1;
+	
+	//PS用のカメラ
+	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//PixelShaderで使う
+	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号1を使う
+	rootParameters[5].Descriptor.ShaderRegister = 2;
 
 
 
@@ -1465,16 +1456,19 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//InputLayout・・VertexShaderへ渡す頂点データがどのようなものかを指定するオブジェクト
 	//InputLayout
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
+	//float4
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
+	//float2
 	inputElementDescs[1].SemanticName = "TEXCOORD";
 	inputElementDescs[1].SemanticIndex = 0;
 	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
+	//float3
 	inputElementDescs[2].SemanticName = "NORMAL";
 	inputElementDescs[2].SemanticIndex = 0;
 	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -1523,7 +1517,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	//今回はカリングをオフにする
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	//三角形の中を塗りつぶす
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
@@ -1589,9 +1583,6 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 void PipelineManager::GenarateFullScreenPSO() {
 
-	//////////PSO
-	// 
-	// 
 	////RootSignatureを作成
 	//RootSignature・・ShaderとResourceをどのように関連づけるかを示したオブジェクトである
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
@@ -1622,10 +1613,6 @@ void PipelineManager::GenarateFullScreenPSO() {
 	rootParameters[1].Descriptor.ShaderRegister = 1;
 
 
-
-	//応急処置でTextureを無理矢理2番目になるようにする
-	//そろわなくなってしまう
-	//いつか直す
 
 	//Texture
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};

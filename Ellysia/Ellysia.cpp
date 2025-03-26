@@ -8,6 +8,7 @@
 #include "RtvManager.h"
 #include <Audio.h>
 #include <AdjustmentItems.h>
+#include "../External/TsumiInput/TInput.h"
 
 
 //インスタンス
@@ -19,7 +20,7 @@ Ellysia* Ellysia::GetInstance() {
 
 void Ellysia::Initialize(){
 	//ここでタイトルバーの名前を決めてね
-	const wchar_t* titleBarName = L"静寂の霊園";
+	const wchar_t* titleBarName = L"3025_脳天一撃";
 	//ウィンドウのサイズを決める
 	const int WINDOW_SIZE_WIDTH_ = 1280;
 	const int WINDOW_SIZE_HEIGHT_ = 720;
@@ -56,7 +57,12 @@ void Ellysia::Initialize(){
 	ImGuiManager::GetInstance()->Initialize();
 	
 #endif
-
+	//パイプライン
+	PipelineManager::GetInstance()->SetModelBlendMode(1);
+	PipelineManager::GetInstance()->GenerateModelPSO();
+	PipelineManager::GetInstance()->GenerateParticle3DPSO();
+	PipelineManager::GetInstance()->SetSpriteBlendMode(1);
+	PipelineManager::GetInstance()->GenerateSpritePSO();
 	//Input
 	Input::GetInstance()->Initialize();
 	
@@ -71,6 +77,14 @@ void Ellysia::Initialize(){
 	gameManager_->Initialize();
 
 
+
+	////////////////////////////////////////////
+
+	// ツミエンジンのInputの初期化
+	TInput::GetInstance()->Initialize();
+
+	////////////////////////////////////////////
+
 }
 
 
@@ -81,6 +95,12 @@ void Ellysia::BeginFrame(){
 #ifdef _DEBUG
 	ImGuiManager::GetInstance()->BeginFrame();
 #endif
+	////////////////////////////////////////////
+
+	// ツミエンジンのInputの初期化
+	TInput::GetInstance()->BeginFrame();
+
+	////////////////////////////////////////////
 }
 
 void Ellysia::Update(){

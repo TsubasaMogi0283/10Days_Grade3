@@ -1,13 +1,8 @@
 #pragma once
-#include <string>
 #include <cassert>
-#include <fstream>
-#include <sstream>
 #include <array>
 #include <memory>
-#include <DirectXTex.h>
-#include <d3dx12.h>
-#include "DirectXSetup.h"
+
 
 #include "Matrix4x4.h"
 #include "Vector4.h"
@@ -15,7 +10,7 @@
 #include "Matrix4x4Calculation.h"
 #include "VertexData.h"
 #include "ModelData.h"
-#include "ModelManager.h"
+#include "DirectXSetup.h"
 
 #include "LightingType.h"
 
@@ -27,18 +22,24 @@ struct DirectionalLight;
 struct PointLight;
 struct SpotLight;
 
+
+class ModelManager;
+class TextureManager;
+
 class Model {
 public:
 
-	//コンストラクタ
-	Model() = default;
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	Model();
 
 	/// <summary>
 	/// 生成
 	/// </summary>
 	/// <param name="modelHandle">モデルハンドル</param>
 	/// <returns></returns>
-	static Model* Create(uint32_t modelHandle);
+	static Model* Create(uint32_t& modelHandle);
 
 	#pragma region 描画
 
@@ -98,6 +99,15 @@ public:
 
 
 private:
+
+	DirectXSetup* directXSetup_ = nullptr;
+	ModelManager* modelManager_ = nullptr;
+	TextureManager* textureManager_ = nullptr;
+
+
+
+
+
 	//頂点リソースを作る
 	//頂点バッファビューを作成する
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;

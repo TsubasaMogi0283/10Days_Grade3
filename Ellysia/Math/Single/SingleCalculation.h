@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 struct Vector2;
 struct Vector3;
@@ -22,6 +23,18 @@ namespace SingleCalculation{
 	/// <returns></returns>
 	float Clamp(const float& min, const float& max, const float& t);
 
+
+
+	/// <summary>
+	/// 線形補間(float)
+	/// </summary>
+	/// <param name="start"></param>
+	/// <param name="end"></param>
+	/// <param name="t"></param>
+	/// <returns></returns>
+	int32_t Lerp(const int32_t& start, const int32_t& end, const float& t);
+
+
 	/// <summary>
 	/// 線形補間(float)
 	/// </summary>
@@ -30,6 +43,7 @@ namespace SingleCalculation{
 	/// <param name="t"></param>
 	/// <returns></returns>
 	float Lerp(const float& start, const float& end, const float& t);
+
 
 
 	/// <summary>

@@ -4,7 +4,7 @@
 #include <array>
 #include <DirectXTex.h>
 #include <d3dx12.h>
-
+#include <map>
 
 #include "DirectXSetup.h"
 #include "ConvertLog.h"
@@ -73,9 +73,10 @@ public:
 		//リソース
 		ComPtr<ID3D12Resource> resource_= nullptr;
 		ComPtr<ID3D12Resource> internegiateResource_ = nullptr;
-		//画像読み込み
-		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_ = {};
-		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_ = {};
+
+		DirectX::ScratchImage mipImages_;
+		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
+
 
 		//読み込んだテクスチャの名前
 		std::string name_={};
@@ -84,15 +85,19 @@ public:
 		uint32_t handle_ = 0;
 	};
 
+
+	// テクスチャ情報を取得/設定するアクセサ関数
+	std::map<std::string, TextureInformation>& GetTextureInformation() {
+		return textureInformation_;
+	}
+
 private:
 
+	static uint32_t index_;
 
 
-	//構造体版
-	//mapにしたい
-	//array...stdの配列版。その名前の通り配列だよね
-	std::array<TextureInformation, TEXTURE_MAX_AMOUNT_> textureInformation_{};
-
-
+	std::map<std::string, TextureInformation> textureInformation_{};
+	// handleからfilePathへのマッピングを保持する
+	std::map<uint32_t, std::string> handleToFilePathMap_{};
 
 };

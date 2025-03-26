@@ -36,6 +36,17 @@ void WorldTransform::Update() {
 }
 
 
+Vector3 WorldTransform::GetWorldPosition(){
+	Vector3 position = {
+		.x = worldMatrix_.m[3][0],
+		.y = worldMatrix_.m[3][1],
+		.z = worldMatrix_.m[3][2],
+
+	};
+
+	return position;
+}
+
 void WorldTransform::Transfer() {
 	//Resourceに書き込む
 	//今までTransformationに書いていたものをこっちに引っ越す

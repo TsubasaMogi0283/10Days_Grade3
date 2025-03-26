@@ -23,7 +23,6 @@ public:
 
 
 	//ワールド座標を取得
-	//純粋仮想関数
 	virtual Vector3 GetWorldPosition() = 0;
 
 
@@ -41,22 +40,11 @@ public:
 
 
 #pragma region AABB
+	//AABB
+	inline AABB GetAABB() {
+		return aabb_;
+	}
 
-	/// <summary>
-	/// 上方のサイズ
-	/// </summary>
-	/// <returns></returns>
-	inline Vector3 GetUpSideSize() {
-		return upSideSize_;
-	}
-	
-	/// <summary>
-	/// 下方のサイズ
-	/// </summary>
-	/// <returns></returns>
-	inline Vector3 GetDownSideSize() {
-		return downSideSize_;
-	}
 
 #pragma endregion
 
@@ -105,14 +93,8 @@ protected:
 
 
 #pragma region AABB
-
-	//AABBのmax部分に加算する縦横高さのサイズ
-	Vector3 upSideSize_ = {};
-
-	//AABBのmax部分に加算する縦横高さのサイズ
-	Vector3 downSideSize_ = {};
-
-
+	//AABB
+	AABB aabb_ = {};
 
 #pragma endregion
 
